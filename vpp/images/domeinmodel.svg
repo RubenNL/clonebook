@@ -1,0 +1,264 @@
+<!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.0//EN'  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="522" height="506" color-interpolation="auto" color-rendering="auto" fill="rgb(0,0,0)" fill-opacity="0" font-family="'Dialog'" font-size="12px" image-rendering="auto" shape-rendering="auto" stroke="rgb(0,0,0)" stroke-linecap="square" stroke-miterlimit="10" stroke-opacity="0" text-rendering="auto" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <clipPath id="a">
+   <path d="m-7-7h98v58h-98v-58z"/>
+  </clipPath>
+  <clipPath id="c">
+   <path d="m0 0v16h80v-16z"/>
+  </clipPath>
+  <clipPath id="f">
+   <path d="m-7-7h102v58h-102v-58z"/>
+  </clipPath>
+  <clipPath id="l">
+   <path d="m0 0v16h84v-16z"/>
+  </clipPath>
+  <clipPath id="h">
+   <path d="m0 0v70h70v-70z"/>
+  </clipPath>
+  <clipPath id="e">
+   <path d="m0 0v48h48v-48z"/>
+  </clipPath>
+  <clipPath id="b">
+   <path d="m0 0v40h40v-40z"/>
+  </clipPath>
+  <clipPath id="g">
+   <path d="m0 0v44h44v-44z"/>
+  </clipPath>
+  <clipPath id="v">
+   <path d="m0 0v94h94v-94z"/>
+  </clipPath>
+  <clipPath id="u">
+   <path d="m0 0v72h73v-72z"/>
+  </clipPath>
+  <clipPath id="k">
+   <path d="m0 0v50h50v-50z"/>
+  </clipPath>
+  <clipPath id="t">
+   <path d="m0 0v72h72v-72z"/>
+  </clipPath>
+  <clipPath id="s">
+   <path d="m0 0v52h52v-52z"/>
+  </clipPath>
+  <clipPath id="r">
+   <path d="m0 0v16h39v-16z"/>
+  </clipPath>
+  <clipPath id="j">
+   <path d="m0 0v245h268v-245z"/>
+  </clipPath>
+  <clipPath id="q">
+   <path d="m0 0v104h172v-104z"/>
+  </clipPath>
+  <clipPath id="p">
+   <path d="m0 0v225h115v-225z"/>
+  </clipPath>
+  <clipPath id="o">
+   <path d="m0 0v115h228v-115z"/>
+  </clipPath>
+  <clipPath id="n">
+   <path d="m0 0v325h115v-325z"/>
+  </clipPath>
+  <clipPath id="i">
+   <path d="m0 0v233h186v-233z"/>
+  </clipPath>
+  <clipPath id="m">
+   <path d="m0 0v212h104v-212z"/>
+  </clipPath>
+  <clipPath id="d">
+   <path d="m0 0v174h184v-174z"/>
+  </clipPath>
+ </defs>
+ <g fill-opacity="1" stroke-opacity="1" text-rendering="geometricPrecision">
+  <g fill="#fff" stroke="#fff">
+   <rect width="522" height="506" stroke="none"/>
+  </g>
+  <g font-family="sans-serif" font-size="11px" font-weight="bold">
+   <g transform="translate(185,252)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <rect width="80" height="40" clip-path="url(#a)" stroke="none"/>
+   </g>
+   <g transform="translate(185,252)" fill="none" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <rect width="80" height="40" clip-path="url(#a)"/>
+    <line x2="80" y1="16" y2="16" clip-path="url(#a)"/>
+   </g>
+   <g transform="translate(185,252)" fill="#000" image-rendering="optimizeQuality" stroke="#000">
+    <text x="26" y="12" clip-path="url(#c)" stroke="none" xml:space="preserve">User</text>
+   </g>
+   <g transform="translate(378,402)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <rect width="80" height="40" clip-path="url(#a)" stroke="none"/>
+   </g>
+   <g transform="translate(378,402)" fill="none" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <rect width="80" height="40" clip-path="url(#a)"/>
+    <line x2="80" y1="16" y2="16" clip-path="url(#a)"/>
+   </g>
+   <g transform="translate(378,402)" fill="#000" image-rendering="optimizeQuality" stroke="#000">
+    <text x="28" y="12" clip-path="url(#c)" stroke="none" xml:space="preserve">Post</text>
+   </g>
+   <g transform="translate(378,252)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <rect width="80" height="40" clip-path="url(#a)" stroke="none"/>
+   </g>
+   <g transform="translate(378,252)" fill="none" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <rect width="80" height="40" clip-path="url(#a)"/>
+    <line x2="80" y1="16" y2="16" clip-path="url(#a)"/>
+   </g>
+   <g transform="translate(378,252)" fill="#000" image-rendering="optimizeQuality" stroke="#000">
+    <text x="25" y="12" clip-path="url(#c)" stroke="none" xml:space="preserve">Page</text>
+   </g>
+   <g transform="translate(35,252)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <rect width="80" height="40" clip-path="url(#a)" stroke="none"/>
+   </g>
+   <g transform="translate(35,252)" fill="none" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <rect width="80" height="40" clip-path="url(#a)"/>
+    <line x2="80" y1="16" y2="16" clip-path="url(#a)"/>
+   </g>
+   <g transform="translate(35,252)" fill="#000" image-rendering="optimizeQuality" stroke="#000">
+    <text x="27" y="12" clip-path="url(#c)" stroke="none" xml:space="preserve">Chat</text>
+   </g>
+   <g transform="translate(185,2)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <rect width="80" height="40" clip-path="url(#a)" stroke="none"/>
+   </g>
+   <g transform="translate(185,2)" fill="none" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <rect width="80" height="40" clip-path="url(#a)"/>
+    <line x2="80" y1="16" y2="16" clip-path="url(#a)"/>
+   </g>
+   <g transform="translate(185,2)" fill="#000" image-rendering="optimizeQuality" stroke="#000">
+    <text x="26" y="12" clip-path="url(#c)" stroke="none" xml:space="preserve">Vote</text>
+   </g>
+   <g transform="translate(33,102)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <rect width="84" height="40" clip-path="url(#f)" stroke="none"/>
+   </g>
+  </g>
+ </g>
+ <g fill-opacity="1" font-family="sans-serif" font-size="11px" stroke="#000" stroke-opacity="1" text-rendering="geometricPrecision">
+  <g transform="translate(33,102)" fill="none" font-weight="bold" image-rendering="optimizeQuality" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+   <rect width="84" height="40" clip-path="url(#f)"/>
+   <line x2="84" y1="16" y2="16" clip-path="url(#f)"/>
+  </g>
+  <g transform="translate(33,102)" fill="#000" font-weight="bold" image-rendering="optimizeQuality">
+   <text x="5" y="12" clip-path="url(#l)" stroke="none" xml:space="preserve">ChatMessage</text>
+  </g>
+  <g transform="translate(155,270)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="39" clip-path="url(#h)" stroke="none" xml:space="preserve">PostedBy</text>
+  </g>
+  <g transform="translate(326,387)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="28" clip-path="url(#e)" stroke="none" xml:space="preserve">Posts</text>
+  </g>
+  <g transform="translate(219,285)" fill="#000" image-rendering="optimizeQuality">
+   <text x="16" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">1</text>
+  </g>
+  <g transform="translate(333,411)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">0..*</text>
+  </g>
+  <g transform="translate(200,221)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="26" clip-path="url(#g)" stroke="none" xml:space="preserve">user</text>
+  </g>
+  <g transform="translate(118,84)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="51" clip-path="url(#v)" stroke="none" xml:space="preserve">chatMessages</text>
+  </g>
+  <g transform="translate(166,223)" fill="#000" image-rendering="optimizeQuality">
+   <text x="16" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">1</text>
+  </g>
+  <g transform="translate(118,93)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">0..*</text>
+  </g>
+  <g transform="translate(75,221)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="26" clip-path="url(#g)" stroke="none" xml:space="preserve">chat</text>
+  </g>
+  <g transform="translate(2,115)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="40" clip-path="url(#u)" stroke="none" xml:space="preserve">messages</text>
+  </g>
+  <g transform="translate(41,223)" fill="#000" image-rendering="optimizeQuality">
+   <text x="16" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">1</text>
+  </g>
+  <g transform="translate(75,131)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">0..*</text>
+  </g>
+  <g transform="translate(263,217)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="26" clip-path="url(#g)" stroke="none" xml:space="preserve">user</text>
+  </g>
+  <g transform="translate(216,32)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="28" clip-path="url(#e)" stroke="none" xml:space="preserve">votes</text>
+  </g>
+  <g transform="translate(230,219)" fill="#000" image-rendering="optimizeQuality">
+   <text x="16" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">1</text>
+  </g>
+  <g transform="translate(263,35)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">0..*</text>
+  </g>
+  <g transform="translate(116,257)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="28" clip-path="url(#e)" stroke="none" xml:space="preserve">chats</text>
+  </g>
+  <g transform="translate(135,238)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="29" clip-path="url(#k)" stroke="none" xml:space="preserve">users</text>
+  </g>
+  <g transform="translate(116,243)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">0..*</text>
+  </g>
+  <g transform="translate(145,261)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">1..*</text>
+  </g>
+  <g transform="translate(360,269)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="40" clip-path="url(#t)" stroke="none" xml:space="preserve">postedOn</text>
+  </g>
+  <g transform="translate(439,365)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="28" clip-path="url(#e)" stroke="none" xml:space="preserve">posts</text>
+  </g>
+  <g transform="translate(429,312)" fill="#000" image-rendering="optimizeQuality">
+   <text x="16" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">1</text>
+  </g>
+  <g transform="translate(397,369)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">0..*</text>
+  </g>
+  <g transform="translate(324,238)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="29" clip-path="url(#k)" stroke="none" xml:space="preserve">users</text>
+  </g>
+  <g transform="translate(270,255)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="30" clip-path="url(#s)" stroke="none" xml:space="preserve">pages</text>
+  </g>
+  <g transform="translate(333,261)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">0..*</text>
+  </g>
+  <g transform="translate(269,243)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="24" clip-path="url(#b)" stroke="none" xml:space="preserve">1..*</text>
+  </g>
+  <g transform="translate(368,416)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="39" clip-path="url(#h)" stroke="none" xml:space="preserve">repliedTo</text>
+  </g>
+  <g transform="translate(437,443)" fill="#000" image-rendering="optimizeQuality">
+   <text x="10" y="12" clip-path="url(#r)" stroke="none" xml:space="preserve">0..1</text>
+  </g>
+  <g stroke-linecap="butt" stroke-linejoin="round">
+   <g transform="translate(169,236)" fill="none" image-rendering="optimizeQuality">
+    <line x1="55" x2="55" y1="56" y2="186" clip-path="url(#j)"/>
+    <line x1="55" x2="209" y1="186" y2="186" clip-path="url(#j)"/>
+   </g>
+   <g transform="translate(66,222)" fill="#000" image-rendering="optimizeQuality">
+    <line x1="50" x2="118" y1="50" y2="50" clip-path="url(#q)" fill="none"/>
+   </g>
+   <g transform="translate(382,236)" fill="#000" image-rendering="optimizeQuality">
+    <line x1="56" x2="56" y1="56" y2="166" clip-path="url(#p)" fill="none"/>
+   </g>
+   <g transform="translate(209,216)" fill="#000" image-rendering="optimizeQuality">
+    <line x1="169" x2="55" y1="56" y2="56" clip-path="url(#o)" fill="none"/>
+   </g>
+   <g transform="translate(209,-14)" fill="#000" image-rendering="optimizeQuality">
+    <line x1="55" x2="55" y1="265" y2="56" clip-path="url(#n)" fill="none"/>
+   </g>
+   <g transform="translate(68,72)" fill="none" image-rendering="optimizeQuality">
+    <line x1="132" x2="132" y1="179" y2="50" clip-path="url(#i)"/>
+    <line x1="132" x2="50" y1="50" y2="50" clip-path="url(#i)"/>
+   </g>
+   <g transform="translate(25,93)" fill="#000" image-rendering="optimizeQuality">
+    <line x1="50" x2="50" y1="158" y2="50" clip-path="url(#m)" fill="none"/>
+   </g>
+   <g transform="translate(388,382)" fill="none" image-rendering="optimizeQuality">
+    <line x1="50" x2="50" y1="61" y2="120" clip-path="url(#d)"/>
+    <line x1="50" x2="130" y1="120" y2="120" clip-path="url(#d)"/>
+    <line x1="130" x2="130" y1="120" y2="50" clip-path="url(#d)"/>
+    <line x1="130" x2="71" y1="50" y2="50" clip-path="url(#d)"/>
+   </g>
+  </g>
+ </g>
+ <g fill="#787878" fill-opacity="1" font-size="8px" image-rendering="optimizeQuality" stroke="#787878" stroke-opacity="1" text-rendering="geometricPrecision">
+  <text y="10" stroke="none" xml:space="preserve">Visual Paradigm Standard(ruben(Utrecht University of Applied Sciences))</text>
+ </g>
+</svg>

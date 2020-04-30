@@ -1,0 +1,437 @@
+<!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.0//EN'  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="641" height="431" color-interpolation="auto" color-rendering="auto" fill="rgb(0,0,0)" fill-opacity="0" font-family="'Dialog'" font-size="12px" image-rendering="auto" shape-rendering="auto" stroke="rgb(0,0,0)" stroke-linecap="square" stroke-miterlimit="10" stroke-opacity="0" text-rendering="auto" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <clipPath id="w">
+   <path d="m-7-7h358v443h-358v-443z"/>
+  </clipPath>
+  <clipPath id="at">
+   <path d="m0 0v425h340v-425z"/>
+  </clipPath>
+  <clipPath id="a">
+   <path d="m-7-7h48v78h-48v-78z"/>
+  </clipPath>
+  <clipPath id="h">
+   <path d="m-7-7h124v67h-124v-67z"/>
+  </clipPath>
+  <clipPath id="g">
+   <path d="m0 0v49h106v-49z"/>
+  </clipPath>
+  <clipPath id="f">
+   <path d="m-7-7h149v72h-149v-72z"/>
+  </clipPath>
+  <clipPath id="e">
+   <path d="m0 0v54h131v-54z"/>
+  </clipPath>
+  <clipPath id="b">
+   <path d="m-7-7h98v58h-98v-58z"/>
+  </clipPath>
+  <clipPath id="c">
+   <path d="m0 0v40h80v-40z"/>
+  </clipPath>
+  <clipPath id="v">
+   <path d="m-7-7h104v83h-104v-83z"/>
+  </clipPath>
+  <clipPath id="d">
+   <path d="m0 0v65h86v-65z"/>
+  </clipPath>
+  <clipPath id="u">
+   <path d="m-7-7h171v58h-171v-58z"/>
+  </clipPath>
+  <clipPath id="t">
+   <path d="m0 0v40h153v-40z"/>
+  </clipPath>
+  <clipPath id="s">
+   <path d="m-7-7h143v58h-143v-58z"/>
+  </clipPath>
+  <clipPath id="r">
+   <path d="m0 0v40h125v-40z"/>
+  </clipPath>
+  <clipPath id="q">
+   <path d="m-7-7h148v58h-148v-58z"/>
+  </clipPath>
+  <clipPath id="p">
+   <path d="m0 0v40h130v-40z"/>
+  </clipPath>
+  <clipPath id="o">
+   <path d="m-7-7h158v58h-158v-58z"/>
+  </clipPath>
+  <clipPath id="au">
+   <path d="m0 0v40h140v-40z"/>
+  </clipPath>
+  <clipPath id="n">
+   <path d="m-7-7h177v58h-177v-58z"/>
+  </clipPath>
+  <clipPath id="as">
+   <path d="m0 0v40h159v-40z"/>
+  </clipPath>
+  <clipPath id="m">
+   <path d="m-7-7h175v58h-175v-58z"/>
+  </clipPath>
+  <clipPath id="ar">
+   <path d="m0 0v40h157v-40z"/>
+  </clipPath>
+  <clipPath id="l">
+   <path d="m-7-7h139v58h-139v-58z"/>
+  </clipPath>
+  <clipPath id="aq">
+   <path d="m0 0v40h121v-40z"/>
+  </clipPath>
+  <clipPath id="k">
+   <path d="m-7-7h153v58h-153v-58z"/>
+  </clipPath>
+  <clipPath id="j">
+   <path d="m0 0v40h135v-40z"/>
+  </clipPath>
+  <clipPath id="ap">
+   <path d="m-127-16h381v48h-381v-48z"/>
+  </clipPath>
+  <clipPath id="ao">
+   <path d="m-207-16h621v48h-621v-48z"/>
+  </clipPath>
+  <clipPath id="an">
+   <path d="m-105-16h315v48h-315v-48z"/>
+  </clipPath>
+  <clipPath id="am">
+   <path d="m-96-16h288v48h-288v-48z"/>
+  </clipPath>
+  <clipPath id="i">
+   <path d="m-131-16h393v48h-393v-48z"/>
+  </clipPath>
+  <clipPath id="al">
+   <path d="m-82-16h246v48h-246v-48z"/>
+  </clipPath>
+  <clipPath id="ak">
+   <path d="m0 0v102h99v2h101v-104z"/>
+  </clipPath>
+  <clipPath id="aj">
+   <path d="m0 0v79h99v16h-99v9h211v-104z"/>
+  </clipPath>
+  <clipPath id="ai">
+   <path d="m0 0v32h48v16h-48v56h178v-104z"/>
+  </clipPath>
+  <clipPath id="ah">
+   <path d="m0 0v104h213v-8h-141v-16h141v-57h-103v-16h103v-7z"/>
+  </clipPath>
+  <clipPath id="ag">
+   <path d="m0 0v32h48v16h-48v106h104v-154z"/>
+  </clipPath>
+  <clipPath id="af">
+   <path d="m0 0v104h192v-3h-90v-16h90v-59h-141v-16h141v-10z"/>
+  </clipPath>
+  <clipPath id="ae">
+   <path d="m0 0v82h83v16h-83v6h159v-104z"/>
+  </clipPath>
+  <clipPath id="ad">
+   <path d="m0 0v55h83v16h-83v33h167v-104z"/>
+  </clipPath>
+  <clipPath id="ac">
+   <path d="m0 0v104h126v-11h103v-66h-90v-16h90v-11z"/>
+  </clipPath>
+  <clipPath id="ab">
+   <path d="m0 0v104h222v-35h-103v-16h103v-53z"/>
+  </clipPath>
+  <clipPath id="aa">
+   <path d="m0 0v104h130v-12h79v-66h-103v-16h103v-10z"/>
+  </clipPath>
+  <clipPath id="z">
+   <path d="m0 0v172h99v16h-99v26h224v-214z"/>
+  </clipPath>
+  <clipPath id="y">
+   <path d="m0 0v104h109v-16h103v-88z"/>
+  </clipPath>
+  <clipPath id="x">
+   <path d="m0 0v104h240v-17h-79v-16h79v-66h-103v-5z"/>
+  </clipPath>
+ </defs>
+ <g fill-opacity="1" stroke-opacity="1" text-rendering="geometricPrecision">
+  <g fill="#fff" stroke="#fff">
+   <rect width="641" height="431" stroke="none"/>
+  </g>
+  <g font-family="sans-serif" font-size="11px">
+   <g transform="translate(117,2)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <rect width="339" height="424" clip-path="url(#w)" stroke="none"/>
+   </g>
+   <g transform="translate(117,2)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <rect width="339" height="424" clip-path="url(#w)" fill="none"/>
+   </g>
+   <g transform="translate(117,2)" fill="#000" image-rendering="optimizeQuality" stroke="#000">
+    <text x="142" y="12" clip-path="url(#at)" stroke="none" xml:space="preserve">CloneBook</text>
+   </g>
+   <g transform="translate(50,121)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)" stroke="none"/>
+   </g>
+   <g transform="translate(50,121)" fill="none" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)"/>
+    <line x1="15" x2="15" y1="15" y2="40" clip-path="url(#a)"/>
+    <line x2="30" y1="24" y2="24" clip-path="url(#a)"/>
+    <line x1="15" y1="40" y2="60" clip-path="url(#a)"/>
+    <line x1="15" x2="30" y1="40" y2="60" clip-path="url(#a)"/>
+   </g>
+   <g transform="translate(176,80)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="53" cy="24.5" rx="53" ry="24.5" clip-path="url(#h)" stroke="none"/>
+   </g>
+   <g transform="translate(176,80)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="53" cy="24.5" rx="53" ry="24.5" clip-path="url(#h)" fill="none"/>
+   </g>
+   <g transform="translate(176,80)" fill="#000" image-rendering="optimizeQuality" stroke="none">
+    <text x="17" y="20" clip-path="url(#g)" xml:space="preserve">Vriendschaps</text>
+    <text x="5" y="36" clip-path="url(#g)" xml:space="preserve">verzoek versturen</text>
+   </g>
+   <g transform="translate(304,80)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="65.5" cy="27" rx="65.5" ry="27" clip-path="url(#f)" stroke="none"/>
+   </g>
+   <g transform="translate(304,80)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="65.5" cy="27" rx="65.5" ry="27" clip-path="url(#f)" fill="none"/>
+   </g>
+   <g transform="translate(304,80)" fill="#000" image-rendering="optimizeQuality" stroke="none">
+    <text x="10" y="23" clip-path="url(#e)" xml:space="preserve">Vriendschapsverzoek</text>
+    <text x="10" y="39" clip-path="url(#e)" xml:space="preserve">accepteren/weigeren</text>
+   </g>
+   <g transform="translate(192,194)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="40" cy="20" rx="40" ry="20" clip-path="url(#b)" stroke="none"/>
+   </g>
+   <g transform="translate(192,194)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="40" cy="20" rx="40" ry="20" clip-path="url(#b)" fill="none"/>
+   </g>
+   <g transform="translate(192,194)" fill="#000" image-rendering="optimizeQuality" stroke="none">
+    <text x="22" y="16" clip-path="url(#c)" xml:space="preserve">Pagina</text>
+    <text x="12" y="32" clip-path="url(#c)" xml:space="preserve">aanmaken</text>
+   </g>
+   <g transform="translate(186,129)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="43" cy="32.5" rx="43" ry="32.5" clip-path="url(#v)" stroke="none"/>
+   </g>
+   <g transform="translate(186,129)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="43" cy="32.5" rx="43" ry="32.5" clip-path="url(#v)" fill="none"/>
+   </g>
+   <g transform="translate(186,129)" fill="#000" image-rendering="optimizeQuality" stroke="none">
+    <text x="24" y="20" clip-path="url(#d)" xml:space="preserve">Bericht</text>
+    <text x="16" y="36" clip-path="url(#d)" xml:space="preserve">posten op</text>
+    <text x="10" y="52" clip-path="url(#d)" xml:space="preserve">eigen tijdlijn</text>
+   </g>
+   <g transform="translate(518,99)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)" stroke="none"/>
+   </g>
+   <g transform="translate(518,99)" fill="none" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)"/>
+    <line x1="15" x2="15" y1="15" y2="40" clip-path="url(#a)"/>
+    <line x2="30" y1="24" y2="24" clip-path="url(#a)"/>
+    <line x1="15" y1="40" y2="60" clip-path="url(#a)"/>
+    <line x1="15" x2="30" y1="40" y2="60" clip-path="url(#a)"/>
+   </g>
+   <g transform="translate(518,174)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)" stroke="none"/>
+   </g>
+   <g transform="translate(518,174)" fill="none" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)"/>
+    <line x1="15" x2="15" y1="15" y2="40" clip-path="url(#a)"/>
+    <line x2="30" y1="24" y2="24" clip-path="url(#a)"/>
+    <line x1="15" y1="40" y2="60" clip-path="url(#a)"/>
+    <line x1="15" x2="30" y1="40" y2="60" clip-path="url(#a)"/>
+   </g>
+   <g transform="translate(129,234)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="76.5" cy="20" rx="76.5" ry="20" clip-path="url(#u)" stroke="none"/>
+   </g>
+   <g transform="translate(129,234)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="76.5" cy="20" rx="76.5" ry="20" clip-path="url(#u)" fill="none"/>
+   </g>
+   <g transform="translate(129,234)" fill="#000" image-rendering="optimizeQuality" stroke="none">
+    <text x="6" y="16" clip-path="url(#t)" xml:space="preserve">Aanvraag om lid te worden</text>
+    <text x="21" y="32" clip-path="url(#t)" xml:space="preserve">van pagina versturen</text>
+   </g>
+   <g transform="translate(304,159)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="62.5" cy="20" rx="62.5" ry="20" clip-path="url(#s)" stroke="none"/>
+   </g>
+   <g transform="translate(304,159)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="62.5" cy="20" rx="62.5" ry="20" clip-path="url(#s)" fill="none"/>
+   </g>
+   <g transform="translate(304,159)" fill="#000" image-rendering="optimizeQuality" stroke="none">
+    <text x="28" y="16" clip-path="url(#r)" xml:space="preserve">Lid aanvraag</text>
+    <text x="7" y="32" clip-path="url(#r)" xml:space="preserve">accepteren/weigeren</text>
+   </g>
+   <g transform="translate(299,276)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="65" cy="20" rx="65" ry="20" clip-path="url(#q)" stroke="none"/>
+   </g>
+   <g transform="translate(299,276)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="65" cy="20" rx="65" ry="20" clip-path="url(#q)" fill="none"/>
+   </g>
+   <g transform="translate(299,276)" fill="#000" image-rendering="optimizeQuality" stroke="none">
+    <text x="8" y="16" clip-path="url(#p)" xml:space="preserve">Chatgroep aanmaken</text>
+    <text x="29" y="32" clip-path="url(#p)" xml:space="preserve">met vrienden</text>
+   </g>
+   <g transform="translate(50,266)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)" stroke="none"/>
+   </g>
+   <g transform="translate(50,266)" fill="none" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)"/>
+    <line x1="15" x2="15" y1="15" y2="40" clip-path="url(#a)"/>
+    <line x2="30" y1="24" y2="24" clip-path="url(#a)"/>
+    <line x1="15" y1="40" y2="60" clip-path="url(#a)"/>
+    <line x1="15" x2="30" y1="40" y2="60" clip-path="url(#a)"/>
+   </g>
+   <g transform="translate(135,276)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="70" cy="20" rx="70" ry="20" clip-path="url(#o)" stroke="none"/>
+   </g>
+   <g transform="translate(135,276)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="70" cy="20" rx="70" ry="20" clip-path="url(#o)" fill="none"/>
+   </g>
+   <g transform="translate(135,276)" fill="#000" image-rendering="optimizeQuality" stroke="#000">
+    <text x="5" y="24" clip-path="url(#au)" stroke="none" xml:space="preserve">Bericht posten op pagina</text>
+   </g>
+   <g transform="translate(287,234)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="79.5" cy="20" rx="79.5" ry="20" clip-path="url(#n)" stroke="none"/>
+   </g>
+   <g transform="translate(287,234)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="79.5" cy="20" rx="79.5" ry="20" clip-path="url(#n)" fill="none"/>
+   </g>
+   <g transform="translate(287,234)" fill="#000" image-rendering="optimizeQuality" stroke="#000">
+    <text x="5" y="24" clip-path="url(#as)" stroke="none" xml:space="preserve">Reageren op post van vriend</text>
+   </g>
+   <g transform="translate(125,314)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="78.5" cy="20" rx="78.5" ry="20" clip-path="url(#m)" stroke="none"/>
+   </g>
+   <g transform="translate(125,314)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="78.5" cy="20" rx="78.5" ry="20" clip-path="url(#m)" fill="none"/>
+   </g>
+   <g transform="translate(125,314)" fill="#000" image-rendering="optimizeQuality" stroke="#000">
+    <text x="4" y="24" clip-path="url(#ar)" stroke="none" xml:space="preserve">Reageren op post op pagina</text>
+   </g>
+   <g transform="translate(518,256)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)" stroke="none"/>
+   </g>
+   <g transform="translate(518,256)" fill="none" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)"/>
+    <line x1="15" x2="15" y1="15" y2="40" clip-path="url(#a)"/>
+    <line x2="30" y1="24" y2="24" clip-path="url(#a)"/>
+    <line x1="15" y1="40" y2="60" clip-path="url(#a)"/>
+    <line x1="15" x2="30" y1="40" y2="60" clip-path="url(#a)"/>
+   </g>
+   <g transform="translate(518,338)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)" stroke="none"/>
+   </g>
+   <g transform="translate(518,338)" fill="none" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)"/>
+    <line x1="15" x2="15" y1="15" y2="40" clip-path="url(#a)"/>
+    <line x2="30" y1="24" y2="24" clip-path="url(#a)"/>
+    <line x1="15" y1="40" y2="60" clip-path="url(#a)"/>
+    <line x1="15" x2="30" y1="40" y2="60" clip-path="url(#a)"/>
+   </g>
+   <g transform="translate(299,326)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="60.5" cy="20" rx="60.5" ry="20" clip-path="url(#l)" stroke="none"/>
+   </g>
+   <g transform="translate(299,326)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="60.5" cy="20" rx="60.5" ry="20" clip-path="url(#l)" fill="none"/>
+   </g>
+   <g transform="translate(299,326)" fill="#000" image-rendering="optimizeQuality" stroke="#000">
+    <text x="5" y="24" clip-path="url(#aq)" stroke="none" xml:space="preserve">Bericht sturen in chat</text>
+   </g>
+   <g transform="translate(329,26)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="40" cy="20" rx="40" ry="20" clip-path="url(#b)" stroke="none"/>
+   </g>
+   <g transform="translate(329,26)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="40" cy="20" rx="40" ry="20" clip-path="url(#b)" fill="none"/>
+   </g>
+   <g transform="translate(329,26)" fill="#000" image-rendering="optimizeQuality" stroke="#000">
+    <text x="16" y="24" clip-path="url(#c)" stroke="none" xml:space="preserve">Inloggen</text>
+   </g>
+   <g transform="translate(192,26)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="40" cy="20" rx="40" ry="20" clip-path="url(#b)" stroke="none"/>
+   </g>
+   <g transform="translate(192,26)" fill="#000" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <ellipse cx="40" cy="20" rx="40" ry="20" clip-path="url(#b)" fill="none"/>
+   </g>
+   <g transform="translate(192,26)" fill="#000" image-rendering="optimizeQuality" stroke="#000">
+    <text x="14" y="24" clip-path="url(#c)" stroke="none" xml:space="preserve">Uitloggen</text>
+   </g>
+   <g transform="translate(518,26)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)" stroke="none"/>
+   </g>
+   <g transform="translate(518,26)" fill="none" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+    <circle cx="14.5" cy="7.5" r="7.5" clip-path="url(#a)"/>
+    <line x1="15" x2="15" y1="15" y2="40" clip-path="url(#a)"/>
+    <line x2="30" y1="24" y2="24" clip-path="url(#a)"/>
+    <line x1="15" y1="40" y2="60" clip-path="url(#a)"/>
+    <line x1="15" x2="30" y1="40" y2="60" clip-path="url(#a)"/>
+   </g>
+   <g transform="translate(292,376)" fill="#7acff5" image-rendering="optimizeQuality" stroke="#7acff5">
+    <ellipse cx="67.5" cy="20" rx="67.5" ry="20" clip-path="url(#k)" stroke="none"/>
+   </g>
+  </g>
+ </g>
+ <g fill="#000" fill-opacity="1" font-family="sans-serif" font-size="11px" stroke-opacity="1" text-rendering="geometricPrecision">
+  <g transform="translate(292,376)" image-rendering="optimizeQuality" stroke="#000" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="0">
+   <ellipse cx="67.5" cy="20" rx="67.5" ry="20" clip-path="url(#k)" fill="none"/>
+  </g>
+  <g transform="translate(292,376)" image-rendering="optimizeQuality" stroke="none">
+   <text x="24" y="16" clip-path="url(#j)" xml:space="preserve">Videoverbinding</text>
+   <text x="29" y="32" clip-path="url(#j)" xml:space="preserve">starten in chat</text>
+  </g>
+  <g transform="translate(2,181)" image-rendering="optimizeQuality" stroke="#000">
+   <text x="10" y="12" clip-path="url(#ap)" stroke="none" xml:space="preserve">ingelogde Gebruiker</text>
+  </g>
+  <g transform="translate(430,159)" image-rendering="optimizeQuality" stroke="#000">
+   <text x="10" y="12" clip-path="url(#ao)" stroke="none" xml:space="preserve">Gebruiker met vriendschapsverzoek</text>
+  </g>
+  <g transform="translate(481,234)" image-rendering="optimizeQuality" stroke="#000">
+   <text x="10" y="12" clip-path="url(#an)" stroke="none" xml:space="preserve">Pagina-eigenaar</text>
+  </g>
+  <g transform="translate(17,326)" image-rendering="optimizeQuality" stroke="#000">
+   <text x="10" y="12" clip-path="url(#am)" stroke="none" xml:space="preserve">Lid van pagina</text>
+  </g>
+  <g transform="translate(468,316)" image-rendering="optimizeQuality" stroke="#000">
+   <text x="10" y="12" clip-path="url(#i)" stroke="none" xml:space="preserve">Gebruiker met vriend</text>
+  </g>
+  <g transform="translate(492,398)" image-rendering="optimizeQuality" stroke="#000">
+   <text x="10" y="12" clip-path="url(#al)" stroke="none" xml:space="preserve">Lid van chat</text>
+  </g>
+  <g transform="translate(468,86)" image-rendering="optimizeQuality" stroke="#000">
+   <text x="10" y="12" clip-path="url(#i)" stroke="none" xml:space="preserve">Uitgelogde gebruiker</text>
+  </g>
+  <g stroke="#000" stroke-linecap="butt" stroke-linejoin="round">
+   <g transform="translate(30,79)" image-rendering="optimizeQuality">
+    <line x1="50" x2="146" y1="50" y2="50" clip-path="url(#ak)" fill="none"/>
+   </g>
+   <g transform="translate(30,102)" image-rendering="optimizeQuality">
+    <line x1="50" x2="157" y1="50" y2="50" clip-path="url(#aj)" fill="none"/>
+   </g>
+   <g transform="translate(81,149)" image-rendering="optimizeQuality">
+    <line x1="50" x2="124" y1="50" y2="50" clip-path="url(#ai)" fill="none"/>
+   </g>
+   <g transform="translate(358,79)" image-rendering="optimizeQuality">
+    <line x1="50" x2="159" y1="50" y2="50" clip-path="url(#ah)" fill="none"/>
+   </g>
+   <g transform="translate(81,149)" image-rendering="optimizeQuality">
+    <line x1="50" x2="50" y1="50" y2="100" clip-path="url(#ag)" fill="none"/>
+   </g>
+   <g transform="translate(379,149)" image-rendering="optimizeQuality">
+    <line x1="138" x2="50" y1="50" y2="50" clip-path="url(#af)" fill="none"/>
+   </g>
+   <g transform="translate(30,244)" image-rendering="optimizeQuality">
+    <line x1="105" x2="50" y1="50" y2="50" clip-path="url(#ae)" fill="none"/>
+   </g>
+   <g transform="translate(30,271)" image-rendering="optimizeQuality">
+    <line x1="113" x2="50" y1="50" y2="50" clip-path="url(#ad)" fill="none"/>
+   </g>
+   <g transform="translate(342,223)" image-rendering="optimizeQuality">
+    <line x1="50" x2="175" y1="50" y2="50" clip-path="url(#ac)" fill="none"/>
+   </g>
+   <g transform="translate(349,263)" image-rendering="optimizeQuality">
+    <line x1="168" x2="50" y1="50" y2="50" clip-path="url(#ab)" fill="none"/>
+   </g>
+   <g transform="translate(362,306)" image-rendering="optimizeQuality">
+    <line x1="50" x2="155" y1="50" y2="50" clip-path="url(#aa)" fill="none"/>
+   </g>
+   <g transform="translate(30,9)" image-rendering="optimizeQuality">
+    <line x1="50" x2="170" y1="160" y2="50" clip-path="url(#z)" fill="none"/>
+   </g>
+   <g transform="translate(359,-2)" image-rendering="optimizeQuality">
+    <line x1="50" x2="158" y1="50" y2="50" clip-path="url(#y)" fill="none"/>
+   </g>
+   <g transform="translate(331,327)" image-rendering="optimizeQuality">
+    <line x1="50" x2="186" y1="50" y2="50" clip-path="url(#x)" fill="none"/>
+   </g>
+  </g>
+ </g>
+ <g fill="#787878" fill-opacity="1" font-size="8px" image-rendering="optimizeQuality" stroke="#787878" stroke-opacity="1" text-rendering="geometricPrecision">
+  <text y="10" stroke="none" xml:space="preserve">Visual Paradigm Standard(ruben(Utrecht University of Applied Sciences))</text>
+ </g>
+</svg>
