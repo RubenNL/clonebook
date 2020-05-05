@@ -1,2 +1,31 @@
-Hoi!<br>
-Test voor java+mariadb:<a href="date">date</a>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="style.css"/>
+		<link rel="icon" href="icon.svg">
+		<title>CloneBook</title>
+	</head>
+	<body>
+		<div id="topBar">
+			<img src="icon.svg" height="32px">
+			<span id="siteName">CloneBook</span>
+		</div>
+		<div id="main">
+			<div id="loginScreen">
+				<label for="loginEmail">E-mail adres:</label>
+				<input type="email" id="loginEmail"><br>
+				<label for="loginPassword">Wachtwoord:</label>
+				<input type="password" id="loginPassword"><br>
+				<input type="submit" id="loginButton" value="Inloggen">
+			</div>
+			<div id="newAccountScreen">
+				<label for="newAccountEmail">E-mail adres:</label>
+				<input type="email" id="newAccountEmail"><br>
+				<input type="submit" id="createNewAccountButton" value="Account aanmaken">
+			</div>
+			<button id="showNewAccount">Nieuw account aanmaken</button>
+		</div>
+		<script src="jquery.min.js"></script>
+		<script src="config.js"></script>
+		<script src="loginSignup.js"></script>
+	</body>
+</html>

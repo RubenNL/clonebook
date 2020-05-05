@@ -1,0 +1,18 @@
+#topBar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	display:flex;
+	background-color: #3b9859;
+}
+#topBar #siteName {
+	margin:auto;
+	color:white;
+}
+#main {
+	margin-top:40px;
+}
+#newAccountScreen {
+	display:none;
+}
