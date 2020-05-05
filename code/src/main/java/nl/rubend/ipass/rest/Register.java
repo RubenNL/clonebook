@@ -33,10 +33,10 @@ public class Register {
 		try {
 			user=User.getUser(email);
 		} catch (IpassException e) {
-			response.add("message",e.getMessage());
-			return response.build().toString();
-			//e.printStackTrace();
-			//user=new User(email);
+			//response.add("message",e.getMessage());
+			//return response.build().toString();
+			e.printStackTrace();
+			user=new User(email);
 		}
 		user.sendPasswordForgottenUrl();
 		response.add("status","OK");
