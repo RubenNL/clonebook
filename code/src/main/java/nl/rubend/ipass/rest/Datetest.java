@@ -16,9 +16,9 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 @Path("/date")
+@Produces("application/json")
 public class Datetest {
 	@GET
-	@Produces("application/json")
 	public String getDate() {
 		JsonObjectBuilder dateObject = Json.createObjectBuilder();
 		try {

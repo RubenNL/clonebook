@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
-public class SqlInterface {
+public class
+SqlInterface {
 	private static Connection conn;
 	static {
 		try {
@@ -18,5 +19,11 @@ public class SqlInterface {
 	}
 	public static ResultSet executeQuery(String query) throws SQLException {
 		return conn.createStatement().executeQuery(query);
+	}
+	public static int executeUpdate(String query) throws SQLException {
+		return conn.createStatement().executeUpdate(query);
+	}
+	public static PreparedStatement prepareStatement(String statement) throws SQLException {
+		return conn.prepareStatement(statement);
 	}
 }
