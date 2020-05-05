@@ -16,7 +16,7 @@ public class SqlInterface {
 			e.printStackTrace();
 		}
 	}
-	protected static ResultSet executeQuery(String query) throws SQLException {
+	public static ResultSet executeQuery(String query) throws SQLException {
 		return conn.createStatement().executeQuery(query);
 	}
 }
