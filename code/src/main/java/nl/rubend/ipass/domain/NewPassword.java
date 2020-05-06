@@ -1,6 +1,6 @@
 package nl.rubend.ipass.domain;
 
-import nl.rubend.ipass.SqlInterface;
+import nl.rubend.ipass.utils.SqlInterface;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -25,16 +25,20 @@ public class NewPassword {
 	public String getCode() {
 		return this.uuid;
 	}
-	public static User use(String code) throws IpassException, UnauthorizedException {
+	public static User use(String code) throws IpassException {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM newPassword WHERE code=?");
 			statement.setString(1, code);
 			ResultSet set = statement.executeQuery();
-			set.next();
+			try {
+				set.next();
+			} catch (SQLException e) {
+				throw new IpassException("Code niet gevonden.");
+			}
 			User user;
 			if (set.getDate("validUntil").before(new Date(System.currentTimeMillis())))
 				user = User.getUser(set.getInt("userId"));
-			else throw new UnauthorizedException("Code is niet meer geldig.");
+			else throw new IpassException("Code is niet meer geldig.");
 			statement = SqlInterface.prepareStatement("DELETE FROM newPassword WHERE ID=?");
 			statement.setInt(1, set.getInt("ID"));
 			statement.executeUpdate();

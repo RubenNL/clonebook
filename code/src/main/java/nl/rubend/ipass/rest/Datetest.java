@@ -1,18 +1,12 @@
 package nl.rubend.ipass.rest;
 
-import nl.rubend.ipass.SqlInterface;
+import nl.rubend.ipass.utils.SqlInterface;
 
 import javax.json.Json;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 @Path("/date")

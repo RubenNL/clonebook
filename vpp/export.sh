@@ -1,5 +1,10 @@
 #!/bin/bash
 #Dit script wordt uitgevoerd voor elke commit (pre-commit hook), zodat er altijd afbeeldingen zijn van het visual paradigm project.
+
+exit #Visual paradigm veranderd nogsteeds bestanden die niet veranderd zijn.
+
+
+
 cd "$(dirname $0)"
 vppFile="ipass.vpp"
 vppFilePath="$PWD/$vppFile"

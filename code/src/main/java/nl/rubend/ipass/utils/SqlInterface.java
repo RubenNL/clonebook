@@ -1,11 +1,10 @@
-package nl.rubend.ipass;
+package nl.rubend.ipass.utils;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
-public class
-SqlInterface {
+public class SqlInterface {
 	private static Connection conn;
 	static {
 		try {

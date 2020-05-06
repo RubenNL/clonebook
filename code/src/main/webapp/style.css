@@ -13,6 +13,6 @@
 #main {
 	margin-top:40px;
 }
-#newAccountScreen {
+#newAccountScreen,#newPasswordScreen {
 	display:none;
 }
