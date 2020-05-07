@@ -10,28 +10,41 @@
 			<span id="siteName">CloneBook</span>
 		</div>
 		<div id="main">
-			<div id="loginScreen">
-				<label for="loginEmail">E-mail adres:</label>
-				<input type="email" id="loginEmail"><br>
-				<label for="loginPassword">Wachtwoord:</label>
-				<input type="password" id="loginPassword"><br>
-				<input type="submit" id="loginButton" value="Inloggen">
+			<div id="notLoggedIn">
+				<div id="loginScreen">
+					<label for="loginEmail">E-mail adres:</label>
+					<input type="email" id="loginEmail"><br>
+					<label for="loginPassword">Wachtwoord:</label>
+					<input type="password" id="loginPassword"><br>
+					<input type="submit" id="loginButton" value="Inloggen">
+				</div>
+				<div id="newAccountScreen">
+					<label for="newAccountEmail">E-mail adres:</label>
+					<input type="email" id="newAccountEmail"><br>
+					<input type="submit" id="createNewAccountButton" value="Account aanmaken">
+				</div>
+				<div id="newPasswordScreen">
+					<label for="newPasswordBox">Wachtwoord:</label>
+					<input type="password" id="newPasswordBox"><br>
+					<input type="submit" id="newPasswordButton" value="Wachtwoord opslaan">
+				</div>
+				<button id="showNewAccount">Nieuw account aanmaken</button>
 			</div>
-			<div id="newAccountScreen">
-				<label for="newAccountEmail">E-mail adres:</label>
-				<input type="email" id="newAccountEmail"><br>
-				<input type="submit" id="createNewAccountButton" value="Account aanmaken">
+			<div id="settings">
+				<label for="settingsName">Naam:</label>
+				<input id="settingsName"><br>
+				<label for="settingsEmail">E-mail:</label>
+				<input id="settingsEmail"><br>
+				<button id="settingsSave">opslaan</button><br>
 			</div>
-			<div id="newPasswordScreen">
-				<label for="newPasswordBox">Wachtwoord:</label>
-				<input type="password" id="newPasswordBox"><br>
-				<input type="submit" id="newPasswordButton" value="Wachtwoord opslaan">
-			</div>
-			<button id="showNewAccount">Nieuw account aanmaken</button>
 		</div>
 		<script src="jquery.min.js"></script>
 		<script src="config.js"></script>
 		<script src="tools.js"></script>
 		<script src="loginSignup.js"></script>
+		<script src="settings.js"></script>
+		<script>
+			openSettings() //Demo
+		</script>
 	</body>
 </html>

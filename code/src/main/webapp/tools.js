@@ -1,3 +1,16 @@
+function handleResponse(response) {
+	return new Promise((resolve,reject)=>{
+		if (response.status === 200) {
+			resolve(response.json());
+		} else {
+			reject('Invalid JSON');
+		}
+	}).then(response=>{
+		if(response.status=="OK") return response;
+		else throw new Error(response.error)
+	})
+}
+
 function sendPost(path,params) {
 	return fetch(url+path,{
 		method:'POST',
@@ -7,14 +20,9 @@ function sendPost(path,params) {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
 		}
-	}).then(response=>{
-		if (response.status === 200) {
-			return response.json();
-		} else {
-			throw new Error('Something went wrong on api server!');
-		}
-	})
+	}).then(handleResponse)
 }
+
 function sendGet(path,params) {
 	return fetch(url+path,{
 		method:'GET',
@@ -22,11 +30,5 @@ function sendGet(path,params) {
 		headers: {
 			'Accept': 'application/json',
 		}
-	}).then(response=>{
-		if (response.status === 200) {
-			return response.json();
-		} else {
-			throw new Error('Something went wrong on api server!');
-		}
-	})
+	}).then(handleResponse)
 }

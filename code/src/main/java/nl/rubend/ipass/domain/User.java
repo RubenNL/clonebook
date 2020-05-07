@@ -106,6 +106,31 @@ public class User {
 	public void sendPasswordForgottenUrl() {
 		SendEmail.SendEmail(this.email,"CloneBook nieuw wachtwoord","Gebruik <a href=\"https://clonebook.rubend.nl/#newAccount=" + new NewPassword(this).getCode() + "\">Deze</a> url om je account te activeren.");
 	}
+	public void setName(String name) {
+		this.name = name;
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE user SET name = ? WHERE ID = ?");
+			statement.setString(1, this.name);
+			statement.setInt(2, this.userId);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
+	public void setEmail(String email) {
+		this.email = email;
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE user SET email = ? WHERE ID = ?");
+			statement.setString(1, this.email);
+			statement.setInt(2, this.userId);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
 	public int getId() {return this.userId;}
 	public String getName() {return this.name;}
+	public String getEmail() {return this.email;}
 }
