@@ -14,7 +14,7 @@ import java.io.StringReader;
 
 @Path("/user")
 @Produces("application/json")
-public class Register {
+public class UserService {
 	@POST
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -24,7 +24,7 @@ public class Register {
 		String email=data.getString("email");
 		User user;
 		try {
-			user=User.getUser(email);
+			user=User.getUserByEmail(email);
 		} catch (UnauthorizedException e) {
 			user=new User(email);
 		}
@@ -71,7 +71,7 @@ public class Register {
 		JsonObject data=Json.createReader(new StringReader(json)).read().asJsonObject();
 		User user;
 		try {
-			user = User.getUser(data.getString("email"));
+			user = User.getUserByEmail(data.getString("email"));
 		} catch (UnauthorizedException e) {
 			response.add("status","ERR");
 			response.add("error","gebruiker niet gevonden");
@@ -81,7 +81,7 @@ public class Register {
 			req.getSession(true).setAttribute("sessionId",new Session(user).getId());
 			response.add("status","OK");
 		} else {
-			response.add("status","OK");
+			response.add("status","ERR");
 			response.add("error","wachtwoord niet geldig");
 		}
 		return response.build().toString();

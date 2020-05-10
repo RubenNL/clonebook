@@ -15,7 +15,7 @@ public class NewPassword {
 			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO newPassword(validUntil,code,userID) VALUES(?,?,?)");
 			statement.setDate(1, new Date(System.currentTimeMillis() + 3600 * 1000)); //1 hour in future
 			statement.setString(2, uuid);
-			statement.setInt(3, user.getId());
+			statement.setString(3, user.getId());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -37,7 +37,7 @@ public class NewPassword {
 			}
 			User user;
 			if (set.getDate("validUntil").before(new Date(System.currentTimeMillis())))
-				user = User.getUser(set.getInt("userId"));
+				user = User.getUserById(set.getString("userId"));
 			else throw new IpassException("Code is niet meer geldig.");
 			statement = SqlInterface.prepareStatement("DELETE FROM newPassword WHERE ID=?");
 			statement.setInt(1, set.getInt("ID"));

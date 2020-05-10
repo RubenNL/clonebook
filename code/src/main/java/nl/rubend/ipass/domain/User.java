@@ -12,46 +12,48 @@ import java.security.spec.KeySpec;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class User {
 	private static SecureRandom random = new SecureRandom();
-	private int userId;
+	private String userId;
 	private String name;
 	private String email;
 	private String hash;
 	private String salt;
-	public static User getUser(int userId) throws IpassException {
+	public static User getUserById(String userId) throws IpassException {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM user WHERE ID=?");
-			statement.setInt(1, userId);
+			statement.setString(1, userId);
 			ResultSet set=statement.executeQuery();
 			set.next();
-			return new User(set.getInt("ID"),set.getString("name"),set.getString("email"),set.getString("hash"),set.getString("salt"));
+			return new User(set.getString("ID"),set.getString("name"),set.getString("email"),set.getString("hash"),set.getString("salt"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
 	}
-	public static User getUser(String email) throws UnauthorizedException {
+	public static User getUserByEmail(String email) throws UnauthorizedException {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM user WHERE email=?");
 			statement.setString(1, email);
 			ResultSet set=statement.executeQuery();
 			set.next();
-			return new User(set.getInt("ID"),set.getString("name"),set.getString("email"),set.getString("hash"),set.getString("salt"));
+			return new User(set.getString("ID"),set.getString("name"),set.getString("email"),set.getString("hash"),set.getString("salt"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new UnauthorizedException(e.getMessage());
 		}
 	}
 	public User(String email) throws IpassException {
-		this.userId=ThreadLocalRandom.current().nextInt(0, 1000000000);
+		this.userId=UUID.randomUUID().toString();
 		this.email=email;
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO user(ID,email,name) VALUES (?,?,?)");
-			statement.setInt(1, userId);
+			statement.setString(1, userId);
 			statement.setString(2, email);
 			statement.setString(3,"Nieuwe gebruiker");
 			statement.executeUpdate();
@@ -61,7 +63,7 @@ public class User {
 		}
 		this.sendPasswordForgottenUrl();
 	}
-	public User(int userId,String name,String email,String hash,String salt) {
+	public User(String userId,String name,String email,String hash,String salt) {
 		this.userId=userId;
 		this.name=name;
 		this.email=email;
@@ -93,7 +95,32 @@ public class User {
 			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE user SET salt = ?,hash = ?  WHERE ID = ?");
 			statement.setString(1, this.salt);
 			statement.setString(2, this.hash);
-			statement.setInt(3, this.userId);
+			statement.setString(3, this.userId);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
+	public ArrayList<Session> getSessions() {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM session WHERE userID=?");
+			statement.setString(1,userId);
+			ResultSet set=statement.executeQuery();
+			ArrayList<Session> response=new ArrayList<Session>();
+			while(set.next()) {
+				response.add(new Session(set.getString("ID"),set.getDate("validUntil"),set.getString("userID")));
+			}
+			return response;
+		} catch (SQLException | UnauthorizedException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
+	public void delete() {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM user WHERE ID = ?");
+			statement.setString(1, this.userId);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -111,7 +138,7 @@ public class User {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE user SET name = ? WHERE ID = ?");
 			statement.setString(1, this.name);
-			statement.setInt(2, this.userId);
+			statement.setString(2, this.userId);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -123,14 +150,56 @@ public class User {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE user SET email = ? WHERE ID = ?");
 			statement.setString(1, this.email);
-			statement.setInt(2, this.userId);
+			statement.setString(2, this.userId);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
 	}
-	public int getId() {return this.userId;}
+	public String getId() {return this.userId;}
 	public String getName() {return this.name;}
 	public String getEmail() {return this.email;}
+	public ArrayList<Page> getPages() {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM page_lid WHERE userID=?");
+			statement.setString(1,userId);
+			ResultSet set=statement.executeQuery();
+			ArrayList<Page> response=new ArrayList<Page>();
+			while(set.next()) {
+				response.add(Page.getPage(set.getString("pageID")));
+			}
+			return response;
+		} catch (SQLException | NotFoundException e) {
+			throw new IpassException(e.getMessage());
+		}
+	}
+	public ArrayList<Post> getPosts() {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM post WHERE userID=?");
+			statement.setString(1, userId);
+			ResultSet set = statement.executeQuery();
+			ArrayList<Post> response = new ArrayList<Post>();
+			while (set.next()) {
+				response.add(new Post(set.getString("ID"), set.getString("userID"), set.getString("pageID"),set.getString("repliedTo"),set.getString("text"),set.getTimestamp("date")));
+			}
+			return response;
+		} catch (SQLException | NotFoundException e) {
+			throw new IpassException(e.getMessage());
+		}
+	}
+	public ArrayList<Vote> getVotes() {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM vote WHERE userID=?");
+			statement.setString(1, userId);
+			ResultSet set = statement.executeQuery();
+			ArrayList<Vote> response = new ArrayList<Vote>();
+			while (set.next()) {
+				response.add(new Vote(set.getString("userID"), set.getString("postID"),set.getInt("vote")));
+			}
+			return response;
+		} catch (SQLException | NotFoundException e) {
+			throw new IpassException(e.getMessage());
+		}
+	}
 }
