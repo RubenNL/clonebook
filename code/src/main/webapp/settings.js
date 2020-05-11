@@ -7,6 +7,7 @@ $('#settingsSave').on('click',()=>{
 loginListeners.push(sendGet("/rest/user/settings").then(settings=>{
 	$('#settingsName').val(settings.name)
 	$('#settingsEmail').val(settings.email)
+	openSettings();
 }))
 function openSettings() {
 	$('#settings').show();

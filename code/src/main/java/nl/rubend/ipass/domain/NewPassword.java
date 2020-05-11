@@ -44,7 +44,6 @@ public class NewPassword {
 			statement.executeUpdate();
 			return user;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
 	}

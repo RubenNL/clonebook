@@ -3,11 +3,8 @@ function handleResponse(response) {
 		if (response.status === 200) {
 			resolve(response.json());
 		} else {
-			reject('Invalid JSON');
+			reject(response.status);
 		}
-	}).then(response=>{
-		if(response.status=="OK") return response;
-		else throw new Error(response.error)
 	})
 }
 

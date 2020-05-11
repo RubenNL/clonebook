@@ -1,5 +1,7 @@
 package nl.rubend.ipass.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import nl.rubend.ipass.utils.SqlInterface;
 import nl.rubend.ipass.utils.SendEmail;
 
@@ -14,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -61,7 +64,6 @@ public class User {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
-		this.sendPasswordForgottenUrl();
 	}
 	public User(String userId,String name,String email,String hash,String salt) {
 		this.userId=userId;
@@ -102,6 +104,7 @@ public class User {
 			throw new IpassException(e.getMessage());
 		}
 	}
+	@JsonIgnore
 	public ArrayList<Session> getSessions() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM session WHERE userID=?");
@@ -159,7 +162,9 @@ public class User {
 	}
 	public String getId() {return this.userId;}
 	public String getName() {return this.name;}
+	@JsonIgnore
 	public String getEmail() {return this.email;}
+	@JsonIgnore
 	public ArrayList<Page> getPages() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM page_lid WHERE userID=?");
@@ -174,6 +179,7 @@ public class User {
 			throw new IpassException(e.getMessage());
 		}
 	}
+	@JsonIgnore
 	public ArrayList<Post> getPosts() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM post WHERE userID=?");
@@ -188,6 +194,7 @@ public class User {
 			throw new IpassException(e.getMessage());
 		}
 	}
+	@JsonIgnore
 	public ArrayList<Vote> getVotes() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM vote WHERE userID=?");
@@ -201,5 +208,18 @@ public class User {
 		} catch (SQLException | NotFoundException e) {
 			throw new IpassException(e.getMessage());
 		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return userId.equals(user.userId);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(userId);
 	}
 }

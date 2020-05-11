@@ -17,11 +17,11 @@ $('#createNewAccountButton').on("click",()=>{
 function load() {
 	sendGet('/rest/user')
 	.then(response=>Promise.all(loginListeners))
-	.catch(exception=>{
-		if(exception.message==="niet ingelogd" || exception.message==="Sessie niet meer geldig") $('#notLoggedIn').show()
+	.catch(message=>{
+		if(message==401) $('#notLoggedIn').show()
 		else {
-			console.log(exception);
-			alert(exception);
+			console.log(message);
+			alert(message);
 		}
 	})
 }

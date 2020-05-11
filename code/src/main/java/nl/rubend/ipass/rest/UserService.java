@@ -2,7 +2,6 @@ package nl.rubend.ipass.rest;
 
 import nl.rubend.ipass.domain.*;
 
-import javax.annotation.PostConstruct;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -10,16 +9,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("/user")
-@Produces("application/json")
+@Produces(MediaType.APPLICATION_JSON)
 public class UserService {
 	@POST
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String register(@Context HttpServletRequest req, String json) {
-		JsonObjectBuilder response=Json.createObjectBuilder();
+	public Response newPasswordMail(@Context HttpServletRequest req, String json) {
 		JsonObject data=Json.createReader(new StringReader(json)).read().asJsonObject();
 		String email=data.getString("email");
 		User user;
@@ -29,97 +30,80 @@ public class UserService {
 			user=new User(email);
 		}
 		user.sendPasswordForgottenUrl();
-		response.add("status","OK");
-		return response.build().toString();
+		return Response.ok(new HashMap<String,String>()).build();
 	}
 	@POST
 	@Path("/newPassword")
-	public String use(@Context HttpServletRequest req, String json) {
-		JsonObjectBuilder response=Json.createObjectBuilder();
+	public Response use(@Context HttpServletRequest req, String json) {
 		JsonObject data=Json.createReader(new StringReader(json)).read().asJsonObject();
 		if(data.getString("password")!=null && data.getString("password").length()>=8 && data.getString("code")!=null) {
 			User user=NewPassword.use(data.getString("code"));
 			user.setPassword(data.getString("password"));
 			req.getSession(true).setAttribute("sessionId",new Session(user).getId());
-			response.add("status","OK");
+			return Response.ok(new HashMap<String,String>()).build();
 		} else {
-			response.add("status","ERR");
-			response.add("error","ongeldige waardes");
+			Map<String,String> response=new HashMap<>();
+			response.put("error","ongeldige waardes");
+			return Response.status(Response.Status.BAD_REQUEST).entity(response).build();
 		}
-		return response.build().toString();
 	}
 	@GET
 	@Path("/")
-	public String status(@Context HttpServletRequest req) {
-		JsonObjectBuilder response=Json.createObjectBuilder();
+	public Response status(@Context HttpServletRequest req) {
 		User user;
 		try {
 			user = Utils.getUser(req);
 		} catch (UnauthorizedException e) {
-			response.add("status","ERR");
-			response.add("error",e.getMessage());
-			return response.build().toString();
+			Map<String,String> response=new HashMap<>();
+			return Response.status(Response.Status.UNAUTHORIZED).entity(response).build();
 		}
-		response.add("status","OK");
-		return response.build().toString();
+		return Response.ok(user).build();
 	}
 	@POST
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String login(@Context HttpServletRequest req, String json) {
-		JsonObjectBuilder response=Json.createObjectBuilder();
+	public Response login(@Context HttpServletRequest req, String json) {
 		JsonObject data=Json.createReader(new StringReader(json)).read().asJsonObject();
 		User user;
 		try {
 			user = User.getUserByEmail(data.getString("email"));
 		} catch (UnauthorizedException e) {
-			response.add("status","ERR");
-			response.add("error","gebruiker niet gevonden");
-			return response.build().toString();
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 		if(user.checkPassword(data.getString("password"))) {
 			req.getSession(true).setAttribute("sessionId",new Session(user).getId());
-			response.add("status","OK");
+			return Response.ok(new HashMap<String,String>()).build();
 		} else {
-			response.add("status","ERR");
-			response.add("error","wachtwoord niet geldig");
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
-		return response.build().toString();
 	}
 	@GET
 	@Path("/settings")
-	public String getSettings(@Context HttpServletRequest req) {
-		JsonObjectBuilder response=Json.createObjectBuilder();
+	public Response getSettings(@Context HttpServletRequest req) {
 		User user;
 		try {
 			user = Utils.getUser(req);
 		} catch (UnauthorizedException e) {
-			response.add("status","ERR");
-			response.add("error",e.getMessage());
-			return response.build().toString();
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
-		response.add("email",user.getEmail());
-		response.add("name",user.getName());
-		response.add("status","OK");
-		return response.build().toString();
+		Map<String,String> response=new HashMap<>();
+		response.put("email",user.getEmail());
+		response.put("name",user.getName());
+		return Response.ok(response).build();
 	}
 	@POST
 	@Path("/settings")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String setSettings(@Context HttpServletRequest req, String json) {
-		JsonObject data=Json.createReader(new StringReader(json)).read().asJsonObject();
-		JsonObjectBuilder response=Json.createObjectBuilder();
+	public Response setSettings(@Context HttpServletRequest req, String json) {
 		User user;
 		try {
 			user = Utils.getUser(req);
 		} catch (UnauthorizedException e) {
-			response.add("status","ERR");
-			response.add("error",e.getMessage());
-			return response.build().toString();
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
+		JsonObject data=Json.createReader(new StringReader(json)).read().asJsonObject();
 		if(!user.getEmail().equals(data.getString("email"))) user.setEmail(data.getString("email"));
 		if(!user.getName().equals(data.getString("name"))) user.setName(data.getString("name"));
-		response.add("status","OK");
-		return response.build().toString();
+		return Response.ok(new HashMap<String,String>()).build();
 	}
 }
