@@ -5,33 +5,43 @@
 		<title>CloneBook</title>
 	</head>
 	<body>
-		<div id="topBar">
-			<img src="icon.svg" height="32px">
+		<header role="banner" id="topBar">
+			<img src="icon.svg" height="32px" alt="logo">
 			<span id="siteName">CloneBook</span>
 			<div id="userMenu">
 				<span id="userMenuName"></span>
 			</div>
-		</div>
-		<div id="main">
+		</header>
+		<main role="main">
 			<div id="notLoggedIn">
-				<div id="loginScreen">
-					<label for="loginEmail">E-mail adres:</label>
-					<input type="email" id="loginEmail"><br>
-					<label for="loginPassword">Wachtwoord:</label>
-					<input type="password" id="loginPassword"><br>
-					<input type="submit" id="loginButton" value="Inloggen">
+				<div id="loginOptions">
+					<form id="loginScreen" action="javascript:login()">
+						<fieldset>
+							<legend>Inloggen</legend>
+							<label for="loginEmail">E-mail adres:</label>
+							<input type="email" id="loginEmail" required><br>
+							<label for="loginPassword">Wachtwoord:</label>
+							<input type="password" id="loginPassword" required><br>
+						</fieldset>
+						<input type="submit" id="loginButton" value="Inloggen">
+					</form>
+					<b id="loginSeparator">OF</b>
+					<form id="newAccountScreen" action="javascript:passwordRequest()">
+						<fieldset>
+							<legend>Nieuw account aanmaken<br>wachtwoord vergeten</legend>
+							<label for="newAccountEmail">E-mail adres:</label>
+							<input type="email" id="newAccountEmail" required><br>
+						</fieldset>
+						<input type="submit" id="createNewAccountButton" value="Account aanmaken">
+					</form>
 				</div>
-				<div id="newAccountScreen">
-					<label for="newAccountEmail">E-mail adres:</label>
-					<input type="email" id="newAccountEmail"><br>
-					<input type="submit" id="createNewAccountButton" value="Account aanmaken">
-				</div>
-				<div id="newPasswordScreen">
-					<label for="newPasswordBox">Wachtwoord:</label>
-					<input type="password" id="newPasswordBox"><br>
+				<form id="newPasswordScreen" action="javascript:savePassword()">
+					<fieldset>
+						<label for="newPasswordBox">Wachtwoord:</label>
+						<input type="password" id="newPasswordBox"><br>
+					</fieldset>
 					<input type="submit" id="newPasswordButton" value="Wachtwoord opslaan">
-				</div>
-				<button id="showNewAccount">Nieuw account aanmaken</button>
+				</form>
 			</div>
 			<div id="settings">
 				<label for="settingsName">Naam:</label>
@@ -40,7 +50,7 @@
 				<input id="settingsEmail"><br>
 				<button id="settingsSave">opslaan</button><br>
 			</div>
-		</div>
+		</main>
 		<script src="jquery.min.js"></script>
 		<script src="config.js"></script>
 		<script src="tools.js"></script>

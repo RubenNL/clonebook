@@ -1,10 +1,6 @@
 var loginListeners=[]
 
-$('#showNewAccount').on('click',()=>{
-	$('#newAccountScreen').toggle();
-	$('#loginScreen').toggle();
-});
-$('#createNewAccountButton').on("click",()=>{
+function passwordRequest() {
 	sendPost('/rest/user/new',{
 		email:$('#newAccountEmail').val()
 	}).then(response=>{
@@ -13,7 +9,7 @@ $('#createNewAccountButton').on("click",()=>{
 		$('#newAccountEmail').val('');
 		$('#notLoggedIn').hide();
 	}).catch(exception=>alert(exception));
-});
+}
 function load() {
 	sendGet('/rest/user')
 	.then(response=>Promise.all(loginListeners))
@@ -25,15 +21,15 @@ function load() {
 		}
 	})
 }
-$('#newPasswordButton').on('click',()=>{
+function savePassword() {
 	sendPost('/rest/user/newPassword',{
 		code:window.location.hash.split('=')[1],
 		password:$('#newPasswordBox').val()
 	})
 	.then(response=>load())
 	.catch(exception=>alert(exception));
-});
-$('#loginButton').on('click',()=>{
+}
+function login() {
 	sendPost('/rest/user/login',{
 		email:$('#loginEmail').val(),
 		password:$('#loginPassword').val()
@@ -44,15 +40,15 @@ $('#loginButton').on('click',()=>{
 	}).catch(exception=>{
 		alert(exception);
 	})
-});
+}
 if(window.location.hash && window.location.hash.split('=')[1]) {
 	parts=window.location.hash.split('=');
 	if(parts[1]) {
 		parts[0]=parts[0].split('#')[1];
 		if(parts[0]==="newAccount") {
-			$('#loginScreen').hide();
-			$('#notLoggedIn').show();
 			$('#newPasswordScreen').show();
+			$('#loginOptions').hide();
+			$('#notLoggedIn').show();
 		}
 	}
 } else load();

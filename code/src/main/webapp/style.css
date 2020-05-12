@@ -10,9 +10,22 @@
 	margin:auto;
 	color:white;
 }
-#main {
+main {
 	margin-top:40px;
 }
-#settings,#notLoggedIn,#newAccountScreen,#newPasswordScreen {
+#loginOptions {
+	display:flex;
+}
+#loginOptions fieldset {
+	text-align:right;
+}
+#loginOptions > form {
+	margin-right:30px;
+	margin-left:30px;
+}
+#settings,#notLoggedIn,#newPasswordScreen {
 	display:none;
+}
+#loginSeparator {
+	align-self:center;
 }
