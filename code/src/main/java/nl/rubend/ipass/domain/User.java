@@ -131,6 +131,7 @@ public class User {
 		}
 	}
 	public boolean checkPassword(String password) {
+		if(this.salt==null || this.salt.equals("")) return false;
 		return hash(password,this.salt).equals(this.hash);
 	}
 	public void sendPasswordForgottenUrl() {
