@@ -14,7 +14,7 @@ function load() {
 	sendGet('/rest/user')
 	.then(response=>Promise.all(loginListeners))
 	.catch(message=>{
-		if(message==401) $('#notLoggedIn').show()
+		if(message==401) $('#notLoggedIn').show();
 		else {
 			console.log(message);
 			alert(message);
@@ -38,7 +38,8 @@ function login() {
 		console.log(response);
 		load();
 	}).catch(exception=>{
-		alert(exception);
+		if(exception==401) alert("e-mail+wachtwoord combinatie niet geldig.");
+		else alert(exception);
 	})
 }
 if(window.location.hash && window.location.hash.split('=')[1]) {

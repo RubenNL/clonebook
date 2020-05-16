@@ -1,4 +1,4 @@
-<html>
+<html lang="nl">
 	<head>
 		<link rel="stylesheet" type="text/css" href="style.css"/>
 		<link rel="icon" href="icon.svg">
@@ -38,6 +38,7 @@
 				</div>
 				<form id="newPasswordScreen" action="javascript:savePassword()">
 					<fieldset>
+						<legend>Nieuw wachtwoord instellen</legend>
 						<label for="newPasswordBox">Wachtwoord:</label>
 						<input type="password" id="newPasswordBox"><br>
 					</fieldset>
@@ -51,6 +52,16 @@
 				<input id="settingsEmail"><br>
 				<button id="settingsSave">opslaan</button><br>
 			</div>
+			<div id="posts">
+				<template id="postTemplate">
+					<article class="post">
+						<img class="profilePicture">
+						<span class="name"></span>
+						<span class="date"></span>
+						<p class="text"></p>
+					</article>
+				</template>
+			</div>
 		</main>
 		<aside id="friends">Vrienden</aside>
 		<footer>Copyright Ruben van Dijk</footer>
@@ -58,6 +69,7 @@
 		<script src="config.js"></script>
 		<script src="tools.js"></script>
 		<script src="loginSignup.js"></script>
+		<script src="post.js"></script>
 		<script src="settings.js"></script>
 	</body>
 </html>
