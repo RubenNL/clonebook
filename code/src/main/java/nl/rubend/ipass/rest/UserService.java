@@ -52,6 +52,7 @@ public class UserService {
 				.add("name",user.getName())
 				.add("email",user.getEmail())
 				.add("id",user.getId())
+				.add("privatePageId",user.getPrivatePageId())
 				.build().toString();
 	}
 	@POST

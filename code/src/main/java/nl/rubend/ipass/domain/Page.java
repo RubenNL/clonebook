@@ -1,5 +1,7 @@
 package nl.rubend.ipass.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import nl.rubend.ipass.utils.SqlInterface;
 
 import java.sql.PreparedStatement;
@@ -20,10 +22,10 @@ public class Page {
 			statement.setString(1, id);
 			ResultSet set=statement.executeQuery();
 			set.next();
-			return new Page(set.getString("userId"),set.getString("name"),set.getString("ID"));
+			return new Page(set.getString("ownerId"),set.getString("name"),set.getString("ID"));
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new NotFoundException("Sessie niet meer geldig");
+			throw new RuntimeException(e);
 		}
 	}
 	private Page(String ownerId,String name, String id) {
@@ -89,7 +91,7 @@ public class Page {
 	}
 	public void addLid(User user) {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO page_lid(userID,pageID) VALUES (?,?)");
+			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO pageLid(userID,pageID) VALUES (?,?)");
 			statement.setString(1,user.getId());
 			statement.setString(2, this.id);
 			statement.executeUpdate();
@@ -98,9 +100,27 @@ public class Page {
 			throw new IpassException(e.getMessage());
 		}
 	}
+	public boolean isLid(User user) {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("select userID from pageLid where pageID=? and userID=?");
+			statement.setString(1, this.id);
+			statement.setString(2,user.getId());
+			ResultSet set=statement.executeQuery();
+			try {
+				set.first();
+				return true;
+			} catch (SQLException e) {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
+	@JsonIgnore
 	public ArrayList<User> getLeden() {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM page_lid WHERE pageID=?");
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pageLid WHERE pageID=?");
 			statement.setString(1,id);
 			ResultSet set=statement.executeQuery();
 			ArrayList<User> response=new ArrayList<User>();
@@ -112,6 +132,7 @@ public class Page {
 			throw new IpassException(e.getMessage());
 		}
 	}
+	@JsonIgnore
 	public ArrayList<Post> getPosts() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM post WHERE pageID=?");
@@ -125,5 +146,15 @@ public class Page {
 		} catch (SQLException | NotFoundException e) {
 			throw new IpassException(e.getMessage());
 		}
+	}
+	public String getName() {
+		return this.name;
+	}
+	@JsonIgnore
+	public String getOwnerId() {
+		return this.ownerId;
+	}
+	public User getOwner() {
+		return User.getUserById(getOwnerId());
 	}
 }

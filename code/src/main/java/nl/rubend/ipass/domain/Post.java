@@ -1,5 +1,6 @@
 package nl.rubend.ipass.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import nl.rubend.ipass.utils.SqlInterface;
 
 import java.sql.Timestamp;
@@ -55,11 +56,23 @@ public class Post {
 	public Post(User user,Page page,Post repliedTo,String text) {
 		this(user.getId(),page.getId(),repliedTo==null?null:repliedTo.getId(),text);
 	}
+	public void delete() {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM post WHERE ID = ?");
+			statement.setString(1, this.id);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
 	public String getId() {return this.id;}
 	public String getText() {return this.text;}
+	@JsonIgnore
 	public Post getRepliedTo() throws NotFoundException {
 		return getPost(this.repliedToId);
 	}
+	@JsonIgnore
 	public ArrayList<Vote> getVotes() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM vote WHERE postID=?");
@@ -85,5 +98,15 @@ public class Post {
 		} catch (SQLException | NotFoundException e) {
 			throw new IpassException(e.getMessage());
 		}
+	}
+	@JsonIgnore
+	public String getPageId() {
+		return this.pageId;
+	}
+	public Page getPage() {
+		return Page.getPage(this.pageId);
+	}
+	public User getUser() {
+		return User.getUserById(userId);
 	}
 }

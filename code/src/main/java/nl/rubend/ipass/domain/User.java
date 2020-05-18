@@ -28,6 +28,7 @@ public class User implements Principal {
 	private String email;
 	private String hash;
 	private String salt;
+	private String privatePageId;
 	private String role="user";
 	public static User getUserById(String userId) throws IpassException {
 		try {
@@ -35,7 +36,7 @@ public class User implements Principal {
 			statement.setString(1, userId);
 			ResultSet set=statement.executeQuery();
 			set.next();
-			return new User(set.getString("ID"),set.getString("name"),set.getString("email"),set.getString("hash"),set.getString("salt"));
+			return new User(set.getString("ID"),set.getString("name"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
@@ -47,7 +48,7 @@ public class User implements Principal {
 			statement.setString(1, email);
 			ResultSet set=statement.executeQuery();
 			set.next();
-			return new User(set.getString("ID"),set.getString("name"),set.getString("email"),set.getString("hash"),set.getString("salt"));
+			return new User(set.getString("ID"),set.getString("name"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new UnauthorizedException(e.getMessage());
@@ -62,17 +63,24 @@ public class User implements Principal {
 			statement.setString(2, email);
 			statement.setString(3,"Nieuwe gebruiker");
 			statement.executeUpdate();
+			Page page=new Page(this);
+			statement = SqlInterface.prepareStatement("UPDATE user SET privatePageId=? WHERE ID=?");
+			statement.setString(1, page.getId());
+			statement.setString(2, userId);
+			statement.executeUpdate();
+			page.addLid(this);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
 	}
-	public User(String userId,String name,String email,String hash,String salt) {
+	public User(String userId,String name,String email,String hash,String salt,String privatePageId) {
 		this.userId=userId;
 		this.name=name;
 		this.email=email;
 		this.hash=hash;
 		this.salt=salt;
+		this.privatePageId=privatePageId;
 	}
 	public static String hash(String password, String saltString) {
 		byte[] salt = Base64.getUrlDecoder().decode(saltString);
@@ -108,6 +116,7 @@ public class User implements Principal {
 	}
 	@JsonIgnore
 	public String getRole() {return this.role;}
+	public String getPrivatePageId() {return this.privatePageId;}
 	public void delete() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM user WHERE ID = ?");
@@ -156,7 +165,7 @@ public class User implements Principal {
 	@JsonIgnore
 	public ArrayList<Page> getPages() {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM page_lid WHERE userID=?");
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pageLid WHERE userID=?");
 			statement.setString(1,userId);
 			ResultSet set=statement.executeQuery();
 			ArrayList<Page> response=new ArrayList<Page>();
