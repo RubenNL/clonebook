@@ -1,31 +1,25 @@
 function handleResponse(response) {
-	return new Promise((resolve,reject)=>{
-		if (response.status === 200) {
-			resolve(response.json());
-		} else {
-			reject(response.status);
-		}
-	})
+	console.log(response);
+	if(response.ok) {
+		const contentType = response.headers.get("content-type");
+		if (contentType && contentType.indexOf("application/json") !== -1) return response.json();
+		else return response.text();
+	} else throw response.status;
 }
-
-function sendPost(path,params) {
-	return fetch(url+path,{
-		method:'POST',
-		credentials: 'include',
-		body:JSON.stringify(params),
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		}
-	}).then(handleResponse)
-}
-
-function sendGet(path,params) {
+function sendGet(path) {
 	return fetch(url+path,{
 		method:'GET',
-		credentials: 'include',
 		headers: {
-			'Accept': 'application/json',
+			'Authorization': 'Bearer ' + window.sessionStorage.getItem("jwt")||""
 		}
-	}).then(handleResponse)
+	}).then(handleResponse);
+}
+function sendPost(path,form) {
+	return fetch(url+path,{
+		method:'POST',
+		body:new URLSearchParams(new FormData(document.querySelector(form)).entries()),
+		headers: {
+			'Authorization': 'Bearer ' + window.sessionStorage.getItem("jwt")||""
+		}
+	}).then(handleResponse);
 }

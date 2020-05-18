@@ -8,6 +8,7 @@ import nl.rubend.ipass.utils.SendEmail;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -20,13 +21,14 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class User {
+public class User implements Principal {
 	private static SecureRandom random = new SecureRandom();
 	private String userId;
 	private String name;
 	private String email;
 	private String hash;
 	private String salt;
+	private String role="user";
 	public static User getUserById(String userId) throws IpassException {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM user WHERE ID=?");
@@ -105,21 +107,7 @@ public class User {
 		}
 	}
 	@JsonIgnore
-	public ArrayList<Session> getSessions() {
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM session WHERE userID=?");
-			statement.setString(1,userId);
-			ResultSet set=statement.executeQuery();
-			ArrayList<Session> response=new ArrayList<Session>();
-			while(set.next()) {
-				response.add(new Session(set.getString("ID"),set.getDate("validUntil"),set.getString("userID")));
-			}
-			return response;
-		} catch (SQLException | UnauthorizedException e) {
-			e.printStackTrace();
-			throw new IpassException(e.getMessage());
-		}
-	}
+	public String getRole() {return this.role;}
 	public void delete() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM user WHERE ID = ?");

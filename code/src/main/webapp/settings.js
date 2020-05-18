@@ -1,14 +1,17 @@
-$('#settingsSave').on('click',()=>{
-	sendPost('/rest/user/settings',{
-		name:$('#settingsName').val(),
-		email:$('#settingsEmail').val()
-	}).then(response=>console.log(response))
-})
-loginListeners.push(sendGet("/rest/user/settings").then(settings=>{
-	$('#settingsName').val(settings.name)
-	$('#settingsEmail').val(settings.email)
+function settingsSave() {
+	sendPost("/rest/user","#settings")
+	.then(()=>{
+		alert("Instellingen zijn opgeslagen");
+	}).catch(error=>{
+		console.log(error);
+		alert(error);
+	});
+};
+loginListeners.push(function () {
+	$('#settingsName').val(profile.name);
+	$('#settingsEmail').val(profile.email);
 	openSettings();
-}))
+});
 function openSettings() {
 	$('#settings').show();
 }
