@@ -34,6 +34,7 @@ body {
 .date {grid-area: date;}
 .text {grid-area: text;}
 @media (max-width:1000px) {
+	#friends {display:none;}
 	body {
 		grid-template-areas:
 			"header header header"
