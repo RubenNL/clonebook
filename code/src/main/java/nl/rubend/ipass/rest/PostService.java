@@ -14,7 +14,6 @@ import javax.ws.rs.core.SecurityContext;
 @Produces(MediaType.APPLICATION_JSON)
 public class PostService {
 	@POST
-	@Path("/")
 	public Response newPost(@Context SecurityContext securityContext, @FormParam("pageId") String pageId, @FormParam("repliedTo") String repliedToId, @FormParam("text") String text) {
 		User user= (User) securityContext.getUserPrincipal();
 		Page page=Page.getPage(pageId);

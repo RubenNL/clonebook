@@ -44,7 +44,6 @@ public class UserService {
 		return Response.ok().build();
 	}
 	@GET
-	@Path("/")
 	@RolesAllowed("user")
 	public String profile(@Context SecurityContext securityContext) {
 		User user= (User) securityContext.getUserPrincipal();
@@ -56,7 +55,6 @@ public class UserService {
 				.build().toString();
 	}
 	@POST
-	@Path("/")
 	@RolesAllowed("user")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response setProfile(@FormParam("name") String name, @FormParam("email") String email, @Context SecurityContext securityContext) {
