@@ -7,7 +7,7 @@
 	</head>
 	<body>
 		<header role="banner" id="topBar">
-			<img src="icon.svg" height="32px" alt="logo">
+			<img src="icon.svg" height="32px" alt="">
 			<span id="siteName">CloneBook</span>
 			<div id="userMenu">
 				<span id="userMenuName"></span>
@@ -53,24 +53,47 @@
 				<input type="email" name="email" id="settingsEmail"><br>
 				<input type="submit" value="opslaan">
 			</form>
-			<div id="posts">
-				<template id="postTemplate">
-					<article class="post">
-						<img class="profilePicture">
-						<span class="name"></span>
-						<span class="date"></span>
-						<p class="text"></p>
-					</article>
-				</template>
+			<div id="page" role="abstract">
+				<header id="pageHeader" class="border">
+					<img src="icon.png" alt=""><h1>Pagina naam</h1>
+				</header>
+				<div id="posts">
+				</div>
 			</div>
 		</main>
 		<aside id="friends">Vrienden</aside>
-		<footer>Copyright Ruben van Dijk</footer>
-		<script src="cash.min.js"></script>
+		<footer id="copyright">Copyright Ruben van Dijk</footer>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
 		<script src="config.js"></script>
 		<script src="tools.js"></script>
 		<script src="loginSignup.js"></script>
-		<script src="post.js"></script>
 		<script src="settings.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
+		<template id="postTemplate">
+			<article class="post border" role="article">
+				<header class="postHeader">
+					<img alt="" class="profilePicture">
+					<h2 class="name">Voornaam Achternaam</h2>
+				</header>
+				<p class="text"></p>
+				<div class="postFooter">
+					<button class="vote" action="up">&#128077;</button>
+					<button class="replyButton">Reageer</button>
+					<button class="vote" action="down">&#128078;</button>
+				</div>
+				<div class="subReplies"></div>
+			</article>
+		</template>
+		<template id="messageBoxTemplate">
+			<div class="messageDiv">
+				<form class="messageForm">
+					<input type="hidden" name="parentId">
+					<label>bericht:<br><textarea name="text" class="messageBox" required></textarea></label>
+					<button type="button" type="button" class="messageEmoticon">&#128512;</button>
+					<input type="submit" value="opslaan">
+				</form>
+			</div>
+		</template>
+		<script src="post.js"></script>
 	</body>
 </html>
