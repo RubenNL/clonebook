@@ -3,7 +3,7 @@
 		<link rel="stylesheet" type="text/css" href="style.css"/>
 		<link rel="icon" href="icon.svg">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<title>fish</title>
+		<title>CloneBook</title>
 	</head>
 	<body>
 		<header role="banner" id="topBar">
@@ -69,12 +69,6 @@
 		</main>
 		<aside id="friends">Vrienden</aside>
 		<footer id="copyright">Copyright Ruben van Dijk</footer>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
-		<script src="config.js"></script>
-		<script src="tools.js"></script>
-		<script src="loginSignup.js"></script>
-		<script src="settings.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
 		<template id="postTemplate">
 			<article class="post border" role="article">
 				<header class="postHeader">
@@ -104,6 +98,15 @@
 				<button class="newFile">Nieuw bestand</button>
 			</div>
 		</template>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+		<script src="config.js"></script>
+		<script src="settings.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
+		<script src="service/utils.js"></script>
+		<script src="service/post.js"></script>
+		<script src="service/page.js"></script>
+		<script src="service/user.js"></script>
 		<script src="post.js"></script>
+		<script src="loginSignup.js"></script>
 	</body>
 </html>

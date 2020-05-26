@@ -14,8 +14,8 @@ import java.io.*;
 import java.net.URLConnection;
 import java.nio.file.Files;
 
-@Path("/file")
-public class FileService {
+@Path("/media")
+public class MediaService {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	@POST
@@ -29,5 +29,4 @@ public class FileService {
 		Media media=Media.getMedia(fileId);
 		return Response.ok(media.getFile()).type(media.getMime()).build();
 	}
-
 }

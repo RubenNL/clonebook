@@ -80,11 +80,10 @@ public class Media {
 		return this.id;
 	}
 
-	@JsonIgnore
 	public String getOwnerId() {
 		return this.ownerId;
 	}
-
+	@JsonIgnore
 	public User getOwner() {
 		return User.getUserById(this.ownerId);
 	}

@@ -44,18 +44,8 @@ public class UserService {
 		user.setPassword(password);
 		return Response.ok().build();
 	}
-	@GET
-	@RolesAllowed("user")
-	public String profile(@Context SecurityContext securityContext) {
-		User user= (User) securityContext.getUserPrincipal();
-		return Json.createObjectBuilder()
-				.add("name",user.getName())
-				.add("email",user.getEmail())
-				.add("id",user.getId())
-				.add("privatePageId",user.getPrivatePageId())
-				.build().toString();
-	}
 	@POST
+	@Path("/settings")
 	@RolesAllowed("user")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response setProfile(@FormParam("name") String name, @FormParam("email") String email, @Context SecurityContext securityContext) {
@@ -69,7 +59,8 @@ public class UserService {
 	@Path("/{userId}")
 	public Response publicUserProfile(@Context SecurityContext securityContext, @PathParam("userId") String userId) {
 		User user= (User) securityContext.getUserPrincipal();
-		//check if user is allowed;
-		return null;
+		User requested=User.getUserById(userId);
+		if(requested.getPrivatePage().isLid(user)) return Response.ok(requested).build();
+		else throw new ForbiddenException("Niet eigen profiel");
 	}
 }

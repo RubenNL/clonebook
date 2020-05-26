@@ -1,5 +1,5 @@
 function settingsSave() {
-	sendPost("/rest/user","#settings")
+	Utils.sendPost("/rest/user/settings","#settings")
 	.then(()=>{
 		alert("Instellingen zijn opgeslagen");
 		$('#settings').hide();

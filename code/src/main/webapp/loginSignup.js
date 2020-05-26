@@ -1,6 +1,6 @@
 var profile;
 function passwordRequest() {
-	sendPost("/rest/user/new","#newAccountScreen")
+	Utils.sendPost("/rest/user/new","#newAccountScreen")
 	.then(()=>{
 		alert("Kijk op je e-mail.");
 		$("#loginOptions").hide();
@@ -10,21 +10,21 @@ function passwordRequest() {
 	});
 }
 function load() {
-	sendGet('/rest/user')
-	.then(response=>{
-		profile=response;
-		loadPage(profile.privatePageId);
-		$('#userMenuName').text(profile.name);
-	}).catch(message=>{
-		if(message==403) $('#notLoggedIn').show();
+	getLoggedinUser().catch(message=>{
+		$('#notLoggedIn').show();
+	}).then(User.getUser).catch(message=>{
+		if(message===403) $('#notLoggedIn').show();
 		else {
 			console.log(message);
 			alert(message);
 		}
-	})
+	}).then(user=>{
+		$('#userMenuName').text(user.name);
+		return user.getPage()
+	}).then(showPage);
 }
 function savePassword() {
-	sendPost("/rest/user/newPassword","#newPasswordScreen")
+	Utils.sendPost("/rest/user/newPassword","#newPasswordScreen")
 	.then(()=>{
 		$('#newPasswordScreen').hide();
 		$('#loginOptions').show();
@@ -35,7 +35,7 @@ function savePassword() {
 	});
 }
 function login() {
-	sendPost("/rest/login","#loginScreen")
+	Utils.sendPost("/rest/login","#loginScreen")
 	.then(response=>{
 		window.sessionStorage.setItem("jwt",response.JWT);
 		$('#notLoggedIn').hide();
@@ -62,3 +62,15 @@ if(window.location.hash && window.location.hash.split('=')[1]) {
 		}
 	}
 } else load();
+function getLoggedinUser() {
+	return new Promise((resolve,reject)=>{
+		token=sessionStorage.getItem("jwt");
+		if(token.length==0) reject("niet ingelogd");
+		var base64Url = token.split('.')[1];
+		var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+		var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+			return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+		}).join(''));
+		resolve(JSON.parse(jsonPayload).sub);
+	})
+};

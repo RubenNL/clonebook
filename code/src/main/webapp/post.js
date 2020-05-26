@@ -1,17 +1,17 @@
 var picker=new EmojiButton();
 var lastSelectedField;
 var currentPage;
-function addPost(repliedTo,id,imgLocation,user,text,mediaList) {
+function addPost(post) {
 	let node = $('#postTemplate').contents("article").clone();
-	node.attr("id",id);
-	node.find('.profilePicture').attr('src',user.profilepicture);
-	node.find('.name').text(user.name);
-	node.find('.name').attr('user',user.id);
-	node.find('.text').text(text);
-	mediaList.forEach(media=>{
-		node.find('.media').append('<a href="/rest/file/'+media.id+'"><img class="mediaImage" src="/rest/file/'+media.id+'"></a>');
+	node.attr("id",post.id);
+	node.find('.profilePicture').attr('src',post.user.profilepicture);
+	node.find('.name').text(post.user.name);
+	node.find('.name').attr('user',post.user.id);
+	node.find('.text').text(post.text);
+	post.media.forEach(media=>{
+		node.find('.media').append('<a href="/rest/media/'+media.id+'"><img class="mediaImage" src="/rest/media/'+media.id+'"></a>');
 	});
-	$(repliedTo?'#'+repliedTo+' > .subReplies':'#posts').append(node);
+	$(post.repliedTo?'#'+post.repliedTo+' > .subReplies':'#posts').append(node);
 }
 picker.on('emoji',emoji=>lastSelectedField.value+=emoji);
 $(document).on('click','.messageEmoticon',(event)=>{
@@ -23,7 +23,7 @@ $(document).on('click','.name',event=>{
 	console.log('user:',$(event.target).attr('user'));
 });
 $(document).on('click','.vote',event=>{
-	sendPost('/rest/post/'+$(event.target).parent().parent().attr('id')+'/vote',{vote:$(event.target).attr('action')});
+	Utils.sendPost('/rest/post/'+$(event.target).parent().parent().attr('id')+'/vote',{vote:$(event.target).attr('action')});
 });
 $(document).on('click','.replyButton',(event)=>{
 	if($(event.target).parent().parent().find('.messageForm').length>0) $(event.target).parent().parent().find('.messageForm').toggle();
@@ -45,7 +45,7 @@ $(document).on('submit','.messageForm',event=>{
 		fileList.forEach(obj=>$(event.target).parent().parent().find('.messageForm').append('<input type="hidden" name="file" value="' + obj.id + '">'))
 	}).then(()=>{
 		$(event.target).find('[name="pageId"]').val(currentPage);
-		return sendPost('/rest/post',event.target);
+		return Utils.sendPost('/rest/post',event.target);
 	}).then(post=>{
 		$(event.target).parent().remove();
 		alert('bericht gepost!');
@@ -59,21 +59,9 @@ $('#newPost').on('click', () =>{
 		clone.insertBefore('#posts');
 	}
 });
-function loadPage(id) {
-	sendGet("/rest/page/"+id).then(page=>{
-		$('#pageHeader > h1').text(page.name);
-		$('#posts').html('');
-		page.last10Posts.forEach(post=>addPost(null,post.id,null,post.user,post.text,post.media));
-		currentPage=page.id;
-	}).catch(page=>{
-		$('#pageHeader > h1').text(page.name);
-		$('#posts').html('Geen toegang tot deze pagina.');
-		currentPage=page.id;
-	})
+function showPage(page) {
+	$('#pageHeader > h1').text(page.name);
+	$('#posts').html('');
+	page.last10Posts.forEach(post=>addPost({repliedTo:null,id:post.id,user:post.user,text:post.text,media:post.media}));
+	currentPage=page.id;
 }
-addPost(null,"1","icon.png",{name:"Voornaam Achternaam",profilepicture:"icon.png",id:"1234"},"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
-addPost("1","2","icon.png",{name:"Voornaam Achternaam",profilepicture:"icon.png",id:"1234"},"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
-addPost("2","3","icon.png",{name:"Voornaam Achternaam",profilepicture:"icon.png",id:"1234"},"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
-addPost("3","4","icon.png",{name:"Voornaam Achternaam",profilepicture:"icon.png",id:"1234"},"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
-addPost("4","5","icon.png",{name:"Voornaam Achternaam",profilepicture:"icon.png",id:"1234"},"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
-addPost("5","6","icon.png",{name:"Voornaam Achternaam",profilepicture:"icon.png",id:"1234"},"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
