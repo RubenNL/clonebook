@@ -9,7 +9,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("/page")
 @RolesAllowed("user")
@@ -17,17 +18,19 @@ import java.util.AbstractMap;
 public class PageService {
 	@GET
 	@Path("/{pageId}")
-	public Response publicPage(@PathParam("pageId") String pageId) {
-		Page page=Page.getPage(pageId);
-		return Response.ok(page).build();
-	}
-	@GET
-	@Path("/{pageId}/posts")
-	public Response posts(@PathParam("pageId") String pageId,@Context SecurityContext securityContext) {
-		Page page=Page.getPage(pageId);
+	public Response publicPage(@PathParam("pageId") String pageId, @Context SecurityContext securityContext) {
 		User user= (User) securityContext.getUserPrincipal();
-		if(!page.isLid(user)) return Response.status(Response.Status.FORBIDDEN).build();
-		else return Response.ok(page.getPosts()).build();
+		Page page;
+		try {
+			page = Page.getPage(pageId);
+		} catch(NotFoundException e) {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+		if(page.isLid(user)) return Response.ok(page).build();
+		Map<String,String> response=new HashMap<>();
+		response.put("id",page.getId());
+		response.put("name",page.getName());
+		return Response.status(Response.Status.FORBIDDEN).entity(response).build();
 	}
 	@GET
 	@Path("/{pageId}/leden")

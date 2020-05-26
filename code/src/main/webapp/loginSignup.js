@@ -1,4 +1,3 @@
-var loginListeners = [];
 var profile;
 function passwordRequest() {
 	sendPost("/rest/user/new","#newAccountScreen")
@@ -14,7 +13,8 @@ function load() {
 	sendGet('/rest/user')
 	.then(response=>{
 		profile=response;
-		loginListeners.forEach(func=>func());
+		loadPage(profile.privatePageId);
+		$('#userMenuName').text(profile.name);
 	}).catch(message=>{
 		if(message==403) $('#notLoggedIn').show();
 		else {
@@ -38,12 +38,17 @@ function login() {
 	sendPost("/rest/login","#loginScreen")
 	.then(response=>{
 		window.sessionStorage.setItem("jwt",response.JWT);
+		$('#notLoggedIn').hide();
 		load();
 	})
 	.catch(error=>{
 		console.log(error);
 		alert(error);
 	});
+}
+function logout() {
+	window.sessionStorage.removeItem("jwt");
+	load();
 }
 if(window.location.hash && window.location.hash.split('=')[1]) {
 	const parts = window.location.hash.split('=');

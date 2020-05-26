@@ -1,10 +1,13 @@
 function handleResponse(response) {
-	console.log(response);
-	if(response.ok) {
+	return new Promise(async (resolve,reject)=>{
+		console.log(response);
 		const contentType = response.headers.get("content-type");
-		if (contentType && contentType.indexOf("application/json") !== -1) return response.json();
-		else return response.text();
-	} else throw response.status;
+		if (contentType && contentType.indexOf("application/json") !== -1) {
+			if(response.ok) resolve(await response.json());
+			else reject(await response.json());
+		} else if(response.ok) resolve();
+		else reject(response.status);
+	})
 }
 function sendGet(path) {
 	return fetch(url+path,{
@@ -26,6 +29,17 @@ function sendPost(path,form) {
 	return fetch(url+path,{
 		method:'POST',
 		body:new URLSearchParams(formData),
+		headers: {
+			'Authorization': 'Bearer ' + window.sessionStorage.getItem("jwt")||""
+		}
+	}).then(handleResponse);
+}
+function sendFile(file) {
+	var data=new FormData();
+	data.append('file',file);
+	return fetch(url+"/rest/file",{
+		method:'POST',
+		body:data,
 		headers: {
 			'Authorization': 'Bearer ' + window.sessionStorage.getItem("jwt")||""
 		}

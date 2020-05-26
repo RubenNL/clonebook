@@ -11,7 +11,7 @@ class UserTest {
 	void addTestUser() {
 		try {
 			user=User.getUserByEmail("test@example.com");
-		} catch (UnauthorizedException e) {
+		} catch (NotFoundException e) {
 			System.out.println("gebruiker bestond nog niet, geen probleem.");
 		}
 		if(user!=null) assertDoesNotThrow(()->user.delete(),"delete functie zou geen fouten moeten geven");

@@ -3,6 +3,7 @@ package nl.rubend.ipass.rest;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import nl.rubend.ipass.domain.*;
+import nl.rubend.ipass.domain.NotFoundException;
 
 import javax.annotation.security.RolesAllowed;
 import javax.json.Json;
@@ -29,7 +30,7 @@ public class UserService {
 		User user;
 		try {
 			user=User.getUserByEmail(email);
-		} catch (UnauthorizedException e) {
+		} catch (NotFoundException e) {
 			user=new User(email);
 		}
 		user.sendPasswordForgottenUrl();

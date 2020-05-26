@@ -66,6 +66,31 @@ public class Post {
 			throw new IpassException(e.getMessage());
 		}
 	}
+	public void addFile(Media file) {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO media_post(mediaid,postID) VALUES (?,?)");
+			statement.setString(1, file.getId());
+			statement.setString(2,this.id);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
+	public ArrayList<Media> getMedia() {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT mediaid FROM media_post WHERE postID=?");
+			statement.setString(1, id);
+			ResultSet set = statement.executeQuery();
+			ArrayList<Media> response = new ArrayList<Media>();
+			while (set.next()) {
+				response.add(Media.getMedia(set.getString("mediaid")));
+			}
+			return response;
+		} catch (SQLException | NotFoundException e) {
+			throw new IpassException(e.getMessage());
+		}
+	}
 	public String getId() {return this.id;}
 	public String getText() {return this.text;}
 	@JsonIgnore
@@ -99,10 +124,10 @@ public class Post {
 			throw new IpassException(e.getMessage());
 		}
 	}
-	@JsonIgnore
 	public String getPageId() {
 		return this.pageId;
 	}
+	@JsonIgnore
 	public Page getPage() {
 		return Page.getPage(this.pageId);
 	}

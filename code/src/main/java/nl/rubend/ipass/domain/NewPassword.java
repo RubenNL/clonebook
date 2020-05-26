@@ -39,8 +39,8 @@ public class NewPassword {
 			if (set.getDate("validUntil").before(new Date(System.currentTimeMillis())))
 				user = User.getUserById(set.getString("userId"));
 			else throw new IpassException("Code is niet meer geldig.");
-			statement = SqlInterface.prepareStatement("DELETE FROM newPassword WHERE ID=?");
-			statement.setInt(1, set.getInt("ID"));
+			statement = SqlInterface.prepareStatement("DELETE FROM newPassword WHERE code=?");
+			statement.setString(1, set.getString("code"));
 			statement.executeUpdate();
 			return user;
 		} catch (SQLException e) {

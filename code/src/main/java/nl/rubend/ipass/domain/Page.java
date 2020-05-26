@@ -16,28 +16,30 @@ public class Page {
 	private String id;
 	private String ownerId;
 	private String name;
+	private String logo;
 	public static Page getPage(String id) throws NotFoundException {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM page WHERE ID=?");
 			statement.setString(1, id);
 			ResultSet set=statement.executeQuery();
 			set.next();
-			return new Page(set.getString("ownerId"),set.getString("name"),set.getString("ID"));
+			return new Page(set.getString("ownerId"),set.getString("name"),set.getString("ID"),set.getString("logo"));
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new NotFoundException(e.getMessage());
 		}
 	}
-	private Page(String ownerId,String name, String id) {
+	private Page(String ownerId,String name, String id,String logo) {
 		this.id=id;
 		this.ownerId=ownerId;
 		this.name=name;
+		this.logo=logo;
 	}
-	private Page(User owner,String name,String id) {
-		this(owner.getId(),name,id);
+	private Page(User owner,String name,String id,String logo) {
+		this(owner.getId(),name,id,logo);
 	}
-	public Page(User owner,String name) {
-		this(owner,name,UUID.randomUUID().toString());
+	public Page(User owner,String name,String logo) {
+		this(owner,name,UUID.randomUUID().toString(),logo);
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO page(ID,name,ownerId) VALUES (?,?,?)");
 			statement.setString(1, this.id);
@@ -49,8 +51,11 @@ public class Page {
 			throw new IpassException(e.getMessage());
 		}
 	}
+	public Page(User owner,String naam) {
+		this(owner,naam,null);
+	}
 	public Page(User owner) {
-		this(owner,"Nieuwe pagina");
+		this(owner,"Nieuwe pagina",null);
 	}
 	public void setName(String name) {
 		this.name=name;
@@ -63,6 +68,13 @@ public class Page {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
+	}
+	public void setLogo(Media media) {
+		this.logo=media.getId();
+	}
+	public Media getLogo() {
+		if(this.logo==null) return null;
+		return Media.getMedia(this.logo);
 	}
 	public void delete() {
 		try {
@@ -102,16 +114,12 @@ public class Page {
 	}
 	public boolean isLid(User user) {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("select userID from pageLid where pageID=? and userID=?");
+			PreparedStatement statement = SqlInterface.prepareStatement("select COUNT(userID) as count from pageLid where pageID=? and userID=?");
 			statement.setString(1, this.id);
 			statement.setString(2,user.getId());
 			ResultSet set=statement.executeQuery();
-			try {
-				set.first();
-				return true;
-			} catch (SQLException e) {
-				return false;
-			}
+			set.next();
+			return set.getInt("count")==1;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
@@ -135,17 +143,36 @@ public class Page {
 	@JsonIgnore
 	public ArrayList<Post> getPosts() {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM post WHERE pageID=?");
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM post WHERE repliedTo IS NULL AND pageID=? ORDER BY date DESC");
 			statement.setString(1,id);
 			ResultSet set=statement.executeQuery();
 			ArrayList<Post> response=new ArrayList<Post>();
 			while(set.next()) {
-				response.add(Post.getPost(set.getString("postID")));
+				response.add(Post.getPost(set.getString("ID")));
 			}
 			return response;
-		} catch (SQLException | NotFoundException e) {
+		} catch (SQLException e) {
 			throw new IpassException(e.getMessage());
 		}
+	}
+	public ArrayList<Post> getPostsLimit(int start,int amount) {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM post WHERE repliedTo IS NULL AND pageID=? ORDER BY date DESC LIMIT ?,?");
+			statement.setString(1,id);
+			statement.setInt(2,start);
+			statement.setInt(3,amount);
+			ResultSet set=statement.executeQuery();
+			ArrayList<Post> response=new ArrayList<Post>();
+			while(set.next()) {
+				response.add(Post.getPost(set.getString("ID")));
+			}
+			return response;
+		} catch (SQLException e) {
+			throw new IpassException(e.getMessage());
+		}
+	}
+	public ArrayList<Post> getLast10Posts() {
+		return getPostsLimit(0,10);
 	}
 	public String getName() {
 		return this.name;

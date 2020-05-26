@@ -32,7 +32,7 @@ public class AuthenticationResource {
 		User user;
 		try {
 			user = User.getUserByEmail(email);
-		} catch (UnauthorizedException e) {
+		} catch (NotFoundException e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 		if(user.checkPassword(password)) {

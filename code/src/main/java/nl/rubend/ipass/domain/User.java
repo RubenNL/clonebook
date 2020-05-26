@@ -24,46 +24,44 @@ import java.util.concurrent.ThreadLocalRandom;
 public class User implements Principal {
 	private static SecureRandom random = new SecureRandom();
 	private String userId;
-	private String name;
 	private String email;
 	private String hash;
 	private String salt;
 	private String privatePageId;
 	private String role="user";
-	public static User getUserById(String userId) throws IpassException {
+	public static User getUserById(String userId) {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM user WHERE ID=?");
 			statement.setString(1, userId);
 			ResultSet set=statement.executeQuery();
 			set.next();
-			return new User(set.getString("ID"),set.getString("name"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"));
+			return new User(set.getString("ID"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"));
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new IpassException(e.getMessage());
+			throw new NotFoundException(e.getMessage());
 		}
 	}
-	public static User getUserByEmail(String email) throws UnauthorizedException {
+	public static User getUserByEmail(String email) {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM user WHERE email=?");
 			statement.setString(1, email);
 			ResultSet set=statement.executeQuery();
 			set.next();
-			return new User(set.getString("ID"),set.getString("name"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"));
+			return new User(set.getString("ID"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"));
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new UnauthorizedException(e.getMessage());
+			throw new NotFoundException(e.getMessage());
 		}
 	}
 	public User(String email) throws IpassException {
 		this.userId=UUID.randomUUID().toString();
 		this.email=email;
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO user(ID,email,name) VALUES (?,?,?)");
+			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO user(ID,email) VALUES (?,?)");
 			statement.setString(1, userId);
 			statement.setString(2, email);
-			statement.setString(3,"Nieuwe gebruiker");
 			statement.executeUpdate();
-			Page page=new Page(this);
+			Page page=new Page(this,"Nieuwe gebruiker");
 			statement = SqlInterface.prepareStatement("UPDATE user SET privatePageId=? WHERE ID=?");
 			statement.setString(1, page.getId());
 			statement.setString(2, userId);
@@ -74,9 +72,8 @@ public class User implements Principal {
 			throw new IpassException(e.getMessage());
 		}
 	}
-	public User(String userId,String name,String email,String hash,String salt,String privatePageId) {
+	public User(String userId,String email,String hash,String salt,String privatePageId) {
 		this.userId=userId;
-		this.name=name;
 		this.email=email;
 		this.hash=hash;
 		this.salt=salt;
@@ -84,7 +81,7 @@ public class User implements Principal {
 	}
 	public static String hash(String password, String saltString) {
 		byte[] salt = Base64.getUrlDecoder().decode(saltString);
-		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 512);
 		try {
 			SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 			Base64.Encoder enc = Base64.getEncoder();
@@ -98,7 +95,7 @@ public class User implements Principal {
 	public void setPassword(String password)  {
 		if (password == null) throw new IpassException("Ongeldig wachtwoord");
 		if (password.length() < 8) throw new IpassException("Wachtwoord is te kort!");
-		byte[] salt = new byte[16];
+		byte[] salt = new byte[64];
 		random.nextBytes(salt);
 		Base64.Encoder enc = Base64.getUrlEncoder().withoutPadding();
 		this.salt = enc.encodeToString(salt);
@@ -117,6 +114,10 @@ public class User implements Principal {
 	@JsonIgnore
 	public String getRole() {return this.role;}
 	public String getPrivatePageId() {return this.privatePageId;}
+	@JsonIgnore
+	public Page getPrivatePage() {
+		return Page.getPage(this.privatePageId);
+	}
 	public void delete() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM user WHERE ID = ?");
@@ -135,16 +136,7 @@ public class User implements Principal {
 		SendEmail.SendEmail(this.email,"CloneBook nieuw wachtwoord","Gebruik <a href=\"https://clonebook.rubend.nl/#newAccount=" + new NewPassword(this).getCode() + "\">Deze</a> url om je account te activeren.");
 	}
 	public void setName(String name) {
-		this.name = name;
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE user SET name = ? WHERE ID = ?");
-			statement.setString(1, this.name);
-			statement.setString(2, this.userId);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new IpassException(e.getMessage());
-		}
+		this.getPrivatePage().setName(name);
 	}
 	public void setEmail(String email) {
 		this.email = email;
@@ -159,7 +151,7 @@ public class User implements Principal {
 		}
 	}
 	public String getId() {return this.userId;}
-	public String getName() {return this.name;}
+	public String getName() {return getPrivatePage().getName();}
 	@JsonIgnore
 	public String getEmail() {return this.email;}
 	@JsonIgnore
