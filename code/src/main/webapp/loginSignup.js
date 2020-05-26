@@ -12,16 +12,18 @@ function passwordRequest() {
 function load() {
 	getLoggedinUser().catch(message=>{
 		$('#notLoggedIn').show();
+		return Promise.reject(403);
 	}).then(User.getUser).catch(message=>{
 		if(message===403) $('#notLoggedIn').show();
 		else {
 			console.log(message);
 			alert(message);
 		}
+		return Promise.reject(403);
 	}).then(user=>{
 		$('#userMenuName').text(user.name);
 		return user.getPage()
-	}).then(showPage);
+	}).then(showPage).catch(()=>{});//silent catch, ik weet niet wat ik hier anders van moet maken.
 }
 function savePassword() {
 	Utils.sendPost("/rest/user/newPassword","#newPasswordScreen")
@@ -36,15 +38,16 @@ function savePassword() {
 }
 function login() {
 	Utils.sendPost("/rest/login","#loginScreen")
-	.then(response=>{
+	.catch(error=>{
+		console.log(error);
+		alert(error);
+		return Promise.reject(error);
+	}).then(response=>{
 		window.sessionStorage.setItem("jwt",response.JWT);
 		$('#notLoggedIn').hide();
 		load();
 	})
-	.catch(error=>{
-		console.log(error);
-		alert(error);
-	});
+
 }
 function logout() {
 	window.sessionStorage.removeItem("jwt");
@@ -65,7 +68,10 @@ if(window.location.hash && window.location.hash.split('=')[1]) {
 function getLoggedinUser() {
 	return new Promise((resolve,reject)=>{
 		token=sessionStorage.getItem("jwt");
-		if(token.length==0) reject("niet ingelogd");
+		if(token.length==0) {
+			reject("niet ingelogd");
+			return;
+		}
 		var base64Url = token.split('.')[1];
 		var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
 		var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {

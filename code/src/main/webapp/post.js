@@ -9,7 +9,7 @@ function addPost(post) {
 	node.find('.name').attr('user',post.user.id);
 	node.find('.text').text(post.text);
 	post.media.forEach(media=>{
-		node.find('.media').append('<a href="/rest/media/'+media.id+'"><img class="mediaImage" src="/rest/media/'+media.id+'"></a>');
+		node.find('.media').append('<a href="'+media.getUrl()+'"><img class="mediaImage" src="'+media.getUrl()+'"></a>');
 	});
 	$(post.repliedTo?'#'+post.repliedTo+' > .subReplies':'#posts').append(node);
 }
@@ -30,7 +30,7 @@ $(document).on('click','.replyButton',(event)=>{
 	else {
 		clone=$('#messageBoxTemplate').contents("div").clone();
 		clone.find('[name="repliedTo"]').val($(event.target).parent().parent().attr('id'));
-		clone.find('[name="pageId"]').val(currentPage);
+		clone.find('[name="pageId"]').val(currentPage.id);
 		$(event.target).parent().after(clone);
 	}
 });
@@ -40,16 +40,19 @@ $(document).on('click','.newFile',event=>{
 $(document).on('submit','.messageForm',event=>{
 	event.preventDefault();
 	Promise.all($(event.target).parent().parent().find('.files').children().map((id,file)=>{
-		return sendFile(file.files[0])
+		return Media.create(file.files[0])
 	})).then(fileList=>{
 		fileList.forEach(obj=>$(event.target).parent().parent().find('.messageForm').append('<input type="hidden" name="file" value="' + obj.id + '">'))
 	}).then(()=>{
-		$(event.target).find('[name="pageId"]').val(currentPage);
+		$(event.target).find('[name="pageId"]').val(currentPage.id);
 		return Utils.sendPost('/rest/post',event.target);
 	}).then(post=>{
 		$(event.target).parent().remove();
 		alert('bericht gepost!');
-		loadPage(currentPage);
+		Page.getPage(currentPage.id).then(page=>{
+			showPage(page);
+			currentPage=page;
+		});
 	});
 });
 $('#newPost').on('click', () =>{
@@ -63,5 +66,5 @@ function showPage(page) {
 	$('#pageHeader > h1').text(page.name);
 	$('#posts').html('');
 	page.last10Posts.forEach(post=>addPost({repliedTo:null,id:post.id,user:post.user,text:post.text,media:post.media}));
-	currentPage=page.id;
+	currentPage=page;
 }

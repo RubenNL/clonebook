@@ -11,6 +11,7 @@ class Post {
 		Utils.sendGet("/rest/post/"+id).then(Post.fromRaw)
 	}
 	static fromRaw(raw) {
+		raw.media=raw.media.map(Media.fromRaw);
 		return new Post(raw.id,raw.media,raw.page,raw.text,raw.user,raw.voteTotal);
 	}
 }

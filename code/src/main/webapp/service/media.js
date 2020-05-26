@@ -21,4 +21,7 @@ class Media {
 			}
 		}).then(Utils.handleResponse);
 	}
+	getUrl() {
+		return '/rest/media/'+this.id;
+	}
 }
