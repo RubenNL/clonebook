@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import nl.rubend.ipass.utils.SqlInterface;
 import org.apache.tika.Tika;
 
+import javax.ws.rs.NotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +21,7 @@ public class Media {
 	private String mime;
 	private static File uploads = new File("/home/pi/ipassUploads");
 
-	public static Media getMedia(String id) throws NotFoundException {
+	public static Media getMedia(String id) {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM media WHERE ID=?");
 			statement.setString(1, id);
@@ -28,7 +29,7 @@ public class Media {
 			set.next();
 			return new Media(set.getString("ID"), set.getString("owner"), set.getString("location"), set.getString("mime"));
 		} catch (SQLException e) {
-			throw new NotFoundException("Post niet gevonden");
+			throw new javax.ws.rs.NotFoundException("Media niet gevonden");
 		}
 	}
 

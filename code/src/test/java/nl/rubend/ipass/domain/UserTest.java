@@ -3,6 +3,8 @@ package nl.rubend.ipass.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.ws.rs.NotFoundException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {

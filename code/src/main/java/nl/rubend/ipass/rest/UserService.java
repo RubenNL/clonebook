@@ -1,24 +1,15 @@
 package nl.rubend.ipass.rest;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import nl.rubend.ipass.domain.*;
-import nl.rubend.ipass.domain.NotFoundException;
 
 import javax.annotation.security.RolesAllowed;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import java.io.StringReader;
-import java.util.AbstractMap;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Map;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)

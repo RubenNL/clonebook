@@ -18,7 +18,7 @@ public class Post {
 	private String repliedToId;
 	private String text;
 	private Date date;
-	public static Post getPost(String id) throws NotFoundException {
+	public static Post getPost(String id) {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM post WHERE ID=?");
 			statement.setString(1, id);
@@ -26,7 +26,7 @@ public class Post {
 			set.next();
 			return new Post(set.getString("ID"),set.getString("userID"),set.getString("pageID"),set.getString("repliedTo"),set.getString("text"),(Date) set.getTimestamp("date"));
 		} catch (SQLException e) {
-			throw new NotFoundException("Post niet gevonden");
+			throw new javax.ws.rs.NotFoundException("Post niet gevonden");
 		}
 	}
 	public Post(String id,String userId,String pageId, String repliedToId,String text,Date date) {
@@ -87,14 +87,14 @@ public class Post {
 				response.add(Media.getMedia(set.getString("mediaid")));
 			}
 			return response;
-		} catch (SQLException | NotFoundException e) {
+		} catch (SQLException e) {
 			throw new IpassException(e.getMessage());
 		}
 	}
 	public String getId() {return this.id;}
 	public String getText() {return this.text;}
 	@JsonIgnore
-	public Post getRepliedTo() throws NotFoundException {
+	public Post getRepliedTo() {
 		return getPost(this.repliedToId);
 	}
 	@JsonIgnore
@@ -108,7 +108,7 @@ public class Post {
 				response.add(new Vote(set.getString("userID"), set.getString("postID"), set.getInt("vote")));
 			}
 			return response;
-		} catch (SQLException | NotFoundException e) {
+		} catch (SQLException e) {
 			throw new IpassException(e.getMessage());
 		}
 	}
@@ -120,7 +120,7 @@ public class Post {
 			ArrayList<Vote> response = new ArrayList<Vote>();
 			set.next();
 			return set.getInt("sum");
-		} catch (SQLException | NotFoundException e) {
+		} catch (SQLException e) {
 			throw new IpassException(e.getMessage());
 		}
 	}

@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import nl.rubend.ipass.domain.NotFoundException;
 import nl.rubend.ipass.domain.User;
 
 import javax.annotation.Priority;
@@ -32,7 +31,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 				Claims claims=parser.parseClaimsJws(token).getBody();
 				String user=claims.getSubject();
 				msc=new MySecurityContext(User.getUserById(user),scheme);
-			} catch (NotFoundException | JwtException | IllegalArgumentException e) {
+			} catch (JwtException | IllegalArgumentException e) {
 				System.out.println("Invalid JWT!");
 			}
 		}

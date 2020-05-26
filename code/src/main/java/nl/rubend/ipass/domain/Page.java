@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import nl.rubend.ipass.utils.SqlInterface;
 
+import javax.ws.rs.NotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +18,7 @@ public class Page {
 	private String ownerId;
 	private String name;
 	private String logo;
-	public static Page getPage(String id) throws NotFoundException {
+	public static Page getPage(String id) {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM page WHERE ID=?");
 			statement.setString(1, id);

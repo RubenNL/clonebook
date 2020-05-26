@@ -38,7 +38,7 @@ public class User implements Principal {
 			return new User(set.getString("ID"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"));
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new NotFoundException(e.getMessage());
+			throw new javax.ws.rs.NotFoundException("Gebruiker niet gevonden");
 		}
 	}
 	public static User getUserByEmail(String email) {
@@ -50,7 +50,7 @@ public class User implements Principal {
 			return new User(set.getString("ID"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"));
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new NotFoundException(e.getMessage());
+			throw new javax.ws.rs.NotFoundException("Gebruiker niet gevonden");
 		}
 	}
 	public User(String email) throws IpassException {
@@ -165,7 +165,7 @@ public class User implements Principal {
 				response.add(Page.getPage(set.getString("pageID")));
 			}
 			return response;
-		} catch (SQLException | NotFoundException e) {
+		} catch (SQLException e) {
 			throw new IpassException(e.getMessage());
 		}
 	}
@@ -180,7 +180,7 @@ public class User implements Principal {
 				response.add(new Post(set.getString("ID"), set.getString("userID"), set.getString("pageID"),set.getString("repliedTo"),set.getString("text"),set.getTimestamp("date")));
 			}
 			return response;
-		} catch (SQLException | NotFoundException e) {
+		} catch (SQLException e) {
 			throw new IpassException(e.getMessage());
 		}
 	}
@@ -195,7 +195,7 @@ public class User implements Principal {
 				response.add(new Vote(set.getString("userID"), set.getString("postID"),set.getInt("vote")));
 			}
 			return response;
-		} catch (SQLException | NotFoundException e) {
+		} catch (SQLException e) {
 			throw new IpassException(e.getMessage());
 		}
 	}
