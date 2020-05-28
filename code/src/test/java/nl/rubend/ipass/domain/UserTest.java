@@ -1,7 +1,7 @@
 package nl.rubend.ipass.domain;
 
+import nl.rubend.ipass.exceptions.IpassException;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.NotFoundException;

@@ -1,4 +1,4 @@
-package nl.rubend.ipass.domain;
+package nl.rubend.ipass.exceptions;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;

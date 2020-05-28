@@ -1,7 +1,7 @@
 package nl.rubend.ipass.utils;
 
 import com.sun.mail.smtp.SMTPTransport;
-import nl.rubend.ipass.domain.IpassException;
+import nl.rubend.ipass.exceptions.IpassException;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;

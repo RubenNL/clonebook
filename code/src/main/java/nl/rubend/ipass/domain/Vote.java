@@ -1,5 +1,6 @@
 package nl.rubend.ipass.domain;
 
+import nl.rubend.ipass.exceptions.IpassException;
 import nl.rubend.ipass.utils.SqlInterface;
 
 import java.sql.PreparedStatement;

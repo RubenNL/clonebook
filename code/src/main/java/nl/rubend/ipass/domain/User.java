@@ -1,7 +1,7 @@
 package nl.rubend.ipass.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
+import nl.rubend.ipass.exceptions.IpassException;
 import nl.rubend.ipass.utils.SqlInterface;
 import nl.rubend.ipass.utils.SendEmail;
 
@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class User implements Principal {
 	private static SecureRandom random = new SecureRandom();
