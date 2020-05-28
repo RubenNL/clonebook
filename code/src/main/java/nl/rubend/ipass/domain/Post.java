@@ -93,9 +93,8 @@ public class Post {
 	}
 	public String getId() {return this.id;}
 	public String getText() {return this.text;}
-	@JsonIgnore
-	public Post getRepliedTo() {
-		return getPost(this.repliedToId);
+	public String getRepliedTo() {
+		return this.repliedToId;
 	}
 	@JsonIgnore
 	public ArrayList<Vote> getVotes() {
@@ -133,5 +132,19 @@ public class Post {
 	}
 	public User getUser() {
 		return User.getUserById(userId);
+	}
+	public ArrayList<Post> getChildren() {
+		ArrayList<Post> response=new ArrayList<>();
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM post WHERE repliedTo=?");
+			statement.setString(1, id);
+			ResultSet set=statement.executeQuery();
+			while(set.next()) {
+				response.add(new Post(set.getString("ID"),set.getString("userID"),set.getString("pageID"),set.getString("repliedTo"),set.getString("text"),(Date) set.getTimestamp("date")));
+			}
+			return response;
+		} catch (SQLException e) {
+			throw new javax.ws.rs.InternalServerErrorException("get werkt niet?");
+		}
 	}
 }

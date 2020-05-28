@@ -12,6 +12,9 @@ function addPost(post) {
 		node.find('.media').append('<a href="'+media.getUrl()+'"><img class="mediaImage" alt="'+post.user.name+" media object"+'" src="'+media.getUrl()+'"></a>');
 	});
 	$(post.repliedTo?'#'+post.repliedTo+' > .subReplies':'#posts').append(node);
+	post.children.forEach(child=>{
+		addPost(child);
+	})
 }
 picker.on('emoji',emoji=>lastSelectedField.value+=emoji);
 $(document).on('click','.messageEmoticon',(event)=>{
@@ -65,7 +68,7 @@ $('#newPost').on('click', () =>{
 function showPage(page) {
 	$('#pageHeader > h1').text(page.name);
 	$('#posts').html('');
-	page.last10Posts.forEach(post=>addPost({repliedTo:null,id:post.id,user:post.user,text:post.text,media:post.media}));
+	page.last10Posts.forEach(post=>addPost(post));
 	currentPage=page;
 	$("#page").show();
 }
