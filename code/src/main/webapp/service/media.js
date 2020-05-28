@@ -13,7 +13,7 @@ class Media {
 	static create(file) {
 		var data=new FormData();
 		data.append('file',file);
-		return fetch(url+"/rest/media",{
+		return fetch("/rest/media",{
 			method:'POST',
 			body:data,
 			headers: {

@@ -11,7 +11,7 @@ class Utils {
 		})
 	}
 	static sendPost(path,formData) {
-		return fetch(url+path,{
+		return fetch(path,{
 			method:'POST',
 			body:new URLSearchParams(formData),
 			headers: {
@@ -20,7 +20,7 @@ class Utils {
 		}).then(Utils.handleResponse);
 	}
 	static sendGet(path) {
-		return fetch(url+path,{
+		return fetch(path,{
 			method:'GET',
 			headers: {
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("jwt")||""
