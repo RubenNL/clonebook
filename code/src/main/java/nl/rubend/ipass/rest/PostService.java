@@ -1,9 +1,6 @@
 package nl.rubend.ipass.rest;
 
-import nl.rubend.ipass.domain.Media;
-import nl.rubend.ipass.domain.Page;
-import nl.rubend.ipass.domain.Post;
-import nl.rubend.ipass.domain.User;
+import nl.rubend.ipass.domain.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -43,6 +40,18 @@ public class PostService {
 		Post post=Post.getPost(postId);
 		if(!(post.getUser().equals(user) || post.getPage().getOwner().equals(user))) return Response.status(Response.Status.UNAUTHORIZED).build();
 		post.delete();
+		return Response.ok().build();
+	}
+	@POST
+	@Path("/{postId}/vote")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Response vote(@PathParam("postId") String postId,@FormParam("vote") String vote,@Context SecurityContext securityContext) {
+		User user= (User) securityContext.getUserPrincipal();
+		Post post=Post.getPost(postId);
+		if(!post.getPage().isLid(user)) return Response.status(Response.Status.UNAUTHORIZED).build();
+		if(vote.equals("up")) new Vote(user,post,1);
+		else if(vote.equals("down")) new Vote(user,post,-1);
+		else throw new javax.ws.rs.BadRequestException();
 		return Response.ok().build();
 	}
 
