@@ -38,7 +38,7 @@ public class User implements Principal {
 			return new User(set.getString("ID"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"));
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new javax.ws.rs.NotFoundException("Gebruiker niet gevonden");
+			return null;
 		}
 	}
 	public static User getUserByEmail(String email) {
@@ -49,8 +49,7 @@ public class User implements Principal {
 			set.next();
 			return new User(set.getString("ID"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"));
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new javax.ws.rs.NotFoundException("Gebruiker niet gevonden");
+			return null;
 		}
 	}
 	public User(String email) throws IpassException {
@@ -62,8 +61,9 @@ public class User implements Principal {
 			statement.setString(2, email);
 			statement.executeUpdate();
 			Page page=new Page(this,"Nieuwe gebruiker");
+			this.privatePageId=page.getId();
 			statement = SqlInterface.prepareStatement("UPDATE user SET privatePageId=? WHERE ID=?");
-			statement.setString(1, page.getId());
+			statement.setString(1, this.privatePageId);
 			statement.setString(2, userId);
 			statement.executeUpdate();
 			page.addLid(this);

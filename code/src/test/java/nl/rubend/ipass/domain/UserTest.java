@@ -1,5 +1,6 @@
 package nl.rubend.ipass.domain;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,9 +9,9 @@ import javax.ws.rs.NotFoundException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
-	User user;
-	@BeforeEach
-	void addTestUser() {
+	static User user;
+	@BeforeAll
+	static void addTestUser() {
 		try {
 			user=User.getUserByEmail("test@example.com");
 		} catch (NotFoundException e) {

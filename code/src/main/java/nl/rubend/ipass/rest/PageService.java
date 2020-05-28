@@ -21,11 +21,8 @@ public class PageService {
 	public Response publicPage(@PathParam("pageId") String pageId, @Context SecurityContext securityContext) {
 		User user= (User) securityContext.getUserPrincipal();
 		Page page;
-		try {
-			page = Page.getPage(pageId);
-		} catch(NotFoundException e) {
-			return Response.status(Response.Status.NOT_FOUND).build();
-		}
+		page = Page.getPage(pageId);
+		if(page==null) return Response.status(Response.Status.NOT_FOUND).build();
 		if(page.isLid(user)) return Response.ok(page).build();
 		Map<String,String> response=new HashMap<>();
 		response.put("id",page.getId());
@@ -36,6 +33,7 @@ public class PageService {
 	@Path("/{pageId}/leden")
 	public Response leden(@PathParam("pageId") String pageId,@Context SecurityContext securityContext) {
 		Page page=Page.getPage(pageId);
+		if(page==null) return Response.status(Response.Status.NOT_FOUND).build();
 		User user= (User) securityContext.getUserPrincipal();
 		if(!page.isLid(user)) return Response.status(Response.Status.FORBIDDEN).build();
 		else return Response.ok(page.getLeden()).build();
@@ -45,6 +43,7 @@ public class PageService {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response setName(@FormParam("name") String name, @PathParam("pageId") String pageId,@Context SecurityContext securityContext) {
 		Page page=Page.getPage(pageId);
+		if(page==null) return Response.status(Response.Status.NOT_FOUND).build();
 		User user= (User) securityContext.getUserPrincipal();
 		if(!page.getOwnerId().equals(user.getId())) return Response.status(Response.Status.FORBIDDEN).build();
 		page.setName(name);

@@ -28,12 +28,8 @@ public class AuthenticationResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response login(@FormParam("email") String email, @FormParam("password") String password) {
-		User user;
-		try {
-			user = User.getUserByEmail(email);
-		} catch (NotFoundException e) {
-			return Response.status(Response.Status.UNAUTHORIZED).build();
-		}
+		User user = User.getUserByEmail(email);
+		if(user==null) return Response.status(Response.Status.UNAUTHORIZED).build();
 		if(user.checkPassword(password)) {
 			String token=createToken(user.getId(),"user");
 			AbstractMap.SimpleEntry<String, String> JWT=new AbstractMap.SimpleEntry<>("JWT",token);

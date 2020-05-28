@@ -1,16 +1,12 @@
 package nl.rubend.ipass.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import nl.rubend.ipass.utils.SqlInterface;
 
-import javax.ws.rs.NotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 public class Page {
@@ -26,8 +22,7 @@ public class Page {
 			set.next();
 			return new Page(set.getString("ownerId"),set.getString("name"),set.getString("ID"),set.getString("logo"));
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new NotFoundException(e.getMessage());
+			return null;
 		}
 	}
 	private Page(String ownerId,String name, String id,String logo) {
@@ -89,6 +84,7 @@ public class Page {
 	}
 	public void transferOwner(User newOwner) {
 		this.ownerId=newOwner.getId();
+		if(!this.isLid(newOwner)) this.addLid(newOwner);
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE page SET ownerId = ? WHERE ID = ?");
 			statement.setString(1, this.ownerId);
@@ -113,6 +109,17 @@ public class Page {
 			throw new IpassException(e.getMessage());
 		}
 	}
+	public void removeLid(User user) {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM pageLid WHERE userID=? AND pageID=?");
+			statement.setString(1, user.getId());
+			statement.setString(2, this.id);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
 	public boolean isLid(User user) {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("select COUNT(userID) as count from pageLid where pageID=? and userID=?");
@@ -129,7 +136,7 @@ public class Page {
 	@JsonIgnore
 	public ArrayList<User> getLeden() {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pageLid WHERE pageID=?");
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT userID FROM pageLid WHERE pageID=?");
 			statement.setString(1,id);
 			ResultSet set=statement.executeQuery();
 			ArrayList<User> response=new ArrayList<User>();
@@ -144,7 +151,7 @@ public class Page {
 	@JsonIgnore
 	public ArrayList<Post> getPosts() {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM post WHERE repliedTo IS NULL AND pageID=? ORDER BY date DESC");
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT ID FROM post WHERE repliedTo IS NULL AND pageID=? ORDER BY date DESC");
 			statement.setString(1,id);
 			ResultSet set=statement.executeQuery();
 			ArrayList<Post> response=new ArrayList<Post>();
@@ -158,7 +165,7 @@ public class Page {
 	}
 	public ArrayList<Post> getPostsLimit(int start,int amount) {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM post WHERE repliedTo IS NULL AND pageID=? ORDER BY date DESC LIMIT ?,?");
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT ID FROM post WHERE repliedTo IS NULL AND pageID=? ORDER BY date DESC LIMIT ?,?");
 			statement.setString(1,id);
 			statement.setInt(2,start);
 			statement.setInt(3,amount);

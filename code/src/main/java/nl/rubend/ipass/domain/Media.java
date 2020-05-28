@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import nl.rubend.ipass.utils.SqlInterface;
 import org.apache.tika.Tika;
 
-import javax.ws.rs.NotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +28,7 @@ public class Media {
 			set.next();
 			return new Media(set.getString("ID"), set.getString("owner"), set.getString("location"), set.getString("mime"));
 		} catch (SQLException e) {
-			throw new javax.ws.rs.NotFoundException("Media niet gevonden");
+			return null;
 		}
 	}
 
@@ -69,7 +68,7 @@ public class Media {
 	@JsonIgnore
 	public File getFile() {
 		File file= new File(new File(uploads, location), id);
-		if(!file.exists()) throw new NotFoundException("bestand niet gevonden");
+		if(!file.exists()) return null;
 		return file;
 	}
 

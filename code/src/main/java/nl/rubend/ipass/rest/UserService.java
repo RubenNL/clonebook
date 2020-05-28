@@ -19,12 +19,8 @@ public class UserService {
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response newPasswordMail(@FormParam("email") String email) {
-		User user;
-		try {
-			user=User.getUserByEmail(email);
-		} catch (NotFoundException e) {
-			user=new User(email);
-		}
+		User user=User.getUserByEmail(email);
+		if(user==null) user=new User(email);
 		user.sendPasswordForgottenUrl();
 		return Response.ok(new HashMap<String,String>()).build();
 	}
@@ -62,6 +58,7 @@ public class UserService {
 	public Response publicUserProfile(@Context SecurityContext securityContext, @PathParam("userId") String userId) {
 		User user= (User) securityContext.getUserPrincipal();
 		User requested=User.getUserById(userId);
+		if(requested==null) throw new NotFoundException("Gebruiker niet gevonden.");
 		if(requested.getPrivatePage().isLid(user)) return Response.ok(requested).build();
 		else throw new ForbiddenException("Niet eigen profiel");
 	}

@@ -26,7 +26,7 @@ public class Post {
 			set.next();
 			return new Post(set.getString("ID"),set.getString("userID"),set.getString("pageID"),set.getString("repliedTo"),set.getString("text"),(Date) set.getTimestamp("date"));
 		} catch (SQLException e) {
-			throw new javax.ws.rs.NotFoundException("Post niet gevonden");
+			return null;
 		}
 	}
 	public Post(String id,String userId,String pageId, String repliedToId,String text,Date date) {
