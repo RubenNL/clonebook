@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Post {
@@ -146,5 +147,18 @@ public class Post {
 		} catch (SQLException e) {
 			throw new javax.ws.rs.InternalServerErrorException("get werkt niet?");
 		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Post)) return false;
+		Post post = (Post) o;
+		return getId().equals(post.getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId());
 	}
 }

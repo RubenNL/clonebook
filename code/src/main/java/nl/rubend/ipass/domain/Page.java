@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Page {
@@ -191,5 +192,18 @@ public class Page {
 	}
 	public User getOwner() {
 		return User.getUserById(getOwnerId());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Page)) return false;
+		Page page = (Page) o;
+		return getId().equals(page.getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId());
 	}
 }
