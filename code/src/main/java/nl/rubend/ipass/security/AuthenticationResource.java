@@ -3,7 +3,6 @@ package nl.rubend.ipass.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.MacProvider;
-import nl.rubend.ipass.domain.UnauthorizedException;
 import nl.rubend.ipass.domain.User;
 
 import javax.ws.rs.*;
