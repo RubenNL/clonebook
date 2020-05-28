@@ -9,7 +9,7 @@ function addPost(post) {
 	node.find('.name').attr('user',post.user.id);
 	node.find('.text').text(post.text);
 	post.media.forEach(media=>{
-		node.find('.media').append('<a href="'+media.getUrl()+'"><img class="mediaImage" src="'+media.getUrl()+'"></a>');
+		node.find('.media').append('<a href="'+media.getUrl()+'"><img class="mediaImage" alt="'+post.user.name+" media object"+'" src="'+media.getUrl()+'"></a>');
 	});
 	$(post.repliedTo?'#'+post.repliedTo+' > .subReplies':'#posts').append(node);
 }
