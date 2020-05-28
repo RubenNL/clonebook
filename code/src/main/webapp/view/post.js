@@ -23,7 +23,7 @@ $(document).on('click','.name',event=>{
 	console.log('user:',$(event.target).attr('user'));
 });
 $(document).on('click','.vote',event=>{
-	Utils.sendPost('/rest/post/'+$(event.target).parent().parent().attr('id')+'/vote',{vote:$(event.target).attr('action')});
+	Utils.sendPost('/rest/post/'+$(event.target).parent().parent().attr('id')+'/vote',generateFormData({vote:$(event.target).attr('action')}));
 });
 $(document).on('click','.replyButton',(event)=>{
 	if($(event.target).parent().parent().find('.messageForm').length>0) $(event.target).parent().parent().find('.messageForm').toggle();
@@ -45,7 +45,7 @@ $(document).on('submit','.messageForm',event=>{
 		fileList.forEach(obj=>$(event.target).parent().parent().find('.messageForm').append('<input type="hidden" name="file" value="' + obj.id + '">'))
 	}).then(()=>{
 		$(event.target).find('[name="pageId"]').val(currentPage.id);
-		return Utils.sendPost('/rest/post',event.target);
+		return Utils.sendPost('/rest/post',generateFormData(event.target));
 	}).then(post=>{
 		$(event.target).parent().remove();
 		alert('bericht gepost!');
@@ -67,4 +67,5 @@ function showPage(page) {
 	$('#posts').html('');
 	page.last10Posts.forEach(post=>addPost({repliedTo:null,id:post.id,user:post.user,text:post.text,media:post.media}));
 	currentPage=page;
+	$("#page").show();
 }

@@ -10,15 +10,7 @@ class Utils {
 			else reject(response.status);
 		})
 	}
-	static sendPost(path,form) {
-		if(typeof form=="string") var formData=new FormData(document.querySelector(form)).entries();
-		else if(form instanceof HTMLElement) var formData=new FormData(form);
-		else {
-			var formData = new FormData();
-			for ( var key in form ) {
-				formData.append(key, form[key]);
-			}
-		}
+	static sendPost(path,formData) {
 		return fetch(url+path,{
 			method:'POST',
 			body:new URLSearchParams(formData),

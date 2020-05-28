@@ -61,7 +61,7 @@ main {grid-area:main;}
 	font-size:14pt;
 	
 }
-#settings,#notLoggedIn,#newPasswordScreen {
+#settings,#notLoggedIn,#newPasswordScreen,#page {
 	display:none;
 }
 #loginOptions fieldset {

@@ -100,14 +100,31 @@
 		</template>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
 		<script src="config.js"></script>
-		<script src="settings.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
-		<script src="service/utils.js"></script>
-		<script src="service/post.js"></script>
-		<script src="service/page.js"></script>
-		<script src="service/user.js"></script>
+		<script src="service/loginSignup.js"></script>
 		<script src="service/media.js"></script>
-		<script src="post.js"></script>
-		<script src="loginSignup.js"></script>
+		<script src="service/page.js"></script>
+		<script src="service/post.js"></script>
+		<script src="service/settings.js"></script>
+		<script src="service/user.js"></script>
+		<script src="service/utils.js"></script>
+		<script src="view/loginSignup.js"></script>
+		<script src="view/post.js"></script>
+		<script src="view/settings.js"></script>
+		<script src="view/utils.js"></script>
+		<script>
+			if(window.location.hash && window.location.hash.split('=')[1]) {
+				const parts = window.location.hash.split('=');
+				if(parts[1]) {
+					parts[0]=parts[0].split('#')[1];
+					if(parts[0]==="newAccount") {
+						$("#newPasswordCode").val(parts[1]);
+						$('#newPasswordScreen').show();
+						$('#loginOptions').hide();
+						$('#notLoggedIn').show();
+					}
+				}
+			} else load();
+		</script>
 	</body>
 </html>

@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.HashMap;
+import java.util.Map;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -34,6 +35,16 @@ public class UserService {
 		User user=NewPassword.use(code);
 		user.setPassword(password);
 		return Response.ok().build();
+	}
+	@GET
+	@Path("/settings")
+	@RolesAllowed("user")
+	public Response getSettings(@Context SecurityContext securityContext) {
+		User user = (User) securityContext.getUserPrincipal();
+		Map<String,String> map=new HashMap<>();
+		map.put("email",user.getEmail());
+		map.put("name",user.getName());
+		return Response.ok(map).build();
 	}
 	@POST
 	@Path("/settings")
