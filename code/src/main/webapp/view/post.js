@@ -38,15 +38,18 @@ $(document).on('click','.replyButton',(event)=>{
 	}
 });
 $(document).on('click','.newFile',event=>{
-	$(event.target).parent().find('.files').append('<input type="file" class="fileUpload">');
+	$(event.target).parent().find('.files').append('<input type="file" accept="image/*" class="fileUpload">');
 });
 $(document).on('submit','.messageForm',event=>{
 	event.preventDefault();
-	Promise.all($(event.target).parent().parent().find('.files').children().map((id,file)=>{
-		return Media.create(file.files[0])
-	})).then(fileList=>{
-		fileList.forEach(obj=>$(event.target).parent().parent().find('.messageForm').append('<input type="hidden" name="file" value="' + obj.id + '">'))
-	}).then(()=>{
+	Promise.all($(event.target).find('.files').children().map((id,file)=>{
+		if(!file.files[0]) return Promise.resolve();
+		return Media.create(file.files[0]).then(obj=>{
+			$(file).attr('type','hidden');
+			$(file).attr("name","file");
+			$(file).val(obj.id);
+		});
+	})).then(()=>{
 		$(event.target).find('[name="pageId"]').val(currentPage.id);
 		return Utils.sendPost('/rest/post',generateFormData(event.target));
 	}).then(post=>{
