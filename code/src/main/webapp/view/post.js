@@ -1,7 +1,7 @@
 var picker=new EmojiButton();
 var lastSelectedField;
 var currentPage;
-function addPost(post) {
+function addPost(post,prepend) {
 	let node = $('#postTemplate').contents("article").clone();
 	node.attr("id",post.id);
 	node.find('.profilePicture').attr('src',post.user.profilepicture);
@@ -11,9 +11,11 @@ function addPost(post) {
 	post.media.forEach(media=>{
 		node.find('.media').append('<a href="'+media.getUrl()+'"><img class="mediaImage" alt="'+post.user.name+" media object"+'" src="'+media.getUrl()+'"></a>');
 	});
-	$(post.repliedTo?'#'+post.repliedTo+' > .subReplies':'#posts').append(node);
+	let field=$(post.repliedTo?'#'+post.repliedTo+' > .subReplies':'#posts');
+	if(prepend) field.prepend(node);
+	else field.append(node);
 	post.children.forEach(child=>{
-		addPost(child);
+		addPost(child,prepend);
 	})
 }
 picker.on('emoji',emoji=>lastSelectedField.value+=emoji);
@@ -42,23 +44,23 @@ $(document).on('click','.newFile',event=>{
 });
 $(document).on('submit','.messageForm',event=>{
 	event.preventDefault();
-	Promise.all($(event.target).find('.files').children().map((id,file)=>{
+	Promise.all($(event.target).find('.files').find('[type="file"]').map((id,file)=>{
 		if(!file.files[0]) return Promise.resolve();
 		return Media.create(file.files[0]).then(obj=>{
 			$(file).attr('type','hidden');
 			$(file).attr("name","file");
 			$(file).val(obj.id);
 		});
-	})).then(()=>{
+	})).catch(message=>{
+		if(message===415) alert("bestandstype niet toegestaan.");
+		throw new Error("FileUploadException");
+	}).then(()=>{
 		$(event.target).find('[name="pageId"]').val(currentPage.id);
 		return Utils.sendPost('/rest/post',generateFormData(event.target));
 	}).then(post=>{
 		$(event.target).parent().remove();
 		alert('bericht gepost!');
-		Page.getPage(currentPage.id).then(page=>{
-			showPage(page);
-			currentPage=page;
-		});
+		addPost(post,true);
 	});
 });
 $('#newPost').on('click', () =>{
