@@ -21,7 +21,12 @@ public class MediaService {
 	@POST
 	public Response upload(@FormDataParam("file") InputStream file,@Context SecurityContext securityContext) {
 		User user= (User) securityContext.getUserPrincipal();
-		return Response.ok(new Media(file,user.getId(), "/")).build();
+		Media media=new Media(file,user.getId(), "/");
+		if(!media.getMime().startsWith("image/")) {
+			media.delete();
+			return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE).build();
+		}
+		return Response.ok().build();
 	}
 	@GET
 	@Path("/{fileId}")
