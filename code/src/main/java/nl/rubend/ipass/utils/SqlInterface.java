@@ -16,12 +16,6 @@ public class SqlInterface {
 			e.printStackTrace();
 		}
 	}
-	public static ResultSet executeQuery(String query) throws SQLException {
-		return conn.createStatement().executeQuery(query);
-	}
-	public static int executeUpdate(String query) throws SQLException {
-		return conn.createStatement().executeUpdate(query);
-	}
 	public static PreparedStatement prepareStatement(String statement) throws SQLException {
 		return conn.prepareStatement(statement);
 	}

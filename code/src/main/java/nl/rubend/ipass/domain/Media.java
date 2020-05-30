@@ -105,14 +105,4 @@ public class Media {
 			throw new IpassException(e.getMessage());
 		}
 	}
-	public static void removeNotConnected() {
-		try {
-			ResultSet set=SqlInterface.executeQuery("SELECT ID FROM media WHERE ID NOT IN (SELECT mediaid FROM media_post");
-			while(set.next()) {
-				Media.getMedia(set.getString("ID")).delete();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 }
