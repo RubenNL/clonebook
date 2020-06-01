@@ -1,6 +1,6 @@
-var picker=new EmojiButton();
-var lastSelectedField;
-var currentPage;
+let picker=new EmojiButton();
+let lastSelectedField;
+let currentPage;
 function addPost(post,prepend) {
 	let node = $('#postTemplate').contents("article").clone();
 	node.attr("id",post.id);
