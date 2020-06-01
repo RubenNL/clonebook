@@ -9,7 +9,7 @@ function passwordRequest() {
 	});
 }
 function load() {
-	LoginSignup.getLoggedinUser().catch(message=>{
+	LoginSignup.getLoggedinUser().catch(()=>{
 		$('#notLoggedIn').show();
 		return Promise.reject(403);
 	}).then(User.getUser).catch(message=>{
@@ -48,9 +48,9 @@ function login() {
 	})
 }
 function logout() {
-	LoginSignup.logout();
-	$('#userMenuName').text("");
-	$('#userMenu').hide();
-	logoutPost();
-	load();
+	return LoginSignup.logout().then(()=>{
+		$('#userMenuName').text("");
+		$('#userMenu').hide();
+		logoutPost();
+	}).then(load);
 }
