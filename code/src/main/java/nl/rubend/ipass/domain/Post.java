@@ -26,7 +26,7 @@ public class Post {
 			statement.setString(1, id);
 			ResultSet set=statement.executeQuery();
 			set.next();
-			return new Post(set.getString("ID"),set.getString("userID"),set.getString("pageID"),set.getString("repliedTo"),set.getString("text"),(Date) set.getTimestamp("date"));
+			return new Post(set.getString("ID"),set.getString("userID"),set.getString("pageID"),set.getString("repliedTo"),set.getString("text"),set.getTimestamp("date"));
 		} catch (SQLException e) {
 			return null;
 		}
@@ -84,7 +84,7 @@ public class Post {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT mediaid FROM media_post WHERE postID=?");
 			statement.setString(1, id);
 			ResultSet set = statement.executeQuery();
-			ArrayList<Media> response = new ArrayList<Media>();
+			ArrayList<Media> response = new ArrayList<>();
 			while (set.next()) {
 				response.add(Media.getMedia(set.getString("mediaid")));
 			}
@@ -104,7 +104,7 @@ public class Post {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM vote WHERE postID=?");
 			statement.setString(1, id);
 			ResultSet set = statement.executeQuery();
-			ArrayList<Vote> response = new ArrayList<Vote>();
+			ArrayList<Vote> response = new ArrayList<>();
 			while (set.next()) {
 				response.add(new Vote(set.getString("userID"), set.getString("postID"), set.getInt("vote")));
 			}
@@ -118,7 +118,6 @@ public class Post {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT SUM(vote) as sum FROM vote WHERE postID=?");
 			statement.setString(1, id);
 			ResultSet set = statement.executeQuery();
-			ArrayList<Vote> response = new ArrayList<Vote>();
 			set.next();
 			return set.getInt("sum");
 		} catch (SQLException e) {
@@ -142,7 +141,7 @@ public class Post {
 			statement.setString(1, id);
 			ResultSet set=statement.executeQuery();
 			while(set.next()) {
-				response.add(new Post(set.getString("ID"),set.getString("userID"),set.getString("pageID"),set.getString("repliedTo"),set.getString("text"),(Date) set.getTimestamp("date")));
+				response.add(new Post(set.getString("ID"),set.getString("userID"),set.getString("pageID"),set.getString("repliedTo"),set.getString("text"),set.getTimestamp("date")));
 			}
 			return response;
 		} catch (SQLException e) {

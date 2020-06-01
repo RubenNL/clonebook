@@ -129,7 +129,7 @@ public class User implements Principal {
 	}
 	public boolean checkPassword(String password) {
 		if(this.salt==null || this.salt.equals("")) return false;
-		return hash(password,this.salt).equals(this.hash);
+		return Objects.equals(hash(password, this.salt), this.hash);
 	}
 	public void sendPasswordForgottenUrl() {
 		SendEmail.SendEmail(this.email,"CloneBook nieuw wachtwoord","Gebruik <a href=\"https://clonebook.rubend.nl/#newAccount=" + new NewPassword(this).getCode() + "\">Deze</a> url om je account te activeren.");
@@ -159,7 +159,7 @@ public class User implements Principal {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pageLid WHERE userID=?");
 			statement.setString(1,userId);
 			ResultSet set=statement.executeQuery();
-			ArrayList<Page> response=new ArrayList<Page>();
+			ArrayList<Page> response=new ArrayList<>();
 			while(set.next()) {
 				response.add(Page.getPage(set.getString("pageID")));
 			}
@@ -174,7 +174,7 @@ public class User implements Principal {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM post WHERE userID=?");
 			statement.setString(1, userId);
 			ResultSet set = statement.executeQuery();
-			ArrayList<Post> response = new ArrayList<Post>();
+			ArrayList<Post> response = new ArrayList<>();
 			while (set.next()) {
 				response.add(new Post(set.getString("ID"), set.getString("userID"), set.getString("pageID"),set.getString("repliedTo"),set.getString("text"),set.getTimestamp("date")));
 			}
@@ -189,7 +189,7 @@ public class User implements Principal {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM vote WHERE userID=?");
 			statement.setString(1, userId);
 			ResultSet set = statement.executeQuery();
-			ArrayList<Vote> response = new ArrayList<Vote>();
+			ArrayList<Vote> response = new ArrayList<>();
 			while (set.next()) {
 				response.add(new Vote(set.getString("userID"), set.getString("postID"),set.getInt("vote")));
 			}

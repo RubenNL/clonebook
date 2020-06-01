@@ -141,7 +141,7 @@ public class Page {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT userID FROM pageLid WHERE pageID=?");
 			statement.setString(1,id);
 			ResultSet set=statement.executeQuery();
-			ArrayList<User> response=new ArrayList<User>();
+			ArrayList<User> response=new ArrayList<>();
 			while(set.next()) {
 				response.add(User.getUserById(set.getString("userID")));
 			}
@@ -156,7 +156,7 @@ public class Page {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT ID FROM post WHERE repliedTo IS NULL AND pageID=? ORDER BY date DESC");
 			statement.setString(1,id);
 			ResultSet set=statement.executeQuery();
-			ArrayList<Post> response=new ArrayList<Post>();
+			ArrayList<Post> response=new ArrayList<>();
 			while(set.next()) {
 				response.add(Post.getPost(set.getString("ID")));
 			}
@@ -172,7 +172,7 @@ public class Page {
 			statement.setInt(2,start);
 			statement.setInt(3,amount);
 			ResultSet set=statement.executeQuery();
-			ArrayList<Post> response=new ArrayList<Post>();
+			ArrayList<Post> response=new ArrayList<>();
 			while(set.next()) {
 				response.add(Post.getPost(set.getString("ID")));
 			}
