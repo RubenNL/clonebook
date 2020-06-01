@@ -77,3 +77,8 @@ function showPage(page) {
 	currentPage=page;
 	$("#page").show();
 }
+function logoutPost() {
+	$('#posts').html('');
+	$('#pageHeader > h1').text("");
+	$("#page").hide();
+}

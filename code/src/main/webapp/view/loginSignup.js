@@ -21,7 +21,7 @@ function load() {
 		return Promise.reject(403);
 	}).then(user=>{
 		$('#userMenuName').text(user.name);
-		return user.getPage()
+		return user.getPage();
 	}).then(showPage).catch(()=>{});//silent catch, ik weet niet wat ik hier anders van moet maken.
 }
 function savePassword() {
@@ -48,5 +48,7 @@ function login() {
 }
 function logout() {
 	LoginSignup.logout();
+	$('#userMenuName').text("");
+	logoutPost();
 	load();
 }
