@@ -11,7 +11,7 @@ class Media {
 		return new Media(raw.id,raw.mime,raw.ownerId);
 	}
 	static create(file) {
-		var data=new FormData();
+		let data=new FormData();
 		data.append('file',file);
 		return fetch("/rest/media",{
 			method:'POST',
