@@ -7,10 +7,10 @@ import java.security.Principal;
 
 public class MySecurityContext implements SecurityContext {
 	private User user;
-	private String scheme;
-	public MySecurityContext(User user, String scheme) {
+	private boolean secure;
+	public MySecurityContext(User user, boolean secure) {
 		this.user=user;
-		this.scheme=scheme;
+		this.secure=secure;
 	}
 	@Override
 	public Principal getUserPrincipal() {
@@ -25,7 +25,7 @@ public class MySecurityContext implements SecurityContext {
 
 	@Override
 	public boolean isSecure() {
-		return "https".equals(this.scheme);
+		return secure;
 	}
 
 	@Override
