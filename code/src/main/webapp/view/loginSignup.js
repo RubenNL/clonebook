@@ -20,6 +20,7 @@ function load() {
 		}
 		return Promise.reject(403);
 	}).then(user=>{
+		$('#userMenu').show();
 		$('#userMenuName').text(user.name);
 		return user.getPage();
 	}).then(showPage).catch(()=>{});//silent catch, ik weet niet wat ik hier anders van moet maken.
@@ -49,6 +50,7 @@ function login() {
 function logout() {
 	LoginSignup.logout();
 	$('#userMenuName').text("");
+	$('#userMenu').hide();
 	logoutPost();
 	load();
 }

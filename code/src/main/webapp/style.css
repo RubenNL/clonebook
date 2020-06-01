@@ -61,7 +61,7 @@ main {grid-area:main;}
 	font-size:14pt;
 	
 }
-#settings,#notLoggedIn,#newPasswordScreen,#page {
+#settings,#notLoggedIn,#newPasswordScreen,#page,#userMenu {
 	display:none;
 }
 #loginOptions fieldset {
@@ -130,9 +130,9 @@ textarea:focus {
 	outline: thin dotted invert
 }
 #userMenuName {
-	background-color: #4CAF50;
+	background-color: #49A74B;/*#4CAF50 was niet goed volgens wave?*/
 	color: white;
-	font-size: 16px;
+	font-size: 14pt;
 	font-weight:bold;
 	height:100%;
 	border: none;
