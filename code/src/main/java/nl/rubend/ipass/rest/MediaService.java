@@ -2,7 +2,6 @@ package nl.rubend.ipass.rest;
 
 import nl.rubend.ipass.domain.Media;
 import nl.rubend.ipass.domain.User;
-import org.apache.tika.Tika;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.ws.rs.*;
@@ -11,8 +10,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.io.*;
-import java.net.URLConnection;
-import java.nio.file.Files;
 
 @Path("/media")
 public class MediaService {

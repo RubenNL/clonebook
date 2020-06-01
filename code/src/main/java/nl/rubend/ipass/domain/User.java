@@ -132,7 +132,7 @@ public class User implements Principal {
 		return Objects.equals(hash(password, this.salt), this.hash);
 	}
 	public void sendPasswordForgottenUrl() {
-		SendEmail.SendEmail(this.email,"CloneBook nieuw wachtwoord","Gebruik <a href=\"https://clonebook.rubend.nl/#newAccount=" + new NewPassword(this).getCode() + "\">Deze</a> url om je account te activeren.");
+		SendEmail.sendEmail(this.email,"CloneBook nieuw wachtwoord","Gebruik <a href=\"https://clonebook.rubend.nl/#newAccount=" + new NewPassword(this).getCode() + "\">Deze</a> url om je account te activeren.");
 	}
 	public void setName(String name) {
 		this.getPrivatePage().setName(name);

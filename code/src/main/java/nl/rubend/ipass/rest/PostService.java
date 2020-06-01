@@ -7,8 +7,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Path("/post")
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,7 +21,7 @@ public class PostService {
 		if(!page.isLid(user)) return Response.status(Response.Status.UNAUTHORIZED).build();
 		Post post=new Post(user,page,repliedToId.equals("")?null:Post.getPost(repliedToId),text);
 		for(String fileID:files) {
-			post.addFile(Media.getMedia(fileID));
+			post.addFile(Objects.requireNonNull(Media.getMedia(fileID)));
 		}
 		return Response.ok(post).build();
 	}

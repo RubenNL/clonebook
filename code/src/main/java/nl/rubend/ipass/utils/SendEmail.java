@@ -10,20 +10,20 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.Objects;
 import java.util.Properties;
 
 public class SendEmail {
-	public static void SendEmail(String to, String subject,String message) {
+	public static void sendEmail(String to, String subject,String message) {
 		try {
 			Properties prop = new Properties();
-			prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("database.properties"));
+			prop.load(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream("database.properties")));
 			Properties props = System.getProperties();
 			props.put("mail.smtps.host", prop.getProperty("smtphost"));
 			props.put("mail.smtps.auth", "true");
 			Session session = Session.getInstance(props, null);
 			Message msg = new MimeMessage(session);
 			msg.setFrom(new InternetAddress("clonebook@rubend.nl"));
-			;
 			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
 			msg.setSubject(subject);
 			msg.setContent(message, "text/html");
