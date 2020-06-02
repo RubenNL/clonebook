@@ -1,4 +1,9 @@
 class Utils {
+	static sendFetch(first,second) {
+		if(navigator.onLine) return fetch(first,second);
+		alert("apparaat is offline! maak verbinding met het internet en probeer opnieuw.");
+		return Promise.reject("offline");
+	}
 	static handleResponse(response) {
 		return new Promise(async (resolve,reject)=>{
 			console.log(response);
@@ -11,7 +16,7 @@ class Utils {
 		})
 	}
 	static sendPost(path,formData) {
-		return fetch(path,{
+		return Utils.sendFetch(path,{
 			method:'POST',
 			body:new URLSearchParams(formData),
 			headers: {
@@ -20,7 +25,7 @@ class Utils {
 		}).then(Utils.handleResponse);
 	}
 	static sendGet(path) {
-		return fetch(path,{
+		return Utils.sendFetch(path,{
 			method:'GET',
 			headers: {
 				'Authorization': 'Bearer ' + window.sessionStorage.getItem("jwt")||""
