@@ -19,7 +19,7 @@ public class Media {
 	private String location;
 	private String ownerId;
 	private String mime;
-	private static File uploads = new File("/home/pi/ipassUploads");
+	private static File uploads = new File("/home/pi/ipass/uploads");
 
 	public static Media getMedia(String id) {
 		try {
