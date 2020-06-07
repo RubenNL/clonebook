@@ -9,10 +9,7 @@ function passwordRequest() {
 	});
 }
 function load() {
-	LoginSignup.getLoggedinUser().catch(()=>{
-		$('#notLoggedIn').show();
-		return Promise.reject(403);
-	}).then(User.getUser).catch(message=>{
+	LoginSignup.getLoggedinUser().catch(message=>{
 		if(message===403) $('#notLoggedIn').show();
 		else {
 			console.log(message);
