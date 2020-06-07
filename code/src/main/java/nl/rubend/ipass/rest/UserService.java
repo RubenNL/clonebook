@@ -54,10 +54,9 @@ public class UserService {
 		return Response.ok().build();
 	}
 	@GET
-	@Path("/lidAanvragen")
-	public Response getLidAanvragen(@Context SecurityContext securityContext) {
-		User user = (User) securityContext.getUserPrincipal();
-		return Response.ok(user.getLidAanvragenOpPaginas()).build();
+	@Path("/{userId}/lidAanvragen")
+	public Response getLidAanvragen(@BeanParam SecurityBean securityBean) {
+		return Response.ok(securityBean.allowedUser().getLidAanvragenOpPaginas()).build();
 	}
 	@GET
 	@RolesAllowed("user")
