@@ -15,10 +15,7 @@ import java.security.spec.KeySpec;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class User implements Principal {
 	private static SecureRandom random = new SecureRandom();
@@ -198,7 +195,15 @@ public class User implements Principal {
 			throw new IpassException(e.getMessage());
 		}
 	}
-
+	@JsonIgnore
+	public HashMap<String,ArrayList<User>> getLidAanvragenOpPaginas() {
+		HashMap<String,ArrayList<User>> response=new HashMap<>();
+		for(Page page:getPages()) {
+			ArrayList<User> fromPage=page.getLidAanvragen();
+			if(fromPage.size()>0) response.put(page.getId(),fromPage);
+		}
+		return response;
+	}
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

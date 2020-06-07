@@ -136,6 +136,47 @@ public class Page {
 		}
 	}
 	@JsonIgnore
+	public ArrayList<User> getLidAanvragen() {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT userID FROM lidAanvraag WHERE pageID=?");
+			statement.setString(1,id);
+			ResultSet set=statement.executeQuery();
+			ArrayList<User> response=new ArrayList<>();
+			while(set.next()) {
+				response.add(User.getUserById(set.getString("userID")));
+			}
+			return response;
+		} catch (SQLException e) {
+			throw new IpassException(e.getMessage());
+		}
+	}
+	public void removeLidAanvraag(User user) {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM lidAanvraag WHERE userID=? AND pageID=?");
+			statement.setString(1, user.getId());
+			statement.setString(2, this.id);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
+	public void acceptUser(User user) {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("select COUNT(userID) as count from lidAanvraag where pageID=? and userID=?");
+			statement.setString(1, this.id);
+			statement.setString(2,user.getId());
+			ResultSet set=statement.executeQuery();
+			set.next();
+			if(set.getInt("count")==1) {
+				addLid(user);
+				removeLidAanvraag(user);
+			}
+		} catch(SQLException e) {
+			throw new IpassException(e.getMessage());
+		}
+	}
+	@JsonIgnore
 	public ArrayList<User> getLeden() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT userID FROM pageLid WHERE pageID=?");

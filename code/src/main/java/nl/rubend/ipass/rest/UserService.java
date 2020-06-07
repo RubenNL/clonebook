@@ -53,6 +53,12 @@ public class UserService {
 		return Response.ok().build();
 	}
 	@GET
+	@Path("/lidAanvragen")
+	public Response getLidAanvragen(@Context SecurityContext securityContext) {
+		User user = (User) securityContext.getUserPrincipal();
+		return Response.ok(user.getLidAanvragenOpPaginas()).build();
+	}
+	@GET
 	@RolesAllowed("user")
 	@Path("/{userId}")
 	public Response publicUserProfile(@Context SecurityContext securityContext, @PathParam("userId") String userId) {
