@@ -13,7 +13,7 @@ class Media {
 	static create(file) {
 		let data=new FormData();
 		data.append('file',file);
-		return Utils.sendFetch("/rest/media",{
+		return Utils.sendFetch("media",{
 			method:'POST',
 			body:data,
 			headers: {

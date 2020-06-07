@@ -1,6 +1,6 @@
 class Utils {
 	static sendFetch(first,second) {
-		if(navigator.onLine) return fetch(first,second);
+		if(navigator.onLine) return fetch('/rest/'+first,second);
 		alert("apparaat is offline! maak verbinding met het internet en probeer opnieuw.");
 		return Promise.reject("offline");
 	}

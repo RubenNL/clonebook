@@ -10,7 +10,7 @@ class Post {
 		this.repliedTo=repliedTo;
 	}
 	static getPost(id) {
-		return Utils.sendGet("/rest/post/"+id).then(Post.fromRaw)
+		return Utils.sendGet("post/"+id).then(Post.fromRaw)
 	}
 	static fromRaw(raw) {
 		if(raw.children!==null) raw.children=raw.children.map(Post.fromRaw);

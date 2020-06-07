@@ -6,7 +6,7 @@ class User {
 		this.privatePageId=privatePageId;
 	}
 	static getUser(id) {
-		return Utils.sendGet("/rest/user/"+id).then(User.fromRaw);
+		return Utils.sendGet("user/"+id).then(User.fromRaw);
 	}
 	static fromRaw(raw) {
 		return new User(raw.id,raw.name,raw.email,raw.privatePageId);
@@ -15,7 +15,7 @@ class User {
 		return Page.getPage(this.privatePageId);
 	}
 	getLidAanvragenOpPaginas() {
-		return Utils.sendGet('/rest/user/'+this.id+'/lidAanvragen');
+		return Utils.sendGet('user/'+this.id+'/lidAanvragen');
 	}
 
 }

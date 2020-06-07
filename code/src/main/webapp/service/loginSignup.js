@@ -1,12 +1,12 @@
 class LoginSignup {
 	static passwordRequest(form) {
-		return Utils.sendPost("/rest/user/new",form);
+		return Utils.sendPost("new",form);
 	}
 	static savePassword(form) {
-		return Utils.sendPost("/rest/user/newPassword",form);
+		return Utils.sendPost("newPassword",form);
 	}
 	static login(form) {
-		return Utils.sendPost("/rest/login",form).then(response=>{
+		return Utils.sendPost("login",form).then(response=>{
 			window.sessionStorage.setItem("jwt",response.JWT);
 		})
 	}

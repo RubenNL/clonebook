@@ -28,7 +28,7 @@ $(document).on('click','.name',event=>{
 	console.log('user:',$(event.target).attr('user'));
 });
 $(document).on('click','.vote',event=>{
-	Utils.sendPost('/rest/post/'+$(event.target).parent().parent().attr('id')+'/vote',generateFormData({vote:$(event.target).attr('action')}));
+	Utils.sendPost('post/'+$(event.target).parent().parent().attr('id')+'/vote',generateFormData({vote:$(event.target).attr('action')}));
 });
 $(document).on('click','.replyButton',(event)=>{
 	if($(event.target).parent().parent().find('.messageForm').length>0) $(event.target).parent().parent().find('.messageForm').toggle();
@@ -56,7 +56,7 @@ $(document).on('submit','.messageForm',event=>{
 		throw new Error("FileUploadException");
 	}).then(()=>{
 		$(event.target).find('[name="pageId"]').val(currentPage.id);
-		return Utils.sendPost('/rest/post',generateFormData(event.target));
+		return Utils.sendPost('post',generateFormData(event.target));
 	}).then(post=>{
 		$(event.target).parent().remove();
 		alert('bericht gepost!');

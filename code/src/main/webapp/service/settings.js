@@ -4,7 +4,7 @@ class Settings {
 		this.email=email;
 	}
 	static getSettings() {
-		return Utils.sendGet('/rest/user/'+getLoggedInId()+'/settings').then(Settings.fromRaw);
+		return Utils.sendGet('user/'+getLoggedInId()+'/settings').then(Settings.fromRaw);
 	}
 	static fromRaw(raw) {
 		return new Settings(raw.name,raw.email);
@@ -13,6 +13,6 @@ class Settings {
 		let formData = new FormData();
 		formData.append("name",this.name);
 		formData.append("email",this.email);
-		return Utils.sendPost("/rest/user/"+getLoggedInId()+"/settings",formData);
+		return Utils.sendPost("user/"+getLoggedInId()+"/settings",formData);
 	}
 }
