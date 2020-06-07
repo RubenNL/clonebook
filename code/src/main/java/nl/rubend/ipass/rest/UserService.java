@@ -59,7 +59,8 @@ public class UserService {
 		User user= (User) securityContext.getUserPrincipal();
 		User requested=User.getUserById(userId);
 		if(requested==null) throw new NotFoundException("Gebruiker niet gevonden.");
-		if(requested.getPrivatePage().isLid(user)) return Response.ok(requested).build();
-		else throw new ForbiddenException("Niet eigen profiel");
+		//if(requested.getPrivatePage().isLid(user)) return Response.ok(requested).build();
+		//else throw new ForbiddenException("Niet eigen profiel");
+		return Response.ok(requested).build();//Iedereen mag het publieke profiel bekijken.
 	}
 }

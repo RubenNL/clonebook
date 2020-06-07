@@ -7,6 +7,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,11 +15,12 @@ import java.util.Objects;
 @Produces(MediaType.APPLICATION_JSON)
 public class PostService {
 	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response newPost(@Context SecurityContext securityContext, @FormParam("pageId") String pageId, @FormParam("repliedTo") String repliedToId, @FormParam("text") String text, @FormParam("file") List<String> files) {
 		User user= (User) securityContext.getUserPrincipal();
 		Page page=Page.getPage(pageId);
 		if(page==null) return Response.status(Response.Status.NOT_FOUND).build();
-		if(!page.isLid(user)) return Response.status(Response.Status.UNAUTHORIZED).build();
+		if(!page.isLid(user)) return Response.status(Response.Status.FORBIDDEN).build();
 		Post post=new Post(user,page,repliedToId.equals("")?null:Post.getPost(repliedToId),text);
 		for(String fileID:files) {
 			post.addFile(Objects.requireNonNull(Media.getMedia(fileID)));
@@ -27,12 +29,11 @@ public class PostService {
 	}
 	@GET
 	@Path("/{postId}")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response getPost(@PathParam("postId") String postId,@Context SecurityContext securityContext) {
 		User user= (User) securityContext.getUserPrincipal();
 		Post post=Post.getPost(postId);
-		if(post==null) throw new NotFoundException("pagina niet gevonden");
-		if(!post.getPage().isLid(user)) return Response.status(Response.Status.UNAUTHORIZED).build();
+		if(post==null) throw new NotFoundException("post niet gevonden");
+		if(!post.getPage().isLid(user)) return Response.status(Response.Status.FORBIDDEN).entity(new AbstractMap.SimpleEntry<String,String>("pageId",post.getPageId())).build();
 		return Response.ok(post).build();
 	}
 	@DELETE
@@ -52,7 +53,7 @@ public class PostService {
 		User user= (User) securityContext.getUserPrincipal();
 		Post post=Post.getPost(postId);
 		if(post==null) throw new NotFoundException("Pagina niet gevonden");
-		if(!post.getPage().isLid(user)) return Response.status(Response.Status.UNAUTHORIZED).build();
+		if(!post.getPage().isLid(user)) return Response.status(Response.Status.FORBIDDEN).build();
 		if(vote.equals("up")) new Vote(user,post,1);
 		else if(vote.equals("down")) new Vote(user,post,-1);
 		else throw new javax.ws.rs.BadRequestException();

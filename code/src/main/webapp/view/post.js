@@ -70,12 +70,34 @@ $('#newPost').on('click', () =>{
 		clone.insertBefore('#posts');
 	}
 });
+function showSinglePost(postId) {
+	Post.getPost(postId).then(post=>{
+		$('#posts').html('');
+		addPost(post);
+		window.location.hash='#post='+post.id;
+		return post.getPage();
+	},message=>{
+		if(message.pageId) {
+			$('#posts').html("Geen toegang.");
+			return Page.getPage(message.pageId);
+		} else throw message;
+	}).catch(message=>{
+			if(message.id) return message; //Geen toegang exception
+			else throw message;
+		})
+		.then(page=>{
+			currentPage=page;
+			$('#pageHeader > h1').text(page.name);
+			$('#page').show();
+		})
+}
 function showPage(page) {
 	$('#pageHeader > h1').text(page.name);
 	$('#posts').html('');
 	page.last10Posts.forEach(post=>addPost(post));
 	currentPage=page;
 	$("#page").show();
+	window.location.hash='#page='+page.id;
 }
 function logoutPost() {
 	$('#posts').html('');
