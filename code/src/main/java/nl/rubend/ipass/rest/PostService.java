@@ -30,35 +30,50 @@ public class PostService {
 	}
 	@GET
 	@Path("/{postId}")
-	public Response getPost(@PathParam("postId") String postId,@BeanParam SecurityBean securityBean) {
+	public Response getPost(@BeanParam Bean bean,@BeanParam SecurityBean securityBean) {
 		User user= securityBean.getSender();
-		Post post=Post.getPost(postId);
-		if(post==null) throw new NotFoundException("post niet gevonden");
-		if(!post.getPage().isLid(user)) return Response.status(Response.Status.FORBIDDEN).entity(new AbstractMap.SimpleEntry<String,String>("pageId",post.getPageId())).build();
-		return Response.ok(post).build();
+		if(bean.getPost()==null) throw new NotFoundException("post niet gevonden");
+		if(!bean.isLid()) return Response.status(Response.Status.FORBIDDEN).entity(new AbstractMap.SimpleEntry<String,String>("pageId",bean.getPost().getPageId())).build();
+		return Response.ok(bean.getPost()).build();
 	}
 	@DELETE
 	@Path("/{postId}")
-	public Response deletePost(@PathParam("postId") String postId,@BeanParam SecurityBean securityBean) {
+	public Response deletePost(@BeanParam Bean bean,@BeanParam SecurityBean securityBean) {
 		User user= securityBean.getSender();
-		Post post=Post.getPost(postId);
-		if(post==null) throw new NotFoundException("Pagina niet gevonden");
-		if(!(post.getUser().equals(user) || post.getPage().getOwner().equals(user))) return Response.status(Response.Status.UNAUTHORIZED).build();
-		post.delete();
+		if(bean.getPost()==null) throw new NotFoundException("Pagina niet gevonden");
+		if(!(bean.getPost().getUser().equals(user) || bean.isAdmin())) return Response.status(Response.Status.FORBIDDEN).build();
+		bean.getPost().delete();
 		return Response.ok().build();
 	}
 	@POST
 	@Path("/{postId}/vote")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response vote(@PathParam("postId") String postId,@FormParam("vote") String vote,@BeanParam SecurityBean securityBean) {
+	public Response vote(@BeanParam Bean bean,@FormParam("vote") String vote,@BeanParam SecurityBean securityBean) {
 		User user= securityBean.getSender();
-		Post post=Post.getPost(postId);
-		if(post==null) throw new NotFoundException("Pagina niet gevonden");
-		if(!post.getPage().isLid(user)) return Response.status(Response.Status.FORBIDDEN).build();
-		if(vote.equals("up")) new Vote(user,post,1);
-		else if(vote.equals("down")) new Vote(user,post,-1);
+		if(bean.getPost()==null) throw new NotFoundException("Pagina niet gevonden");
+		bean.onlyLid();
+		if(vote.equals("up")) new Vote(user,bean.getPost(),1);
+		else if(vote.equals("down")) new Vote(user,bean.getPost(),-1);
 		else throw new javax.ws.rs.BadRequestException();
 		return Response.ok().build();
 	}
-
+	class Bean {
+		@PathParam("postId") String postId;
+		@BeanParam SecurityBean securityBean;
+		Post getPost() {
+			return Post.getPost(postId);
+		}
+		Page getPage() {
+			return getPost().getPage();
+		}
+		boolean isLid() {
+			return getPage().isLid(securityBean.getSender());
+		}
+		void onlyLid() {
+			if(!isLid()) throw new ForbiddenException("geen toegang");
+		}
+		boolean isAdmin() {
+			return getPage().getOwner().equals(securityBean.getSender());
+		}
+	}
 }

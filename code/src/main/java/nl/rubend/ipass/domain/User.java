@@ -196,11 +196,18 @@ public class User implements Principal {
 		}
 	}
 	@JsonIgnore
-	public HashMap<String,ArrayList<User>> getLidAanvragenOpPaginas() {
-		HashMap<String,ArrayList<User>> response=new HashMap<>();
+	public ArrayList<HashMap<String,String>> getLidAanvragenOpPaginas() {
+		ArrayList<HashMap<String,String>> response=new ArrayList<>();
 		for(Page page:getPages()) {
-			ArrayList<User> fromPage=page.getLidAanvragen();
-			if(fromPage.size()>0) response.put(page.getId(),fromPage);
+			ArrayList<String> fromPage=page.getLidAanvragen();
+			for(String userId:fromPage) {
+				HashMap<String,String> tempHash=new HashMap<>();
+				tempHash.put("userId",userId);
+				tempHash.put("userName",User.getUserById(userId).getName());
+				tempHash.put("pageId",page.getId());
+				tempHash.put("pageName",page.getName());
+				response.add(tempHash);
+			}
 		}
 		return response;
 	}

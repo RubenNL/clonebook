@@ -13,4 +13,10 @@ class Page {
 		raw.last10Posts=raw.last10Posts.map(sourcePost=>Post.fromRaw(sourcePost));
 		return new Page(raw.id,raw.last10Posts,raw.logo,raw.name,raw.owner);
 	}
+	static askPermissions(id) {
+		return Utils.sendPost('/rest/page/'+id+'/lidAanvraag','');
+	}
+	acceptLid(user) {
+		return Utils.sendPost('/rest/page/'+this.id+'/acceptLid/'+user,'');
+	}
 }

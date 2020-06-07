@@ -14,5 +14,8 @@ class User {
 	getPage() {
 		return Page.getPage(this.privatePageId);
 	}
+	getLidAanvragenOpPaginas() {
+		return Utils.sendGet('/rest/user/'+this.id+'/lidAanvragen');
+	}
 
 }

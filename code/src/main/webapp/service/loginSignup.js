@@ -27,6 +27,6 @@ class LoginSignup {
 				return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
 			}).join(''));
 			resolve(JSON.parse(jsonPayload).sub);
-		})
+		}).then(User.getUser)
 	}
 }

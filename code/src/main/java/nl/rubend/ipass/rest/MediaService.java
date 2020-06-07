@@ -2,6 +2,7 @@ package nl.rubend.ipass.rest;
 
 import nl.rubend.ipass.domain.Media;
 import nl.rubend.ipass.domain.User;
+import nl.rubend.ipass.security.SecurityBean;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.ws.rs.*;
@@ -16,9 +17,8 @@ public class MediaService {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	@POST
-	public Response upload(@FormDataParam("file") InputStream file,@Context SecurityContext securityContext) {
-		User user= (User) securityContext.getUserPrincipal();
-		Media media=new Media(file,user.getId(), "/");
+	public Response upload(@FormDataParam("file") InputStream file,@BeanParam SecurityBean securityBean) {
+		Media media=new Media(file,securityBean.getSender().getId(), "/");
 		if(!media.getMime().startsWith("image/")) {
 			media.delete();
 			return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE).build();

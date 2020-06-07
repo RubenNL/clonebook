@@ -136,14 +136,40 @@ public class Page {
 		}
 	}
 	@JsonIgnore
-	public ArrayList<User> getLidAanvragen() {
+	public void addLidAanvraag(User user) {
+		if(isLid(user)) throw new IllegalArgumentException("user is al lid!");
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO lidAanvraag(userID,pageID) VALUES (?,?)");
+			statement.setString(1, user.getId());
+			statement.setString(2,this.id);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
+	@JsonIgnore
+	public boolean hasLidAanvraagVanUser(User user) {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("select COUNT(userID) as count from lidAanvraag where pageID=? and userID=?");
+			statement.setString(1, this.id);
+			statement.setString(2,user.getId());
+			ResultSet set=statement.executeQuery();
+			set.next();
+			return set.getInt("count")==1;
+		} catch(SQLException e) {
+			throw new IpassException(e.getMessage());
+		}
+	}
+	@JsonIgnore
+	public ArrayList<String> getLidAanvragen() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT userID FROM lidAanvraag WHERE pageID=?");
 			statement.setString(1,id);
 			ResultSet set=statement.executeQuery();
-			ArrayList<User> response=new ArrayList<>();
+			ArrayList<String> response=new ArrayList<>();
 			while(set.next()) {
-				response.add(User.getUserById(set.getString("userID")));
+				response.add(set.getString("userID"));
 			}
 			return response;
 		} catch (SQLException e) {
@@ -162,19 +188,10 @@ public class Page {
 		}
 	}
 	public void acceptUser(User user) {
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("select COUNT(userID) as count from lidAanvraag where pageID=? and userID=?");
-			statement.setString(1, this.id);
-			statement.setString(2,user.getId());
-			ResultSet set=statement.executeQuery();
-			set.next();
-			if(set.getInt("count")==1) {
-				addLid(user);
-				removeLidAanvraag(user);
-			}
-		} catch(SQLException e) {
-			throw new IpassException(e.getMessage());
-		}
+		if(hasLidAanvraagVanUser(user)) {
+			addLid(user);
+			removeLidAanvraag(user);
+		} else throw new IllegalArgumentException("gebruiker heeft geen aanvraag");
 	}
 	@JsonIgnore
 	public ArrayList<User> getLeden() {
