@@ -1,6 +1,7 @@
 package nl.rubend.ipass.rest;
 
 import nl.rubend.ipass.domain.*;
+import nl.rubend.ipass.security.SecurityBean;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
@@ -33,21 +34,21 @@ public class UserService {
 		return Response.ok().build();
 	}
 	@GET
-	@Path("/settings")
+	@Path("/{userId}/settings")
 	@RolesAllowed("user")
-	public Response getSettings(@Context SecurityContext securityContext) {
-		User user = (User) securityContext.getUserPrincipal();
+	public Response getSettings(@BeanParam SecurityBean securityBean) {
+		User user = securityBean.allowedUser();
 		Map<String,String> map=new HashMap<>();
 		map.put("email",user.getEmail());
 		map.put("name",user.getName());
 		return Response.ok(map).build();
 	}
 	@POST
-	@Path("/settings")
+	@Path("/{userId}/settings")
 	@RolesAllowed("user")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response setProfile(@FormParam("name") String name, @FormParam("email") String email, @Context SecurityContext securityContext) {
-		User user = (User) securityContext.getUserPrincipal();
+	public Response setProfile(@FormParam("name") String name, @FormParam("email") String email, @BeanParam SecurityBean securityBean) {
+		User user = securityBean.allowedUser();
 		if (!user.getEmail().equals(email)) user.setEmail(email);
 		if (!user.getName().equals(name)) user.setName(name);
 		return Response.ok().build();
@@ -55,12 +56,7 @@ public class UserService {
 	@GET
 	@RolesAllowed("user")
 	@Path("/{userId}")
-	public Response publicUserProfile(@Context SecurityContext securityContext, @PathParam("userId") String userId) {
-		User user= (User) securityContext.getUserPrincipal();
-		User requested=User.getUserById(userId);
-		if(requested==null) throw new NotFoundException("Gebruiker niet gevonden.");
-		//if(requested.getPrivatePage().isLid(user)) return Response.ok(requested).build();
-		//else throw new ForbiddenException("Niet eigen profiel");
-		return Response.ok(requested).build();//Iedereen mag het publieke profiel bekijken.
+	public Response publicUserProfile(@PathParam("userId") String userId,@BeanParam SecurityBean securityBean) {
+		return Response.ok(securityBean.getRequested()).build();
 	}
 }

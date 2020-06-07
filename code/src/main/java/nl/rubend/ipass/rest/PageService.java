@@ -2,6 +2,7 @@ package nl.rubend.ipass.rest;
 
 import nl.rubend.ipass.domain.Page;
 import nl.rubend.ipass.domain.User;
+import nl.rubend.ipass.security.SecurityBean;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
@@ -18,8 +19,8 @@ import java.util.Map;
 public class PageService {
 	@GET
 	@Path("/{pageId}")
-	public Response publicPage(@PathParam("pageId") String pageId, @Context SecurityContext securityContext) {
-		User user= (User) securityContext.getUserPrincipal();
+	public Response publicPage(@PathParam("pageId") String pageId, @BeanParam SecurityBean securityBean) {
+		User user= securityBean.getSender();
 		Page page;
 		page = Page.getPage(pageId);
 		if(page==null) return Response.status(Response.Status.NOT_FOUND).build();
@@ -31,21 +32,21 @@ public class PageService {
 	}
 	@GET
 	@Path("/{pageId}/leden")
-	public Response leden(@PathParam("pageId") String pageId,@Context SecurityContext securityContext) {
+	public Response leden(@PathParam("pageId") String pageId,@BeanParam SecurityBean securityBean) {
 		Page page=Page.getPage(pageId);
 		if(page==null) return Response.status(Response.Status.NOT_FOUND).build();
-		User user= (User) securityContext.getUserPrincipal();
+		User user= securityBean.getSender();
 		if(!page.isLid(user)) return Response.status(Response.Status.FORBIDDEN).build();
 		else return Response.ok(page.getLeden()).build();
 	}
 	@POST
 	@Path("/{pageId}/name")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response setName(@FormParam("name") String name, @PathParam("pageId") String pageId,@Context SecurityContext securityContext) {
+	public Response setName(@FormParam("name") String name, @PathParam("pageId") String pageId,@BeanParam SecurityBean securityBean) {
 		Page page=Page.getPage(pageId);
 		if(page==null) return Response.status(Response.Status.NOT_FOUND).build();
-		User user= (User) securityContext.getUserPrincipal();
-		if(!page.getOwnerId().equals(user.getId())) return Response.status(Response.Status.FORBIDDEN).build();
+		User user= securityBean.getSender();
+		if(!page.getOwner().equals(user)) return Response.status(Response.Status.FORBIDDEN).build();
 		page.setName(name);
 		return Response.ok().build();
 	}

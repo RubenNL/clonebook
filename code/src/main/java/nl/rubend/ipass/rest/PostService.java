@@ -1,6 +1,7 @@
 package nl.rubend.ipass.rest;
 
 import nl.rubend.ipass.domain.*;
+import nl.rubend.ipass.security.SecurityBean;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -16,8 +17,8 @@ import java.util.Objects;
 public class PostService {
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response newPost(@Context SecurityContext securityContext, @FormParam("pageId") String pageId, @FormParam("repliedTo") String repliedToId, @FormParam("text") String text, @FormParam("file") List<String> files) {
-		User user= (User) securityContext.getUserPrincipal();
+	public Response newPost(@BeanParam SecurityBean securityBean, @FormParam("pageId") String pageId, @FormParam("repliedTo") String repliedToId, @FormParam("text") String text, @FormParam("file") List<String> files) {
+		User user= securityBean.getSender();
 		Page page=Page.getPage(pageId);
 		if(page==null) return Response.status(Response.Status.NOT_FOUND).build();
 		if(!page.isLid(user)) return Response.status(Response.Status.FORBIDDEN).build();
@@ -29,8 +30,8 @@ public class PostService {
 	}
 	@GET
 	@Path("/{postId}")
-	public Response getPost(@PathParam("postId") String postId,@Context SecurityContext securityContext) {
-		User user= (User) securityContext.getUserPrincipal();
+	public Response getPost(@PathParam("postId") String postId,@BeanParam SecurityBean securityBean) {
+		User user= securityBean.getSender();
 		Post post=Post.getPost(postId);
 		if(post==null) throw new NotFoundException("post niet gevonden");
 		if(!post.getPage().isLid(user)) return Response.status(Response.Status.FORBIDDEN).entity(new AbstractMap.SimpleEntry<String,String>("pageId",post.getPageId())).build();
@@ -38,8 +39,8 @@ public class PostService {
 	}
 	@DELETE
 	@Path("/{postId}")
-	public Response deletePost(@PathParam("postId") String postId,@Context SecurityContext securityContext) {
-		User user= (User) securityContext.getUserPrincipal();
+	public Response deletePost(@PathParam("postId") String postId,@BeanParam SecurityBean securityBean) {
+		User user= securityBean.getSender();
 		Post post=Post.getPost(postId);
 		if(post==null) throw new NotFoundException("Pagina niet gevonden");
 		if(!(post.getUser().equals(user) || post.getPage().getOwner().equals(user))) return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -49,8 +50,8 @@ public class PostService {
 	@POST
 	@Path("/{postId}/vote")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response vote(@PathParam("postId") String postId,@FormParam("vote") String vote,@Context SecurityContext securityContext) {
-		User user= (User) securityContext.getUserPrincipal();
+	public Response vote(@PathParam("postId") String postId,@FormParam("vote") String vote,@BeanParam SecurityBean securityBean) {
+		User user= securityBean.getSender();
 		Post post=Post.getPost(postId);
 		if(post==null) throw new NotFoundException("Pagina niet gevonden");
 		if(!post.getPage().isLid(user)) return Response.status(Response.Status.FORBIDDEN).build();

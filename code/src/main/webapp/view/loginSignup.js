@@ -54,3 +54,13 @@ function logout() {
 		logoutPost();
 	}).then(load);
 }
+function getLoggedInId() {
+	const token=sessionStorage.getItem("jwt");
+	if(token.length==0) throw new Error("niet ingelogd");
+	const base64Url = token.split('.')[1];
+	const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+	const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+		return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+	}).join(''));
+	return JSON.parse(jsonPayload).sub;
+}
