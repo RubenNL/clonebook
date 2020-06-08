@@ -9,6 +9,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', function(event) {
+	if(event.request.mode!=="navigate") return
 	if(navigator.onLine) event.respondWith(fetch(event.request));
 	else {
 		let headers=new Headers();

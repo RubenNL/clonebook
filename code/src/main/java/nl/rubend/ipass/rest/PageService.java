@@ -1,5 +1,6 @@
 package nl.rubend.ipass.rest;
 
+import nl.rubend.ipass.domain.Media;
 import nl.rubend.ipass.domain.Page;
 import nl.rubend.ipass.domain.User;
 import nl.rubend.ipass.security.SecurityBean;
@@ -40,9 +41,17 @@ public class PageService {
 		else return Response.ok(bean.getPage().getLeden()).build();
 	}
 	@POST
+	@Path("/{pageId}/image")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Response setPicture(@FormParam("image") String imageId, @BeanParam Bean bean) {
+		if(!bean.isAdmin()) return Response.status(Response.Status.FORBIDDEN).build();
+		bean.getPage().setLogo(Media.getMedia(imageId));
+		return Response.ok(true).build();
+	}
+	@POST
 	@Path("/{pageId}/name")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response setName(@FormParam("name") String name, @BeanParam Bean bean,@BeanParam SecurityBean securityBean) {
+	public Response setName(@FormParam("name") String name, @BeanParam Bean bean) {
 		if(bean.getPage()==null) return Response.status(Response.Status.NOT_FOUND).build();
 		if(!bean.isAdmin()) return Response.status(Response.Status.FORBIDDEN).build();
 		bean.getPage().setName(name);

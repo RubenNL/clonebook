@@ -1,6 +1,7 @@
 package nl.rubend.ipass.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import nl.rubend.ipass.exceptions.IpassException;
 import nl.rubend.ipass.utils.SqlInterface;
 import nl.rubend.ipass.utils.SendEmail;
@@ -195,8 +196,13 @@ public class User implements Principal {
 			throw new IpassException(e.getMessage());
 		}
 	}
+	@JsonIgnore
 	public Media getProfilePicture() {
 		return getPrivatePage().getLogo();
+	}
+	@JsonProperty("profilePicture")
+	public String getProfilePictureId() {
+		return getPrivatePage().getLogoId();
 	}
 	@JsonIgnore
 	public ArrayList<HashMap<String,String>> getLidAanvragenOpPaginas() {

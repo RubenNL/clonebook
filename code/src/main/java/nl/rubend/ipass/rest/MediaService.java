@@ -23,7 +23,7 @@ public class MediaService {
 			media.delete();
 			return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE).build();
 		}
-		return Response.ok().build();
+		return Response.ok(media).build();
 	}
 	@GET
 	@Path("/{fileId}")

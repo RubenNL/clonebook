@@ -158,7 +158,7 @@ textarea:focus {
 .mediaImage {
 	width:100px;
 }
-#meldingenMenu:active #meldingen,#meldingenMenu:hover #meldingen,#forbidden {
+#meldingenMenu:active #meldingen,#meldingenMenu:hover #meldingen,#forbidden,#pageImageUpload {
 	display:block;
 }
 #meldingen {

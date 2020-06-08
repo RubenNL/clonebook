@@ -1,6 +1,7 @@
 package nl.rubend.ipass.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import nl.rubend.ipass.exceptions.IpassException;
 import nl.rubend.ipass.utils.SqlInterface;
 
@@ -69,7 +70,21 @@ public class Page {
 	}
 	public void setLogo(Media media) {
 		this.logo=media.getId();
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE page SET logo = ? WHERE ID = ?");
+			statement.setString(1, this.logo);
+			statement.setString(2, this.id);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
 	}
+	@JsonProperty("logo")
+	public String getLogoId() {
+		return this.logo;
+	}
+	@JsonIgnore
 	public Media getLogo() {
 		if(this.logo==null) return null;
 		return Media.getMedia(this.logo);

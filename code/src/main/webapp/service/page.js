@@ -23,9 +23,15 @@ class Page {
 		return Utils.sendDelete('page/'+this.id+'/lidAanvraag/'+user.id,'');
 	}
 	getLeden() {
+		console.log('getleden',this);
 		return Utils.sendGet('page/'+this.id+'/leden').then(ledenData=>{
 			return ledenData.map(User.fromRaw);
 		})
+	}
+	setIcon(media) {
+		let formData = new FormData();
+		formData.append("image",media.id);
+		return Utils.sendPost('page/'+this.id+'/image',formData)
 	}
 	isAdmin() {
 		return this.owner.id==getLoggedInId();

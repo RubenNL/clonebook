@@ -11,9 +11,10 @@ function showPageHeader(pageId) {
 			return Page.fromRaw(message);
 		} else throw message;
 	}).then(page=>{
+		$('#pageImageUpload').hide();
 		currentPage=page;
 		$('#pageHeader > h1').text(page.name);
-		$('#pageHeader > img').attr('src',page.logo);
+		$('#pageHeader > img').attr('src','/rest/media/'+page.logo);
 		$('#page').show();
 		return page;
 	})
@@ -28,7 +29,8 @@ function showPage(pageId) {
 function showLid(lid) {
 	let node = $('#lidTemplate').contents("div").clone();
 	node.attr("userId",lid.id);
-	node.find('.lidProfilePicture').attr('src',lid.profilepicture);
+	console.log(lid);
+	if(lid.profilePicture) node.find('.lidProfilePicture').attr('src',lid.profilePicture);
 	node.find('.name').text(lid.name);
 	$('#leden').append(node);
 }
@@ -53,4 +55,21 @@ $('#askPermission').on('click',()=>{
 	currentPage.askPermissions().then(()=>{
 		alert('toegang gevraagd.');
 	})
-})
+});
+
+$(document).on('click','#pageHeader > img',event=>{
+	if(currentPage.isAdmin()) $('#pageImageUpload').toggle();
+});
+$(document).on('submit','#pageImageUpload',event=>{
+	event.preventDefault();
+	const file=$(event.target).find('input[type="file"]')[0];
+	if(!file.files[0]) return;
+	Media.create(file.files[0]).catch(message=>{
+		if(message===415) alert("bestandstype niet toegestaan.");
+		throw new Error("FileUploadException");
+	}).then(icon=>{
+		return currentPage.setIcon(icon);
+	}).then(()=>{
+		alert('afbeelding geupload!');
+	});
+});

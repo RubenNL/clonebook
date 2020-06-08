@@ -72,7 +72,7 @@ public class Media {
 		if(!file.exists()) return null;
 		return file;
 	}
-
+	@JsonIgnore
 	public String getMime() {
 		return this.mime;
 	}
