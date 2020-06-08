@@ -17,7 +17,7 @@
 				</div>
 			</div>
 			<div id="userMenu">
-				<button id="userMenuButton"><img height="32px" id="userMenuPicture"><span id="userMenuName"></span></button>
+				<button id="userMenuButton"><img height="32px" class="squarePicture" id="userMenuPicture"><span id="userMenuName"></span></button>
 				<div id="userMenuItems">
 					<a href="#" onclick="openSettings()">Instellingen</a>
 					<a href="#" onclick="logout()">Uitloggen</a>
@@ -70,7 +70,7 @@
 						<input type="file" accept="image/*" required>
 						<input type="submit">
 					</form>
-					<img src="icon.svg" alt="">
+					<img class="squarePicture" alt="pagina icon">
 					<h1>Pagina naam</h1>
 					<button id="newPost">Nieuw bericht</button>
 				</header>
@@ -87,7 +87,7 @@
 		<template id="postTemplate">
 			<article class="post border" role="article">
 				<header class="postHeader">
-					<img alt="" class="profilePicture">
+					<img alt="" class="squarePicture profilePicture">
 					<a href="#" class="name"></a>
 				</header>
 				<div class="media"></div>
@@ -115,7 +115,7 @@
 		</template>
 		<template id="meldingTemplate">
 			<div class="melding">
-				<img class="meldingImage" height="32px">
+				<img class="squarePicture meldingImage" height="32px">
 				<span class="meldingText">
 					<a class="meldingUserName" href="#"></a> wilt lid worden van <a class="meldingPageName" href="#"></a>
 				</span>
@@ -126,7 +126,7 @@
 		</template>
 		<template id="lidTemplate">
 			<div class="lid">
-				<img class="lidProfilePicture" height="32px">
+				<img class="squarePicture lidProfilePicture" height="32px">
 				<span class="name"></span>
 			</div>
 		</template>

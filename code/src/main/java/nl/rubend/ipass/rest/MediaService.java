@@ -34,4 +34,17 @@ public class MediaService {
 		if(file==null) throw new NotFoundException("File niet gevonden");
 		return Response.ok(file).type(media.getMime()).build();
 	}
+	@GET
+	@Path("/{fileId}/crop")
+	public Response crop(@PathParam("fileId") String fileId) {
+		Media media=Media.getMedia(fileId);
+		if(media==null) throw new NotFoundException("Media niet gevonden");
+		try {
+			media.cropSquare();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+		return Response.ok(media.getFile()).type(media.getMime()).build();
+	}
 }

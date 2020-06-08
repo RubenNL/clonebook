@@ -1,9 +1,9 @@
 class LoginSignup {
 	static passwordRequest(form) {
-		return Utils.sendPost("new",form);
+		return Utils.sendPost("user/new",form);
 	}
 	static savePassword(form) {
-		return Utils.sendPost("newPassword",form);
+		return Utils.sendPost("user/newPassword",form);
 	}
 	static login(form) {
 		return Utils.sendPost("login",form).then(response=>{

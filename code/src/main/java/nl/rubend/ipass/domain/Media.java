@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import nl.rubend.ipass.exceptions.IpassException;
 import nl.rubend.ipass.utils.SqlInterface;
 import org.apache.tika.Tika;
+import org.imgscalr.Scalr;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -77,6 +81,18 @@ public class Media {
 		return this.mime;
 	}
 
+	public void setMime(String mime) {
+		this.mime=mime;
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE media SET mime = ? WHERE ID = ?");
+			statement.setString(1, this.mime);
+			statement.setString(2, this.id);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
 	public String getId() {
 		return this.id;
 	}
@@ -104,5 +120,16 @@ public class Media {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
+	}
+	public void cropSquare() throws IOException {
+		BufferedImage file=ImageIO.read(getFile());
+		int height=file.getHeight();
+		int width=file.getWidth();
+		int size=Math.min(height, width);
+		int x=(width-size)/2;
+		int y=(height-size)/2;
+		BufferedImage cropped=Scalr.crop(file,x,y,size,size);
+		ImageIO.write(cropped,"jpg",getFile());
+		this.setMime("image/jpeg");
 	}
 }

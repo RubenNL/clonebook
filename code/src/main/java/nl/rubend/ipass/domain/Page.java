@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import nl.rubend.ipass.exceptions.IpassException;
 import nl.rubend.ipass.utils.SqlInterface;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -69,6 +70,12 @@ public class Page {
 		}
 	}
 	public void setLogo(Media media) {
+		try {
+			media.cropSquare();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
 		this.logo=media.getId();
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE page SET logo = ? WHERE ID = ?");
