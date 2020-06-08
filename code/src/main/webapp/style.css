@@ -129,13 +129,16 @@ main {grid-area:main;}
 textarea:focus {
 	outline: thin dotted invert
 }
-#userMenuName {
+#userMenuButton {
 	background-color: #49A74B;/*#4CAF50 was niet goed volgens wave?*/
 	color: white;
 	font-size: 14pt;
 	font-weight:bold;
 	height:100%;
 	border: none;
+}
+#userMenuName {
+	float:right;
 }
 #userMenuItems {
 	position: absolute;

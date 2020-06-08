@@ -19,6 +19,7 @@ function load() {
 	}).then(user=> {
 		$('#userMenu').show();
 		$('#userMenuName').text(user.name);
+		$('#userMenuPicture').attr('src','/rest/media/'+user.profilePicture);
 		return user
 	})
 }
