@@ -22,5 +22,12 @@ class Page {
 	denyLid(user) {
 		return Utils.sendDelete('page/'+this.id+'/lidAanvraag/'+user.id,'');
 	}
-
+	getLeden() {
+		return Utils.sendGet('page/'+this.id+'/leden').then(ledenData=>{
+			return ledenData.map(User.fromRaw);
+		})
+	}
+	isAdmin() {
+		return this.owner.id==getLoggedInId();
+	}
 }

@@ -6,10 +6,8 @@ import nl.rubend.ipass.security.SecurityBean;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +36,7 @@ public class PageService {
 	@Path("/{pageId}/leden")
 	public Response leden(@BeanParam Bean bean,@BeanParam SecurityBean securityBean) {
 		if(bean.getPage()==null) return Response.status(Response.Status.NOT_FOUND).build();
-		User user= securityBean.getSender();
-		if(!bean.getPage().isLid(user)) return Response.status(Response.Status.FORBIDDEN).build();
+		if(!bean.isLid()) return Response.status(Response.Status.FORBIDDEN).build();
 		else return Response.ok(bean.getPage().getLeden()).build();
 	}
 	@POST
@@ -47,8 +44,7 @@ public class PageService {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response setName(@FormParam("name") String name, @BeanParam Bean bean,@BeanParam SecurityBean securityBean) {
 		if(bean.getPage()==null) return Response.status(Response.Status.NOT_FOUND).build();
-		User user= securityBean.getSender();
-		if(!bean.getPage().getOwner().equals(user)) return Response.status(Response.Status.FORBIDDEN).build();
+		if(!bean.isAdmin()) return Response.status(Response.Status.FORBIDDEN).build();
 		bean.getPage().setName(name);
 		return Response.ok().build();
 	}
@@ -62,7 +58,7 @@ public class PageService {
 	@Path("/{pageId}/lidAanvraag")
 	public Response addLidAanvraag(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {
 		User user=securityBean.getSender();
-		if(bean.getPage().isLid(user)) return Response.status(Response.Status.CONFLICT).entity(new AbstractMap.SimpleEntry<String,String>("error","al lid")).build();
+		if(bean.isLid()) return Response.status(Response.Status.CONFLICT).entity(new AbstractMap.SimpleEntry<String,String>("error","al lid")).build();
 		if(bean.getPage().hasLidAanvraagVanUser(user)) return Response.status(Response.Status.CONFLICT).entity(new AbstractMap.SimpleEntry<String,String>("error","al lidaanvraag verstuurd")).build();
 		bean.getPage().addLidAanvraag(user);
 		return Response.ok(true).build();
@@ -90,6 +86,9 @@ public class PageService {
 		}
 		boolean isAdmin() {
 			return getPage().getOwner().equals(securityBean.getSender());
+		}
+		boolean isLid() {
+			return getPage().isLid(securityBean.getSender());
 		}
 	}
 }

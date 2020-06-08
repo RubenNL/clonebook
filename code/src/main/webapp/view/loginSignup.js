@@ -19,7 +19,6 @@ function load() {
 	}).then(user=> {
 		$('#userMenu').show();
 		$('#userMenuName').text(user.name);
-		handleHash();
 		return user
 	})
 }
@@ -42,7 +41,7 @@ function login() {
 		return Promise.reject(error);
 	}).then(()=> {
 		$('#notLoggedIn').hide();
-		load();
+		load().then(handleHash);
 	})
 }
 function logout() {
@@ -54,7 +53,7 @@ function logout() {
 }
 function getLoggedInId() {
 	const token=sessionStorage.getItem("jwt");
-	if(token.length==0) throw new Error("niet ingelogd");
+	if(!token || token.length==0) return null;
 	const base64Url = token.split('.')[1];
 	const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
 	const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {

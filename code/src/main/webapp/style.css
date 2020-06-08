@@ -2,7 +2,7 @@ body {
 	display: grid;
 	grid-template-areas:
 			"header header header header"
-			". main . friends"
+			". main . leden"
 			". footer footer footer";
 	grid-template-columns:5% 75% 5%;
 	grid-template-rows:32px 1fr auto;
@@ -21,7 +21,7 @@ body {
 #newAccountScreen {grid-area:newAccountScreen;}
 
 @media (max-width:1000px) {
-	#friends {display:none;}
+	#leden {display:none;}
 	body {
 		grid-template-areas:
 			"header header header"
@@ -43,8 +43,8 @@ body {
 		grid-template-columns:auto;
 	}
 }
-aside#friends {
-	grid-area:friends;
+aside#leden {
+	grid-area:leden;
 	background-color:#8bc39d;
 }
 main {grid-area:main;}
