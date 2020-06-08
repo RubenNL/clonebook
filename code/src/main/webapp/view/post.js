@@ -3,7 +3,7 @@ let currentPage;
 function addPost(post,prepend) {
 	let node = $('#postTemplate').contents("article").clone();
 	node.attr("id",post.id);
-	if(post.user.profilePicture) node.find('.profilePicture').attr('src',post.user.profilePicture)
+	if(post.user.profilePicture) node.find('.profilePicture').attr('src','/rest/media/'+post.user.profilePicture)
 	node.find('.name').text(post.user.name);
 	node.find('.name').attr('user',post.user.id);
 	node.find('.text').text(post.text);
