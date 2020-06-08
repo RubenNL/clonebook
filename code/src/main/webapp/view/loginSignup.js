@@ -9,18 +9,18 @@ function passwordRequest() {
 	});
 }
 function load() {
-	LoginSignup.getLoggedinUser().catch(message=>{
+	return LoginSignup.getLoggedinUser().catch(message=>{
 		if(message===403 || message=="niet ingelogd") $('#notLoggedIn').show();
 		else {
 			console.log(message);
 			alert(message);
 		}
 		return Promise.reject(403);
-	}).then(user=>{
+	}).then(user=> {
 		$('#userMenu').show();
 		$('#userMenuName').text(user.name);
-		return user.getPage();
-	}).then(showPage).catch(()=>{});//silent catch, ik weet niet wat ik hier anders van moet maken.
+		return user
+	})
 }
 function savePassword() {
 	LoginSignup.savePassword(generateFormData("#newPasswordScreen"))

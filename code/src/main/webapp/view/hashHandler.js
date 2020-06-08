@@ -27,4 +27,7 @@ if(window.location.hash && window.location.hash.split('=')[1]) {
 			})
 		}
 	}
-} else load();
+	load();
+} else {
+		load().then(user=>user.getPage()).then(showPage).catch(()=>{});//silent catch, ik weet niet wat ik hier anders van moet maken.
+}
