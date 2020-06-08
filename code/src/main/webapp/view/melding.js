@@ -23,7 +23,7 @@ $(document).on('click','.meldingButton',event=>{
 function getNotifications(user) {
 	user.getLidAanvragenOpPaginas().then(aanvragen=>{
 		console.log(aanvragen);
-		addMelding(aanvragen[0])
+		aanvragen.forEach(addMelding);
 	})
 }
 setTimeout(()=>{

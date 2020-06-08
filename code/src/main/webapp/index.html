@@ -70,6 +70,10 @@
 					<h1>Pagina naam</h1>
 					<button id="newPost">Nieuw bericht</button>
 				</header>
+				<div id="forbidden">
+					<b>Geen toegang.</b>
+					<button id="askPermission">Toegang vragen</button>
+				</div>
 				<div id="posts">
 				</div>
 			</div>
@@ -129,8 +133,9 @@
 		<script src="view/post.js"></script>
 		<script src="view/settings.js"></script>
 		<script src="view/utils.js"></script>
-		<script src="view/hashHandler.js"></script>
+		<script src="view/page.js"></script>
 		<script src="view/melding.js"></script>
+		<script src="view/hashHandler.js"></script>
 		<script>
 			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.register('service-worker.js', { scope: '/' });

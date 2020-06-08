@@ -57,7 +57,7 @@ public class PostService {
 		else throw new javax.ws.rs.BadRequestException();
 		return Response.ok().build();
 	}
-	class Bean {
+	static class Bean {
 		@PathParam("postId") String postId;
 		@BeanParam SecurityBean securityBean;
 		Post getPost() {

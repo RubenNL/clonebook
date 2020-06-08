@@ -1,4 +1,3 @@
-let picker=new EmojiButton();
 let lastSelectedField;
 let currentPage;
 function addPost(post,prepend) {
@@ -18,11 +17,6 @@ function addPost(post,prepend) {
 		addPost(child,prepend);
 	})
 }
-picker.on('emoji',emoji=>lastSelectedField.value+=emoji);
-$(document).on('click','.messageEmoticon',(event)=>{
-	picker.togglePicker(event.target);
-	lastSelectedField=$(event.target).parent().find('.messageBox')[0];
-});
 $(document).on('click','.name',event=>{
 	event.preventDefault();
 	console.log('user:',$(event.target).attr('user'));
@@ -63,41 +57,16 @@ $(document).on('submit','.messageForm',event=>{
 		addPost(post,true);
 	});
 });
-$('#newPost').on('click', () =>{
-	if($('#page').children('.messageDiv').length) $('#page').children('.messageDiv').toggle();
-	else {
-		clone=$('#messageBoxTemplate').contents("div").clone();
-		clone.insertBefore('#posts');
-	}
-});
 function showSinglePost(postId) {
 	Post.getPost(postId).then(post=>{
 		$('#posts').html('');
 		addPost(post);
 		window.location.hash='#post='+post.id;
-		return post.getPage();
+		return showPageHeader(post.pageId);
 	},message=>{
-		if(message.pageId) {
-			$('#posts').html("Geen toegang.");
-			return Page.getPage(message.pageId);
-		} else throw message;
-	}).catch(message=>{
-			if(message.id) return message; //Geen toegang exception
-			else throw message;
-		})
-		.then(page=>{
-			currentPage=page;
-			$('#pageHeader > h1').text(page.name);
-			$('#page').show();
-		})
-}
-function showPage(page) {
-	$('#pageHeader > h1').text(page.name);
-	$('#posts').html('');
-	page.last10Posts.forEach(post=>addPost(post));
-	currentPage=page;
-	$("#page").show();
-	window.location.hash='#page='+page.id;
+		if(message.pageId) showPageHeader(message.pageId);
+		else throw message;
+	})
 }
 function logoutPost() {
 	$('#posts').html('');

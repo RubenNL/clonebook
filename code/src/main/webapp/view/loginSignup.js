@@ -19,6 +19,7 @@ function load() {
 	}).then(user=> {
 		$('#userMenu').show();
 		$('#userMenuName').text(user.name);
+		handleHash();
 		return user
 	})
 }
