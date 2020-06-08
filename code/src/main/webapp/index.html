@@ -14,15 +14,6 @@
 			<div id="meldingenMenu">
 				<button id="meldingButton">🔔</button>
 				<div id="meldingen">
-					<div class="melding">
-						<img class="meldingImage" src="icon.svg" height="32px">
-						<span class="meldingText">
-							<a class="meldingUserName" href="#">Martijn Jansen</a> wilt lid worden van <a class="meldingPageName" href="#">HBO-ICT HU</a>
-						</span>
-						<br>
-						<button class="meldingButton denyMelding">Weigeren</button>
-						<button class="meldingButton acceptMelding">Accepteren</button>
-					</div>
 				</div>
 			</div>
 			<div id="userMenu">
@@ -114,6 +105,17 @@
 				</form>
 			</div>
 		</template>
+		<template id="meldingTemplate">
+			<div class="melding">
+				<img class="meldingImage" height="32px">
+				<span class="meldingText">
+					<a class="meldingUserName" href="#"></a> wilt lid worden van <a class="meldingPageName" href="#"></a>
+				</span>
+				<br>
+				<button class="meldingButton" action="deny">Weigeren</button>
+				<button class="meldingButton" action="accept">Accepteren</button>
+			</div>
+		</template>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
 		<script src="service/loginSignup.js"></script>
@@ -128,6 +130,7 @@
 		<script src="view/settings.js"></script>
 		<script src="view/utils.js"></script>
 		<script src="view/hashHandler.js"></script>
+		<script src="view/melding.js"></script>
 		<script>
 			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.register('service-worker.js', { scope: '/' });

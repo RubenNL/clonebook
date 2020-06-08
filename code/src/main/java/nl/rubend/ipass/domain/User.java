@@ -195,6 +195,9 @@ public class User implements Principal {
 			throw new IpassException(e.getMessage());
 		}
 	}
+	public Media getProfilePicture() {
+		return getPrivatePage().getLogo();
+	}
 	@JsonIgnore
 	public ArrayList<HashMap<String,String>> getLidAanvragenOpPaginas() {
 		ArrayList<HashMap<String,String>> response=new ArrayList<>();
@@ -202,10 +205,14 @@ public class User implements Principal {
 			ArrayList<String> fromPage=page.getLidAanvragen();
 			for(String userId:fromPage) {
 				HashMap<String,String> tempHash=new HashMap<>();
+				User user=User.getUserById(userId);
 				tempHash.put("userId",userId);
-				tempHash.put("userName",User.getUserById(userId).getName());
+				tempHash.put("userName",user.getName());
 				tempHash.put("pageId",page.getId());
 				tempHash.put("pageName",page.getName());
+				Media picture=user.getProfilePicture();
+				if(picture!=null) tempHash.put("picture",picture.getId());
+				else tempHash.put("picture","");
 				response.add(tempHash);
 			}
 		}

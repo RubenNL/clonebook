@@ -17,6 +17,10 @@ class Page {
 		return Utils.sendPost('page/'+id+'/lidAanvraag','');
 	}
 	acceptLid(user) {
-		return Utils.sendPost('page/'+this.id+'/acceptLid/'+user,'');
+		return Utils.sendPost('page/'+this.id+'/acceptLid/'+user.id,'');
 	}
+	denyLid(user) {
+		return Utils.sendDelete('page/'+this.id+'/lidAanvraag/'+user.id,'');
+	}
+
 }

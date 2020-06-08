@@ -1,5 +1,7 @@
 class Utils {
 	static sendFetch(first,second) {
+		if(!second.headers) second.headers={};
+		second.headers.Authorization='Bearer ' + window.sessionStorage.getItem("jwt")||"";
 		if(navigator.onLine) return fetch('/rest/'+first,second);
 		alert("apparaat is offline! maak verbinding met het internet en probeer opnieuw.");
 		return Promise.reject("offline");
@@ -18,18 +20,17 @@ class Utils {
 	static sendPost(path,formData) {
 		return Utils.sendFetch(path,{
 			method:'POST',
-			body:new URLSearchParams(formData),
-			headers: {
-				'Authorization': 'Bearer ' + window.sessionStorage.getItem("jwt")||""
-			}
+			body:new URLSearchParams(formData)
 		}).then(Utils.handleResponse);
 	}
 	static sendGet(path) {
 		return Utils.sendFetch(path,{
-			method:'GET',
-			headers: {
-				'Authorization': 'Bearer ' + window.sessionStorage.getItem("jwt")||""
-			}
+			method:'GET'
 		}).then(Utils.handleResponse);
+	}
+	static sendDelete(path) {
+		return Utils.sendFetch(path,{
+			method:'DELETE'
+		}).then(Utils.handleResponse)
 	}
 }
