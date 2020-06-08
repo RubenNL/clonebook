@@ -10,7 +10,7 @@ function passwordRequest() {
 }
 function load() {
 	LoginSignup.getLoggedinUser().catch(message=>{
-		if(message===403) $('#notLoggedIn').show();
+		if(message===403 || message=="niet ingelogd") $('#notLoggedIn').show();
 		else {
 			console.log(message);
 			alert(message);

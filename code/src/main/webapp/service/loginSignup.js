@@ -17,7 +17,7 @@ class LoginSignup {
 	static getLoggedinUser() {
 		return new Promise((resolve,reject)=>{
 			const token=sessionStorage.getItem("jwt");
-			if(token.length===0) {
+			if(token==null || token.length===0) {
 				reject("niet ingelogd");
 				return;
 			}
