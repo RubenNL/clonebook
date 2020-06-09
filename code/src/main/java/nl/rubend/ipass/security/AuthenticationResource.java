@@ -1,5 +1,6 @@
 package nl.rubend.ipass.security;
 
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.MacProvider;
@@ -40,24 +41,28 @@ public class AuthenticationResource {
 			return key;
 		}
 	}
-	private String createToken(User user) {
-		Calendar expiration=Calendar.getInstance();
-		expiration.add(Calendar.MINUTE,30);
-		return Jwts.builder()
+	private String createToken(User user,boolean ingelogdBlijven) {
+		JwtBuilder jwts=Jwts.builder()
 				.setSubject(user.getId())
-				.setExpiration(expiration.getTime())
 				.claim("userKey",user.getKey())
 				.signWith(SignatureAlgorithm.HS512, key)
-				.compact();
+				.claim("long",ingelogdBlijven);
+		if(!ingelogdBlijven) {
+			Calendar expiration=Calendar.getInstance();
+			expiration.add(Calendar.MINUTE,30);
+			jwts.setExpiration(expiration.getTime());
+		}
+		return jwts.compact();
 	}
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response login(@FormParam("email") String email, @FormParam("password") String password) {
+	public Response login(@FormParam("email") String email, @FormParam("password") String password, @FormParam("long") String ingelogdBlijvenString) {
 		User user = User.getUserByEmail(email);
+		boolean ingelogdBlijven=ingelogdBlijvenString!=null;
 		if(user==null) return Response.status(Response.Status.UNAUTHORIZED).build();
 		if(user.checkPassword(password)) {
-			String token=createToken(user);
+			String token=createToken(user,ingelogdBlijven);
 			AbstractMap.SimpleEntry<String, String> JWT=new AbstractMap.SimpleEntry<>("JWT",token);
 			return Response.ok(JWT).build();
 		} else {

@@ -1,7 +1,7 @@
 class Utils {
 	static sendFetch(first,second) {
 		if(!second.headers) second.headers={};
-		second.headers.Authorization='Bearer ' + window.sessionStorage.getItem("jwt")||"";
+		second.headers.Authorization='Bearer ' + getJWT();
 		if(navigator.onLine) return fetch('/rest/'+first,second);
 		alert("apparaat is offline! maak verbinding met het internet en probeer opnieuw.");
 		return Promise.reject("offline");

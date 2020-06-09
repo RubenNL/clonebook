@@ -7,11 +7,11 @@ class LoginSignup {
 	}
 	static login(form) {
 		return Utils.sendPost("login",form).then(response=>{
-			window.sessionStorage.setItem("jwt",response.JWT);
+			setJWT(response.JWT);
 		})
 	}
 	static logout() {
-		window.sessionStorage.removeItem("jwt");
+		removeJWT();
 		return Promise.resolve();
 	}
 	static getLoggedinUser() {

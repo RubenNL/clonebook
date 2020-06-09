@@ -34,6 +34,8 @@
 							<input type="email" name="email" id="loginEmail" required><br>
 							<label for="loginPassword">Wachtwoord:</label>
 							<input type="password" name="password" id="loginPassword" required><br>
+							<label for="keepLoggedIn">Ingelogd blijven</label>
+							<input id="keepLoggedIn" type="checkbox" name="long">
 						</fieldset>
 						<input type="submit" id="loginButton" value="Inloggen">
 					</form>
@@ -133,6 +135,7 @@
 		</template>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
+		<script src="view/jwtHandler.js"></script>
 		<script src="service/loginSignup.js"></script>
 		<script src="service/media.js"></script>
 		<script src="service/page.js"></script>

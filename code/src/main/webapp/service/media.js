@@ -15,10 +15,7 @@ class Media {
 		data.append('file',file);
 		return Utils.sendFetch("media",{
 			method:'POST',
-			body:data,
-			headers: {
-				'Authorization': 'Bearer ' + window.sessionStorage.getItem("jwt")||""
-			}
+			body:data
 		}).then(Utils.handleResponse);
 	}
 	getUrl() {
