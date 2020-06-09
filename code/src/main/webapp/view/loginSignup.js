@@ -49,6 +49,7 @@ function logout() {
 	return LoginSignup.logout().then(()=>{
 		$('#userMenuName').text("");
 		$('#userMenu').hide();
+		$('#settings').hide();
 		logoutPost();
 	}).then(load);
 }

@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS media;
 DROP TABLE IF EXISTS media_post;
 DROP TABLE IF EXISTS newPassword;
 DROP TABLE IF EXISTS lidAanvraag;
-CREATE TABLE `user` (ID varchar(36) NOT NULL, email varchar(100) NOT NULL UNIQUE, hash varchar(88), salt varchar(86), privatePageId varchar(36), PRIMARY KEY (ID), UNIQUE INDEX (ID));
+CREATE TABLE `user` (ID varchar(36) NOT NULL, email varchar(100) NOT NULL UNIQUE, hash varchar(88), salt varchar(86), userKey varchar(36) NOT NULL, privatePageId varchar(36), PRIMARY KEY (ID), UNIQUE INDEX (ID));
 CREATE TABLE page (ID varchar(36) NOT NULL, name varchar(100) NOT NULL, ownerId varchar(36) NOT NULL, logo varchar(36), PRIMARY KEY (ID), UNIQUE INDEX (ID));
 CREATE TABLE chatMessages ();
 CREATE TABLE pageLid (userID varchar(36) NOT NULL, pageID varchar(36) NOT NULL, PRIMARY KEY (userID, pageID));

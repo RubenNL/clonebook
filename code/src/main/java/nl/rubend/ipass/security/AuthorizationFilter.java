@@ -55,8 +55,11 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 				String user=claims.getSubject();
 				User userObject=User.getUserById(user);
 				if(userObject==null) throw new IllegalArgumentException("Niet gevonden!");
+				String key= (String) claims.get("userKey");
+				if(!userObject.verifyKey(key)) throw new JwtException("key verlopen");
 				msc=new MySecurityContext(userObject,secure);
 			} catch (JwtException | IllegalArgumentException e) {
+				e.printStackTrace();
 				System.out.println("Invalid JWT!");
 			}
 		}

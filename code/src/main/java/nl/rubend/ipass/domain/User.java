@@ -26,13 +26,14 @@ public class User implements Principal {
 	private String salt;
 	private String privatePageId;
 	private String role="user";
+	private String userKey;
 	public static User getUserById(String userId) {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM user WHERE ID=?");
 			statement.setString(1, userId);
 			ResultSet set=statement.executeQuery();
 			set.next();
-			return new User(set.getString("ID"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"));
+			return new User(set.getString("ID"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"),set.getString("userKey"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -44,18 +45,20 @@ public class User implements Principal {
 			statement.setString(1, email);
 			ResultSet set=statement.executeQuery();
 			set.next();
-			return new User(set.getString("ID"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"));
+			return new User(set.getString("ID"),set.getString("email"),set.getString("hash"),set.getString("salt"),set.getString("privatePageId"),set.getString("userKey"));
 		} catch (SQLException e) {
 			return null;
 		}
 	}
 	public User(String email) throws IpassException {
 		this.userId=UUID.randomUUID().toString();
+		this.userKey=UUID.randomUUID().toString();
 		this.email=email;
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO user(ID,email) VALUES (?,?)");
+			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO user(ID,email,userKey) VALUES (?,?,?)");
 			statement.setString(1, userId);
 			statement.setString(2, email);
+			statement.setString(3, userKey);
 			statement.executeUpdate();
 			Page page=new Page(this,"Nieuwe gebruiker");
 			this.privatePageId=page.getId();
@@ -69,12 +72,13 @@ public class User implements Principal {
 			throw new IpassException(e.getMessage());
 		}
 	}
-	public User(String userId,String email,String hash,String salt,String privatePageId) {
+	public User(String userId,String email,String hash,String salt,String privatePageId,String userKey) {
 		this.userId=userId;
 		this.email=email;
 		this.hash=hash;
 		this.salt=salt;
 		this.privatePageId=privatePageId;
+		this.userKey=userKey;
 	}
 	public static String hash(String password, String saltString) {
 		byte[] salt = Base64.getUrlDecoder().decode(saltString);
@@ -102,6 +106,25 @@ public class User implements Principal {
 			statement.setString(1, this.salt);
 			statement.setString(2, this.hash);
 			statement.setString(3, this.userId);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
+	@JsonIgnore
+	public String getKey() {
+		return userKey;
+	}
+	public boolean verifyKey(String key) {
+		return userKey.equals(key);
+	}
+	public void resetKey() {
+		this.userKey=UUID.randomUUID().toString();
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE user SET userKey = ?  WHERE ID = ?");
+			statement.setString(1, this.userKey);
+			statement.setString(2, this.userId);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

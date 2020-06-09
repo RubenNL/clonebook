@@ -18,5 +18,7 @@ class User {
 	getLidAanvragenOpPaginas() {
 		return Utils.sendGet('user/'+this.id+'/lidAanvragen');
 	}
-
+	deleteSessions() {
+		return Utils.sendDelete('user/'+this.id+'/sessions');
+	}
 }

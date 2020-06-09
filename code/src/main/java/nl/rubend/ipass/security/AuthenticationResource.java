@@ -40,13 +40,13 @@ public class AuthenticationResource {
 			return key;
 		}
 	}
-	private String createToken(String userId,String role) {
+	private String createToken(User user) {
 		Calendar expiration=Calendar.getInstance();
 		expiration.add(Calendar.MINUTE,30);
 		return Jwts.builder()
-				.setSubject(userId)
+				.setSubject(user.getId())
 				.setExpiration(expiration.getTime())
-				.claim("role",role)
+				.claim("userKey",user.getKey())
 				.signWith(SignatureAlgorithm.HS512, key)
 				.compact();
 	}
@@ -57,7 +57,7 @@ public class AuthenticationResource {
 		User user = User.getUserByEmail(email);
 		if(user==null) return Response.status(Response.Status.UNAUTHORIZED).build();
 		if(user.checkPassword(password)) {
-			String token=createToken(user.getId(),"user");
+			String token=createToken(user);
 			AbstractMap.SimpleEntry<String, String> JWT=new AbstractMap.SimpleEntry<>("JWT",token);
 			return Response.ok(JWT).build();
 		} else {

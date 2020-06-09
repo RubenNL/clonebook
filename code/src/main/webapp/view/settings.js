@@ -19,3 +19,8 @@ function settingsSave() {
 		alert(error);
 	});
 }
+$('#logoutAll').on('click', ()=>{
+	LoginSignup.getLoggedinUser().then(user=>user.deleteSessions()).then(logout).then(()=>{
+		alert('alle sessies uitgelogd. log opnieuw in.');
+	})
+});

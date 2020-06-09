@@ -55,13 +55,21 @@ public class UserService {
 	}
 	@GET
 	@Path("/{userId}/lidAanvragen")
+	@RolesAllowed("user")
 	public Response getLidAanvragen(@BeanParam SecurityBean securityBean) {
 		return Response.ok(securityBean.allowedUser().getLidAanvragenOpPaginas()).build();
 	}
 	@GET
 	@RolesAllowed("user")
 	@Path("/{userId}")
-	public Response publicUserProfile(@PathParam("userId") String userId,@BeanParam SecurityBean securityBean) {
+	public Response publicUserProfile(@BeanParam SecurityBean securityBean) {
 		return Response.ok(securityBean.getRequested()).build();
+	}
+	@DELETE
+	@RolesAllowed("user")
+	@Path("/{userId}/sessions")
+	public Response resetSessions(@BeanParam SecurityBean securityBean) {
+		securityBean.allowedUser().resetKey();
+		return Response.ok(true).build();
 	}
 }
