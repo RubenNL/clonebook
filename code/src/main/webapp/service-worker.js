@@ -18,15 +18,21 @@ self.addEventListener('fetch', function(event) {
 	}
 });
 self.addEventListener('push', function(event) {
+	let data=event.data.text();
+	let logout=false;
+	if(data=="LOGOUT") {
+		data="Clonebook is uitgelogd.";
+		logout=true;
+	}
 	console.log('[Service Worker] Push Received.');
-	console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
-
+	console.log(`[Service Worker] Push had this data: "${data}"`);
 	const title = 'Push Codelab';
-	const options = {
-		body: event.data.text()
-	};
 
+	const options = {
+		body: data
+	};
 	event.waitUntil(self.registration.showNotification(title, options));
+	if(logout) self.registration.unregister();
 });
 self.addEventListener('notificationclick', function(event) {
 	console.log('[Service Worker] Notification click Received.');
