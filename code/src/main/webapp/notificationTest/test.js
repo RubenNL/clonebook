@@ -1,12 +1,12 @@
-const applicationServerPublicKey = 'BJqEt0KJ2PaOYrOZC1MQatRgm4ddt0Bc4O6hdriShTNFim1VvtDwpxA3YKkorzmljcwqObOnz2qs0n93H3fk1d8';
-const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
-alert('test')
-navigator.serviceWorker.register('sw.js')
-.then(swRegistration=>{
+Promise.all([
+	fetch('/rest/notification').then(response=>response.text()),
+	navigator.serviceWorker.register('sw.js')
+])
+.then(list=>{
 	alert("test2");
-	return swRegistration.pushManager.subscribe({
+	return list[1].pushManager.subscribe({
 		userVisibleOnly: true,
-		applicationServerKey: applicationServerKey
+		applicationServerKey: urlB64ToUint8Array(list[0])
 	})
 })
 .then(subscription=>JSON.parse(JSON.stringify(subscription)))

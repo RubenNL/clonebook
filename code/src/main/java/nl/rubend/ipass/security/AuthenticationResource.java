@@ -17,7 +17,7 @@ import java.util.Calendar;
 @Path("/login")
 public class AuthenticationResource {
 	final static public Key key= getKey();
-	final static private String filename="/home/pi/ipass/key.ser";
+	final static private String filename="/home/pi/ipass/jwt.ser";
 	private static SecretKey getKey() {
 		try {
 			FileInputStream fileIn = new FileInputStream(filename);
