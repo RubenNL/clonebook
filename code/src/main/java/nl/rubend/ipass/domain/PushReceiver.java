@@ -19,12 +19,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public class PushReceiver {
-	final static private KeyPair keyPair= getKey();
 	final static private String filename="/home/pi/ipass/push.ser";
+	final static private KeyPair keyPair= getKey();
+	final static private PushService pushService = new PushService(keyPair);
 	public static String getPublicKeyString() {
 		ECPublicKey key = (ECPublicKey) keyPair.getPublic();
 		byte[] publicKey= key.getQ().getEncoded(false);
@@ -64,14 +64,15 @@ public class PushReceiver {
 			return keyPair;
 		}
 	}
-	public static PushReceiver getReceiver(String id) {
+	public static PushReceiver getReceiver(String auth) {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pushReceiver WHERE ID=?");
-			statement.setString(1, id);
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pushReceiver WHERE auth=?");
+			statement.setString(1, auth);
 			ResultSet set = statement.executeQuery();
 			set.next();
-			return new PushReceiver(set.getString("ID"), set.getString("endpoint"), set.getString("auth"), set.getString("key"),set.getString("userId"));
+			return new PushReceiver(set.getString("endpoint"), set.getString("key"),set.getString("auth"), set.getString("userID"));
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -82,10 +83,11 @@ public class PushReceiver {
 			statement.setString(1, user.getId());
 			ResultSet set = statement.executeQuery();
 			while(set.next()) {
-				response.add(new PushReceiver(set.getString("ID"), set.getString("endpoint"), set.getString("auth"), set.getString("key"), set.getString("userId")));
+				response.add(new PushReceiver(set.getString("endpoint"),set.getString("key"),  set.getString("auth"), set.getString("userID")));
 			}
 			return response;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
 	}
@@ -94,38 +96,35 @@ public class PushReceiver {
 			receiver.sendNotification(message);
 		}
 	}
-	private String id;
 	private String endpoint;
 	private String key;
 	private String auth;
 	private String userId;
 	public PushReceiver(String endpoint,String key,String auth,User user) {
-		this(UUID.randomUUID().toString(),endpoint,key,auth,user.getId());
+		this(endpoint,key,auth,user.getId());
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO pushReceiver(ID,endpoint,auth,`key`,userID) VALUES (?,?,?,?,?)");
-			statement.setString(1, this.id);
-			statement.setString(2, this.endpoint);
+			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO pushReceiver(endpoint,`key`,auth,userID) VALUES (?,?,?,?)");
+			statement.setString(1, this.endpoint);
+			statement.setString(2, this.key);
 			statement.setString(3, this.auth);
-			statement.setString(4, this.key);
-			statement.setString(5, this.userId);
+			statement.setString(4, this.userId);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
 	}
-	private PushReceiver(String id,String endpoint,String key,String auth,String user) {
-		this.id=id;
+	private PushReceiver(String endpoint,String key,String auth,String user) {
 		this.endpoint=endpoint;
 		this.key=key;
 		this.auth=auth;
 		this.userId=user;
 	}
 	public void sendNotification(String message) {
-		Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
-		Security.addProvider(new BouncyCastleProvider());
-		PushService pushService = new PushService(keyPair);
 		Subscription.Keys keys=new Subscription.Keys(key,auth);
+		System.out.println(endpoint);
+		System.out.println(key);
+		System.out.println(auth);
 		Subscription subscription=new Subscription(endpoint,keys);
 		try {
 			Notification notification = new Notification(subscription,message);
@@ -145,8 +144,18 @@ public class PushReceiver {
 	}
 	public void delete() {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM pushReceiver WHERE ID=?");
-			statement.setString(1, this.id);
+			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM pushReceiver WHERE auth=?");
+			statement.setString(1, this.auth);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
+	public static void deleteByUser(User user) {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM pushReceiver WHERE userID=?");
+			statement.setString(1, user.getId());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -46,7 +46,7 @@ CREATE TABLE media (ID varchar(36) NOT NULL, location varchar(50) NOT NULL, mime
 CREATE TABLE media_post (mediaid varchar(36) NOT NULL, postID varchar(36) NOT NULL, PRIMARY KEY (mediaid, postID));
 CREATE TABLE newPassword (validUntil date NOT NULL, code varchar(36) NOT NULL, userID varchar(36) NOT NULL);
 CREATE TABLE lidAanvraag (pageID varchar(36) NOT NULL, userID varchar(36) NOT NULL, PRIMARY KEY (pageID, userID));
-CREATE TABLE pushReceiver (ID varchar(36) NOT NULL, endpoint varchar(256) NOT NULL, auth varchar(32) NOT NULL, `key` varchar(128) NOT NULL, userID varchar(36) NOT NULL, PRIMARY KEY (ID), UNIQUE INDEX (ID));
+CREATE TABLE pushReceiver (auth varchar(32) NOT NULL, endpoint varchar(256) NOT NULL, `key` varchar(128) NOT NULL, userID varchar(36) NOT NULL, PRIMARY KEY (auth), UNIQUE INDEX (auth));
 ALTER TABLE page ADD CONSTRAINT FKpage695732 FOREIGN KEY (ownerId) REFERENCES `user` (ID) ON DELETE Cascade;
 ALTER TABLE pageLid ADD CONSTRAINT FKpageLid998175 FOREIGN KEY (userID) REFERENCES `user` (ID) ON DELETE Cascade;
 ALTER TABLE pageLid ADD CONSTRAINT FKpageLid886583 FOREIGN KEY (pageID) REFERENCES page (ID) ON DELETE Cascade;

@@ -119,7 +119,7 @@ public class User implements Principal {
 	public boolean verifyKey(String key) {
 		return userKey.equals(key);
 	}
-	public void resetKey() {
+	public void logoutAll() {
 		this.userKey=UUID.randomUUID().toString();
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE user SET userKey = ?  WHERE ID = ?");
@@ -130,6 +130,8 @@ public class User implements Principal {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
+		PushReceiver.sendToUser(this,"Alle sessies uitgelogd, log opnieuw in.");
+		PushReceiver.deleteByUser(this);
 	}
 	@JsonIgnore
 	public String getRole() {return this.role;}

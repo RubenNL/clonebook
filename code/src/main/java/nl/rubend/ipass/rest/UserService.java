@@ -3,6 +3,7 @@ package nl.rubend.ipass.rest;
 import nl.rubend.ipass.domain.*;
 import nl.rubend.ipass.security.SecurityBean;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.NotFoundException;
@@ -69,7 +70,14 @@ public class UserService {
 	@RolesAllowed("user")
 	@Path("/{userId}/sessions")
 	public Response resetSessions(@BeanParam SecurityBean securityBean) {
-		securityBean.allowedUser().resetKey();
+		securityBean.allowedUser().logoutAll();
 		return Response.ok(true).build();
+	}
+	@POST
+	@RolesAllowed("user")
+	@Path("/{userId}/notif")
+	public Response sendTestNotif(@BeanParam SecurityBean securityBean) {
+		PushReceiver.sendToUser(securityBean.allowedUser(),"testNotif!");
+		return Response.ok().build();
 	}
 }
