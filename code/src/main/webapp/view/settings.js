@@ -5,6 +5,7 @@ function openSettings() {
 		$('#settingsName').val(settings.name);
 		$('#settingsEmail').val(settings.email);
 		$('#settings').show();
+		showSwStatus();
 	})
 }
 function settingsSave() {
@@ -24,3 +25,25 @@ $('#logoutAll').on('click', ()=>{
 		alert('alle sessies uitgelogd. log opnieuw in.');
 	})
 });
+function showSwStatus() {
+	Settings.getSubscription().then(subscription=>{
+		if (subscription) $('#subscribeNotif').text('meldingen uitzetten');
+		else $('#subscribeNotif').text('meldingen aanzetten');
+	});
+}
+function unsubscribe() {
+	return Settings.unsubscribe()
+}
+function subscribe() {
+	Settings.subscribe().then(()=>alert('meldingen staan aan!'))
+	.catch(function(err) {
+		console.log('Failed to subscribe the user: ', err);
+		alert(err);
+	});
+}
+$('#subscribeNotif').on('click',()=>{
+	Settings.getSubscription().then(status=>{
+		if(status) return unsubscribe();
+		else return subscribe();
+	}).then(showSwStatus);
+})

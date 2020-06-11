@@ -122,13 +122,18 @@ public class PushReceiver {
 	}
 	public void sendNotification(String message) {
 		Subscription.Keys keys=new Subscription.Keys(key,auth);
-		System.out.println(endpoint);
-		System.out.println(key);
-		System.out.println(auth);
 		Subscription subscription=new Subscription(endpoint,keys);
 		try {
 			Notification notification = new Notification(subscription,message);
-			HttpResponse response = pushService.send(notification);//deze call duurt 6 seconden.
+			HttpResponse response = pushService.send(notification);
+			//deze call duurt 6 seconden, ik weet niet hoe ik dit nog verder moet optimaliseren.
+			int code=response.getStatusLine().getStatusCode();
+			if(code==201) return;
+			if(code==410) {
+				delete();
+				return;
+			}
+			System.out.println("code = " + code);
 			return;
 		} catch (JoseException | InterruptedException | IOException | ExecutionException | GeneralSecurityException e) {
 			e.printStackTrace();
