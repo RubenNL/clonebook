@@ -102,6 +102,12 @@
             <scope>${ipass.smalldeploy}</scope>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.21</version><!--waarschuwingen verbergen bij deploy-->
+            <scope>${ipass.smalldeploy}</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.6.2</version>

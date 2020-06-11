@@ -18,19 +18,10 @@ import java.util.concurrent.ExecutionException;
 public class PushReceiver {
 	final static private KeyPair keyPair= getKey();
 	final static private String filename="/home/pi/ipass/push.ser";
-	private static byte[] P256_HEAD = Base64.getDecoder()
-			.decode("MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgA");
-	private static byte[] toUncompressedECPublicKey(ECPublicKey publicKey) {
-		byte[] result = new byte[65];
-		byte[] encoded = publicKey.getEncoded();
-		System.arraycopy(encoded, P256_HEAD.length, result, 0,
-				encoded.length - P256_HEAD.length);
-		return result;
-	}
 	public static String getPublicKeyString() {
 		ECPublicKey key = (ECPublicKey) keyPair.getPublic();
-		String encoded = Base64.getUrlEncoder().withoutPadding().encodeToString(toUncompressedECPublicKey(key));
-		return encoded;
+		byte[] publicKey= key.getQ().getEncoded(false);
+		return Base64.getUrlEncoder().withoutPadding().encodeToString(publicKey);
 	}
 	private static KeyPair getKey() {
 		Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
@@ -78,11 +69,14 @@ public class PushReceiver {
 		System.out.println("NOTIFICATION START!");
 		Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
 		Security.addProvider(new BouncyCastleProvider());
+		System.out.println("SECURITY RELOADED!");
 		PushService pushService = new PushService(keyPair);
 		Subscription.Keys keys=new Subscription.Keys(key,auth);
 		Subscription subscription=new Subscription(endpoint,keys);
+		System.out.println("SUBSCRIPTION GENERATED!");
 		try {
 			Notification notification = new Notification(subscription,message);
+			System.out.println("NOTIFICATION GENERATED!");
 			HttpResponse response = pushService.send(notification);
 			System.out.println("NOTIFICATION SEND!");
 			return;
