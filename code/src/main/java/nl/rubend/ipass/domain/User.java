@@ -269,7 +269,12 @@ public class User implements Principal {
 	}
 
 	public void sendToUser(String action, String message) {
-		sendToUser(action,null,message);
+		sendToUser(action,"",message);
+	}
+	public void sendToUser(String action, Media media, String message) {
+		for (PushReceiver receiver : getReceivers()) {
+			receiver.sendNotification(action, media, message);
+		}
 	}
 	public void sendToUser(String action, String image, String message) {
 		for (PushReceiver receiver : getReceivers()) {

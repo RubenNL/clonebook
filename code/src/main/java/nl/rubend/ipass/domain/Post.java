@@ -56,7 +56,7 @@ public class Post {
 		}
 		User user=this.getUser();
 		Page page=getPage();
-		new Thread(()->page.sendNotificationToAll("/#post="+this.id,"rest/media/"+user.getProfilePictureId(),user.getName()+" heeft een nieuwe post gemaakt op "+page.getName())).start();
+		new Thread(()->page.sendNotificationToAll("/#post="+this.id,user.getProfilePicture(),user.getName()+" heeft een nieuwe post gemaakt op "+page.getName())).start();
 	}
 	public Post(User user,Page page,Post repliedTo,String text) {
 		this(user.getId(),page.getId(),repliedTo==null?null:repliedTo.getId(),text);

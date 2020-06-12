@@ -169,6 +169,7 @@ public class Page {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
+		this.getOwner().sendToUser("/#notifications",user.getProfilePicture(),user.getName()+" wilt lid worden van "+this.getName());
 	}
 	@JsonIgnore
 	public boolean hasLidAanvraagVanUser(User user) {
@@ -213,6 +214,7 @@ public class Page {
 		if(hasLidAanvraagVanUser(user)) {
 			addLid(user);
 			removeLidAanvraag(user);
+			user.sendToUser("/#page="+getId(),"je bent geaccepteerd op "+getName()+".");
 		} else throw new IllegalArgumentException("gebruiker heeft geen aanvraag");
 	}
 	@JsonIgnore
@@ -278,7 +280,10 @@ public class Page {
 		sendNotificationToAll(null,message);
 	}
 	public void sendNotificationToAll(String action,String message) {
-		sendNotificationToAll(action,null,message);
+		sendNotificationToAll(action,"",message);
+	}
+	public void sendNotificationToAll(String action, Media media,String message) {
+		for(User user:getLeden()) user.sendToUser(action,media,message);
 	}
 	public void sendNotificationToAll(String action, String image,String message) {
 		for(User user:getLeden()) user.sendToUser(action,image,message);

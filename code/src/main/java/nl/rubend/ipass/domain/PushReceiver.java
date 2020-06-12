@@ -111,9 +111,12 @@ public class PushReceiver {
 	}
 
 	public void sendNotification(String message) {
-		sendNotification(null,null, message);
+		sendNotification(null,"null", message);
 	}
-	public void sendNotification(String action, String image, String message) {
+	public void sendNotification(String action, Media image, String message) {
+		sendNotification(action,"rest/media/"+image.getId(),message);
+	}
+	public void sendNotification(String action,String image,String message) {
 		actualSend(action,image,message).start();
 	}
 	private Thread actualSend(String action, String image, String message) {
@@ -126,7 +129,7 @@ public class PushReceiver {
 			options.add("body", message);
 			options.add("badge", "icons/grayscale.png");
 			options.add("icon", "icons/256.png");
-			if(image!=null) options.add("image",image);
+			if(!image.equals("")) options.add("image",image);
 			if(action!=null) options.add("data",action);
 			//action kan ook een URL zijn!
 			payload.add("options", options);
