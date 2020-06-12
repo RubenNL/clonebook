@@ -130,7 +130,7 @@ public class User implements Principal {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
-		PushReceiver.sendToUser(this,"LOGOUT");
+		PushReceiver.sendToUser(this,"LOGOUT","Apparaat uitgelogd.");
 		PushReceiver.deleteByUser(this);
 	}
 	@JsonIgnore

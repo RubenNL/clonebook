@@ -12,6 +12,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 import org.jose4j.lang.JoseException;
 
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import java.io.*;
 import java.security.*;
 import java.sql.PreparedStatement;
@@ -22,21 +24,23 @@ import java.util.Base64;
 import java.util.concurrent.ExecutionException;
 
 public class PushReceiver {
-	final static private String filename="/home/pi/ipass/push.ser";
-	final static private KeyPair keyPair= getKey();
+	final static private String filename = "/home/pi/ipass/push.ser";
+	final static private KeyPair keyPair = getKey();
 	final static private PushService pushService = new PushService(keyPair);
+
 	public static String getPublicKeyString() {
 		ECPublicKey key = (ECPublicKey) keyPair.getPublic();
-		byte[] publicKey= key.getQ().getEncoded(false);
+		byte[] publicKey = key.getQ().getEncoded(false);
 		return Base64.getUrlEncoder().withoutPadding().encodeToString(publicKey);
 	}
+
 	private static KeyPair getKey() {
 		Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
 		Security.addProvider(new BouncyCastleProvider());
 		try {
 			FileInputStream fileIn = new FileInputStream(filename);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
-			KeyPair key= (KeyPair) in.readObject();
+			KeyPair key = (KeyPair) in.readObject();
 			in.close();
 			fileIn.close();
 			return key;
@@ -47,7 +51,7 @@ public class PushReceiver {
 				ECNamedCurveParameterSpec parameterSpec = ECNamedCurveTable.getParameterSpec("prime256v1");
 				KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDH", "BC");
 				keyPairGenerator.initialize(parameterSpec);
-				keyPair=keyPairGenerator.generateKeyPair();
+				keyPair = keyPairGenerator.generateKeyPair();
 			} catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException ex) {
 				ex.printStackTrace();
 				throw new IllegalStateException(e);
@@ -58,32 +62,34 @@ public class PushReceiver {
 				out.writeObject(keyPair);
 				out.close();
 				fileout.close();
-			} catch(IOException f) {
+			} catch (IOException f) {
 				f.printStackTrace();
 			}
 			return keyPair;
 		}
 	}
+
 	public static PushReceiver getReceiver(String auth) {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pushReceiver WHERE auth=?");
 			statement.setString(1, auth);
 			ResultSet set = statement.executeQuery();
 			set.next();
-			return new PushReceiver(set.getString("endpoint"), set.getString("key"),set.getString("auth"), set.getString("userID"));
+			return new PushReceiver(set.getString("endpoint"), set.getString("key"), set.getString("auth"), set.getString("userID"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
+
 	private static ArrayList<PushReceiver> getReceivers(User user) {
 		try {
-			ArrayList<PushReceiver> response=new ArrayList<>();
+			ArrayList<PushReceiver> response = new ArrayList<>();
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pushReceiver WHERE userId=?");
 			statement.setString(1, user.getId());
 			ResultSet set = statement.executeQuery();
-			while(set.next()) {
-				response.add(new PushReceiver(set.getString("endpoint"),set.getString("key"),  set.getString("auth"), set.getString("userID")));
+			while (set.next()) {
+				response.add(new PushReceiver(set.getString("endpoint"), set.getString("key"), set.getString("auth"), set.getString("userID")));
 			}
 			return response;
 		} catch (SQLException e) {
@@ -91,17 +97,26 @@ public class PushReceiver {
 			throw new IpassException(e.getMessage());
 		}
 	}
-	public static void sendToUser(User user,String message) {
-		for(PushReceiver receiver:getReceivers(user)) {
-			receiver.sendNotification(message);
+
+	public static void sendToUser(User user, String message) {
+		sendToUser(user, "", message);
+	}
+
+	public static void sendToUser(User user, String action, String message) {
+		sendToUser(user,action,"",message);
+	}
+	public static void sendToUser(User user, String action, String image, String message) {
+		for (PushReceiver receiver : getReceivers(user)) {
+			receiver.sendNotification(action, image, message);
 		}
 	}
 	private String endpoint;
 	private String key;
 	private String auth;
 	private String userId;
-	public PushReceiver(String endpoint,String key,String auth,User user) {
-		this(endpoint,key,auth,user.getId());
+
+	public PushReceiver(String endpoint, String key, String auth, User user) {
+		this(endpoint, key, auth, user.getId());
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO pushReceiver(endpoint,`key`,auth,userID) VALUES (?,?,?,?)");
 			statement.setString(1, this.endpoint);
@@ -114,22 +129,38 @@ public class PushReceiver {
 			throw new IpassException(e.getMessage());
 		}
 	}
-	private PushReceiver(String endpoint,String key,String auth,String user) {
-		this.endpoint=endpoint;
-		this.key=key;
-		this.auth=auth;
-		this.userId=user;
+
+	private PushReceiver(String endpoint, String key, String auth, String user) {
+		this.endpoint = endpoint;
+		this.key = key;
+		this.auth = auth;
+		this.userId = user;
 	}
+
 	public void sendNotification(String message) {
-		Subscription.Keys keys=new Subscription.Keys(key,auth);
-		Subscription subscription=new Subscription(endpoint,keys);
+		sendNotification("", "", message);
+	}
+	public void sendNotification(String action, String image, String message) {
+		Subscription.Keys keys = new Subscription.Keys(key, auth);
+		Subscription subscription = new Subscription(endpoint, keys);
+		JsonObjectBuilder payload = Json.createObjectBuilder();
+		JsonObjectBuilder options = Json.createObjectBuilder();
+		options.add("body", message);
+		options.add("badge", "icons/grayscale.png");
+		options.add("icon", "icons/256.png");
+		if(image.length()>0) options.add("image",image);
+		options.add("data",action);
+		//action kan ook een URL zijn!
+		payload.add("options", options);
+		payload.add("title", "CloneBook");
+		payload.add("action", action);
 		try {
-			Notification notification = new Notification(subscription,message);
+			Notification notification = new Notification(subscription,payload.build().toString());
 			HttpResponse response = pushService.send(notification);
 			//deze call duurt 6 seconden, ik weet niet hoe ik dit nog verder moet optimaliseren.
-			int code=response.getStatusLine().getStatusCode();
-			if(code==201) return;
-			if(code==410) {
+			int code = response.getStatusLine().getStatusCode();
+			if (code == 201) return;
+			if (code == 410) {
 				delete();
 				return;
 			}
@@ -141,12 +172,15 @@ public class PushReceiver {
 		}
 		throw new UnsupportedOperationException();
 	}
+
 	public String getUserId() {
 		return this.userId;
 	}
+
 	public User getUser() {
 		return User.getUserById(userId);
 	}
+
 	public void delete() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM pushReceiver WHERE auth=?");
@@ -157,6 +191,7 @@ public class PushReceiver {
 			throw new IpassException(e.getMessage());
 		}
 	}
+
 	public static void deleteByUser(User user) {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM pushReceiver WHERE userID=?");

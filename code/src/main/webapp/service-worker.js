@@ -17,22 +17,27 @@ self.addEventListener('fetch', function(event) {
 		event.respondWith(new Response("<h1>Browser is offline.</h1>",{headers:headers}));
 	}
 });
-self.addEventListener('push', function(event) {
-	let data=event.data.text();
-	let logout=false;
-	if(data=="LOGOUT") {
-		data="Clonebook is uitgelogd.";
-		logout=true;
-	}
-	console.log('[Service Worker] Push Received.');
-	console.log(`[Service Worker] Push had this data: "${data}"`);
-	const title = 'Push Codelab';
-
-	const options = {
-		body: data
-	};
-	event.waitUntil(self.registration.showNotification(title, options));
-	if(logout) self.registration.unregister();
+self.addEventListener("notificationclick",event=>{
+	const data=event.notification.data;
+	if(data.length==0) return;
+	if(data.split("#").length==1) return;
+	const url=data;
+	event.waitUntil(clients.matchAll({
+		type: "window"
+	}).then(function(clientList) {
+		for (var i = 0; i < clientList.length; i++) {
+			var client = clientList[i];
+			if (client.url == url && 'focus' in client)
+				return client.focus();
+		}
+		if (clients.openWindow)
+			return clients.openWindow(url);
+	}));
+})
+self.addEventListener('push',event=>{
+	let data=event.data.json();
+	event.waitUntil(self.registration.showNotification(data.title, data.options));
+	if(data.action=="LOGOUT") self.registration.unregister();
 });
 self.addEventListener('notificationclick', function(event) {
 	console.log('[Service Worker] Notification click Received.');
