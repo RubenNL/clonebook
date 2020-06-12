@@ -129,6 +129,7 @@ public class PushReceiver {
 			options.add("body", message);
 			options.add("badge", "icons/grayscale.png");
 			options.add("icon", "icons/256.png");
+			options.add("timestamp",System.currentTimeMillis());
 			if(!image.equals("")) options.add("image",image);
 			if(action!=null) options.add("data",action);
 			//action kan ook een URL zijn!
