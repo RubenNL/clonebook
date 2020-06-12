@@ -82,34 +82,7 @@ public class PushReceiver {
 		}
 	}
 
-	private static ArrayList<PushReceiver> getReceivers(User user) {
-		try {
-			ArrayList<PushReceiver> response = new ArrayList<>();
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pushReceiver WHERE userId=?");
-			statement.setString(1, user.getId());
-			ResultSet set = statement.executeQuery();
-			while (set.next()) {
-				response.add(new PushReceiver(set.getString("endpoint"), set.getString("key"), set.getString("auth"), set.getString("userID")));
-			}
-			return response;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new IpassException(e.getMessage());
-		}
-	}
 
-	public static void sendToUser(User user, String message) {
-		sendToUser(user, null, message);
-	}
-
-	public static void sendToUser(User user, String action, String message) {
-		sendToUser(user,action,null,message);
-	}
-	public static void sendToUser(User user, String action, String image, String message) {
-		for (PushReceiver receiver : getReceivers(user)) {
-			receiver.sendNotification(action, image, message);
-		}
-	}
 	private String endpoint;
 	private String key;
 	private String auth;
@@ -130,7 +103,7 @@ public class PushReceiver {
 		}
 	}
 
-	private PushReceiver(String endpoint, String key, String auth, String user) {
+	public PushReceiver(String endpoint, String key, String auth, String user) {
 		this.endpoint = endpoint;
 		this.key = key;
 		this.auth = auth;

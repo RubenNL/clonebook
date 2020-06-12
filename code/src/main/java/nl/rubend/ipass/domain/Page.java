@@ -281,7 +281,7 @@ public class Page {
 		sendNotificationToAll(action,null,message);
 	}
 	public void sendNotificationToAll(String action, String image,String message) {
-		for(User user:getLeden()) PushReceiver.sendToUser(user,action,image,message);
+		for(User user:getLeden()) user.sendToUser(action,image,message);
 	}
 	@Override
 	public boolean equals(Object o) {

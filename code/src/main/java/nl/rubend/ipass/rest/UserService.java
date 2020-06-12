@@ -77,7 +77,7 @@ public class UserService {
 	@RolesAllowed("user")
 	@Path("/{userId}/notif")
 	public Response sendTestNotif(@BeanParam SecurityBean securityBean) {
-		PushReceiver.sendToUser(securityBean.allowedUser(),"testNotif!");
+		securityBean.getSender().sendToUser("testNotif!");
 		return Response.ok().build();
 	}
 }

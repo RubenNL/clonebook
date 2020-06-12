@@ -130,7 +130,7 @@ public class User implements Principal {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
-		PushReceiver.sendToUser(this,"LOGOUT","Apparaat uitgelogd.");
+		sendToUser("LOGOUT","Apparaat uitgelogd.");
 		PushReceiver.deleteByUser(this);
 	}
 	@JsonIgnore
@@ -248,6 +248,33 @@ public class User implements Principal {
 			}
 		}
 		return response;
+	}
+	private ArrayList<PushReceiver> getReceivers() {
+		try {
+			ArrayList<PushReceiver> response = new ArrayList<>();
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pushReceiver WHERE userId=?");
+			statement.setString(1, this.userId);
+			ResultSet set = statement.executeQuery();
+			while (set.next()) {
+				response.add(new PushReceiver(set.getString("endpoint"), set.getString("key"), set.getString("auth"), set.getString("userID")));
+			}
+			return response;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IpassException(e.getMessage());
+		}
+	}
+	public void sendToUser(String message) {
+		sendToUser(null, message);
+	}
+
+	public void sendToUser(String action, String message) {
+		sendToUser(action,null,message);
+	}
+	public void sendToUser(String action, String image, String message) {
+		for (PushReceiver receiver : getReceivers()) {
+			receiver.sendNotification(action, image, message);
+		}
 	}
 	@Override
 	public boolean equals(Object o) {
