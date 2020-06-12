@@ -141,36 +141,41 @@ public class PushReceiver {
 		sendNotification(null,null, message);
 	}
 	public void sendNotification(String action, String image, String message) {
-		Subscription.Keys keys = new Subscription.Keys(key, auth);
-		Subscription subscription = new Subscription(endpoint, keys);
-		JsonObjectBuilder payload = Json.createObjectBuilder();
-		JsonObjectBuilder options = Json.createObjectBuilder();
-		options.add("body", message);
-		options.add("badge", "icons/grayscale.png");
-		options.add("icon", "icons/256.png");
-		if(image!=null) options.add("image",image);
-		if(action!=null) options.add("data",action);
-		//action kan ook een URL zijn!
-		payload.add("options", options);
-		payload.add("title", "CloneBook");
-		if(action!=null) payload.add("data",action);
-		try {
-			Notification notification = new Notification(subscription,payload.build().toString());
-			HttpResponse response = pushService.send(notification);
-			//deze call duurt 6 seconden, ik weet niet hoe ik dit nog verder moet optimaliseren.
-			int code = response.getStatusLine().getStatusCode();
-			if (code == 201) return;
-			if (code == 410) {
-				delete();
+		actualSend(action,image,message).start();
+	}
+	private Thread actualSend(String action, String image, String message) {
+		//Geoptimaliseerd door op de achtergrond te werken, gaat veel sneller.
+		return new Thread(() -> {
+			Subscription.Keys keys = new Subscription.Keys(key, auth);
+			Subscription subscription = new Subscription(endpoint, keys);
+			JsonObjectBuilder payload = Json.createObjectBuilder();
+			JsonObjectBuilder options = Json.createObjectBuilder();
+			options.add("body", message);
+			options.add("badge", "icons/grayscale.png");
+			options.add("icon", "icons/256.png");
+			if(image!=null) options.add("image",image);
+			if(action!=null) options.add("data",action);
+			//action kan ook een URL zijn!
+			payload.add("options", options);
+			payload.add("title", "CloneBook");
+			if(action!=null) payload.add("data",action);
+			try {
+				Notification notification = new Notification(subscription,payload.build().toString());
+				HttpResponse response = pushService.send(notification);
+				int code = response.getStatusLine().getStatusCode();
+				if (code == 201) return;
+				if (code == 410) {
+					delete();
+					return;
+				}
+				System.out.println("code = " + code);
 				return;
+			} catch (JoseException | InterruptedException | IOException | ExecutionException | GeneralSecurityException e) {
+				e.printStackTrace();
+				System.out.println("NOTIFICATION ERROR!");
 			}
-			System.out.println("code = " + code);
-			return;
-		} catch (JoseException | InterruptedException | IOException | ExecutionException | GeneralSecurityException e) {
-			e.printStackTrace();
-			System.out.println("NOTIFICATION ERROR!");
-		}
-		throw new UnsupportedOperationException();
+			throw new UnsupportedOperationException();
+		});
 	}
 
 	public String getUserId() {
