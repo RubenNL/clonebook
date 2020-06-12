@@ -274,7 +274,15 @@ public class Page {
 	public User getOwner() {
 		return User.getUserById(getOwnerId());
 	}
-
+	public void sendNotificationToAll(String message) {
+		sendNotificationToAll(null,message);
+	}
+	public void sendNotificationToAll(String action,String message) {
+		sendNotificationToAll(action,null,message);
+	}
+	public void sendNotificationToAll(String action, String image,String message) {
+		for(User user:getLeden()) PushReceiver.sendToUser(user,action,image,message);
+	}
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -282,7 +290,6 @@ public class Page {
 		Page page = (Page) o;
 		return getId().equals(page.getId());
 	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(getId());

@@ -54,6 +54,9 @@ public class Post {
 			e.printStackTrace();
 			throw new IpassException(e.getMessage());
 		}
+		User user=this.getUser();
+		Page page=getPage();
+		page.sendNotificationToAll("/#post="+this.id,"rest/media/"+user.getProfilePictureId(),user.getName()+" heeft een nieuwe post gemaakt op "+page.getName());
 	}
 	public Post(User user,Page page,Post repliedTo,String text) {
 		this(user.getId(),page.getId(),repliedTo==null?null:repliedTo.getId(),text);

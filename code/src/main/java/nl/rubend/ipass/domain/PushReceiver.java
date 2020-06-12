@@ -99,11 +99,11 @@ public class PushReceiver {
 	}
 
 	public static void sendToUser(User user, String message) {
-		sendToUser(user, "", message);
+		sendToUser(user, null, message);
 	}
 
 	public static void sendToUser(User user, String action, String message) {
-		sendToUser(user,action,"",message);
+		sendToUser(user,action,null,message);
 	}
 	public static void sendToUser(User user, String action, String image, String message) {
 		for (PushReceiver receiver : getReceivers(user)) {
@@ -138,7 +138,7 @@ public class PushReceiver {
 	}
 
 	public void sendNotification(String message) {
-		sendNotification("", "", message);
+		sendNotification(null,null, message);
 	}
 	public void sendNotification(String action, String image, String message) {
 		Subscription.Keys keys = new Subscription.Keys(key, auth);
@@ -148,12 +148,12 @@ public class PushReceiver {
 		options.add("body", message);
 		options.add("badge", "icons/grayscale.png");
 		options.add("icon", "icons/256.png");
-		if(image.length()>0) options.add("image",image);
-		options.add("data",action);
+		if(image!=null) options.add("image",image);
+		if(action!=null) options.add("data",action);
 		//action kan ook een URL zijn!
 		payload.add("options", options);
 		payload.add("title", "CloneBook");
-		payload.add("action", action);
+		if(action!=null) payload.add("data",action);
 		try {
 			Notification notification = new Notification(subscription,payload.build().toString());
 			HttpResponse response = pushService.send(notification);
