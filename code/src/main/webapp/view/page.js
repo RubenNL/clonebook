@@ -66,6 +66,7 @@ $(document).on('submit','#pageImageUpload',event=>{
 	if(!file.files[0]) return;
 	Media.create(file.files[0]).catch(message=>{
 		if(message===415) alert("bestandstype niet toegestaan.");
+		else if(message==413) alert('bestand te groot');
 		throw new Error("FileUploadException");
 	}).then(icon=>{
 		return currentPage.setIcon(icon);

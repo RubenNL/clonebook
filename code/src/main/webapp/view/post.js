@@ -40,18 +40,21 @@ $(document).on('submit','.messageForm',event=>{
 	event.preventDefault();
 	Promise.all($(event.target).find('.files').find('[type="file"]').map((id,file)=>{
 		if(!file.files[0]) return Promise.resolve();
+		if(file.files[0].size>5*1024*1024) return Promise.reject(413);
 		return Media.create(file.files[0]).then(obj=>{
 			$(file).attr('type','hidden');
 			$(file).attr("name","file");
 			$(file).val(obj.id);
 		});
 	})).catch(message=>{
+		if(message===413) alert('Bestand te groot!');
 		if(message===415) alert("bestandstype niet toegestaan.");
+		if(message)
 		throw new Error("FileUploadException");
 	}).then(()=>{
 		$(event.target).find('[name="pageId"]').val(currentPage.id);
 		return Utils.sendPost('post',generateFormData(event.target));
-	}).then(post=>{
+	}).then(Post.fromRaw).then(post=>{
 		$(event.target).parent().remove();
 		alert('bericht gepost!');
 		addPost(post,true);

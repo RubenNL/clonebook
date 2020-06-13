@@ -7,10 +7,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.*;
 import java.io.*;
 
 @Path("/media")
@@ -19,7 +16,11 @@ public class MediaService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("user")
 	@POST
-	public Response upload(@FormDataParam("file") InputStream file,@BeanParam SecurityBean securityBean) {
+	public Response upload(@Context HttpHeaders httpHeaders, @FormDataParam("file") InputStream file, @BeanParam SecurityBean securityBean) {
+		//Jammergenoeg kan ik niet detecteren hoe groot het bestand is voordat het volledig is geupload...
+		int size=httpHeaders.getLength();
+		if(size>6*1024*1024) return Response.status(Response.Status.REQUEST_ENTITY_TOO_LARGE).build();
+		//+1 mb, omdat er altijd padding bij zit.
 		Media media=new Media(file,securityBean.getSender().getId(), "/");
 		if(!media.getMime().startsWith("image/")) {
 			media.delete();
