@@ -67,6 +67,7 @@ function showSinglePost(postId) {
 		window.location.hash='#post='+post.id;
 		return showPageHeader(post.pageId);
 	},message=>{
+		if(message==404) message={pageId:"NotFound"};
 		if(message.pageId) showPageHeader(message.pageId);
 		else throw message;
 	})

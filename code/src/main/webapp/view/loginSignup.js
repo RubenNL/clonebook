@@ -54,13 +54,7 @@ function login() {
 	})
 }
 function logout() {
-	$('#leden').html('');
 	return unsubscribe()
 		.then(LoginSignup.logout)
-		.then(()=>{
-			$('#userMenuName').text("");
-			$('#userMenu').hide();
-			$('#settings').hide();
-			logoutPost();
-		}).then(load)
+		.then(()=>location.reload());//veiligste manier, haalt alle html elementen ook leeg.
 }
