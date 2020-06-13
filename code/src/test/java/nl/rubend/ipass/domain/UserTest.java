@@ -24,7 +24,9 @@ class UserTest {
 	void newAccountGenerate() {
 		String recoveryCode=new NewPassword(user).getCode();
 		assertNotNull(recoveryCode,"code should not be empty");
-		User user2=NewPassword.use(recoveryCode);
+		NewPassword newPassword=NewPassword.use(recoveryCode);
+		User user2=newPassword.getUser();
+		newPassword.delete();
 		assertEquals(user,user2,"after recovery both users should be the same");
 		assertThrows(
 				IpassException.class,
@@ -38,7 +40,7 @@ class UserTest {
 	}
 	@Test
 	void newPasswordTestShort() {
-		assertThrows(IpassException.class,()->user.setPassword("1234567"),"zou een foutmelding moeten geven bij een tekort wachtwoord");
+		assertThrows(IllegalArgumentException.class,()->user.setPassword("1234567"),"zou een foutmelding moeten geven bij een tekort wachtwoord");
 	}
 	@Test
 	void wachtwoordVerify() {

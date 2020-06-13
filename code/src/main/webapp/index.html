@@ -33,7 +33,7 @@
 							<label for="loginEmail">E-mail adres:</label>
 							<input type="email" name="email" id="loginEmail" required><br>
 							<label for="loginPassword">Wachtwoord:</label>
-							<input type="password" name="password" id="loginPassword" required><br>
+							<input type="password" name="password" id="loginPassword" minlength="8" required><br>
 							<label for="keepLoggedIn">Ingelogd blijven</label>
 							<input id="keepLoggedIn" type="checkbox" name="long">
 						</fieldset>
@@ -54,7 +54,7 @@
 					<fieldset>
 						<legend>Nieuw wachtwoord instellen</legend>
 						<label for="newPasswordBox">Wachtwoord:</label>
-						<input type="password" name="password" id="newPasswordBox"><br>
+						<input type="password" name="password" minlength="8" id="newPasswordBox"><br>
 					</fieldset>
 					<input type="submit" id="newPasswordButton" value="Wachtwoord opslaan">
 				</form>

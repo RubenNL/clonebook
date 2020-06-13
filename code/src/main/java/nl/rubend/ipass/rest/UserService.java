@@ -1,6 +1,7 @@
 package nl.rubend.ipass.rest;
 
 import nl.rubend.ipass.domain.*;
+import nl.rubend.ipass.exceptions.IpassException;
 import nl.rubend.ipass.security.SecurityBean;
 
 import javax.annotation.PostConstruct;
@@ -11,6 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,8 +32,21 @@ public class UserService {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Path("/newPassword")
 	public Response use(@FormParam("code") String code, @FormParam("password") String password) {
-		User user=NewPassword.use(code);
-		user.setPassword(password);
+		NewPassword newPassword;
+		try {
+			newPassword=NewPassword.use(code);
+		} catch(IpassException e) {
+			if(e.getMessage().equals("Code is niet meer geldig")) return Response.status(Response.Status.GONE).build();
+			else if(e.getMessage().equals("Code niet gevonden.")) return Response.status(Response.Status.NOT_FOUND).build();
+			throw new IllegalStateException(e);
+		}
+		User user=newPassword.getUser();
+		try {
+			user.setPassword(password);
+		} catch(IllegalArgumentException e) {
+			return Response.status(Response.Status.BAD_REQUEST).entity(new AbstractMap.SimpleEntry<String,String>("error",e.getMessage())).build();
+		}
+		newPassword.delete();
 		return Response.ok().build();
 	}
 	@GET

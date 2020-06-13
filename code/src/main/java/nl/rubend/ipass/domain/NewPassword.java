@@ -11,6 +11,7 @@ import java.util.UUID;
 
 public class NewPassword {
 	private String uuid=UUID.randomUUID().toString();
+	private User user;
 	public NewPassword(User user) throws IpassException {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO newPassword(validUntil,code,userID) VALUES(?,?,?)");
@@ -23,10 +24,14 @@ public class NewPassword {
 			throw new IpassException(e.getMessage());
 		}
 	}
+	private NewPassword(User user,String uuid) {
+		this.user=user;
+		this.uuid=uuid;
+	};
 	public String getCode() {
 		return this.uuid;
 	}
-	public static User use(String code) throws IpassException {
+	public static NewPassword use(String code) throws IpassException {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM newPassword WHERE code=?");
 			statement.setString(1, code);
@@ -40,12 +45,21 @@ public class NewPassword {
 			if (set.getDate("validUntil").before(new Date(System.currentTimeMillis())))
 				user = User.getUserById(set.getString("userId"));
 			else throw new IpassException("Code is niet meer geldig.");
-			statement = SqlInterface.prepareStatement("DELETE FROM newPassword WHERE code=?");
-			statement.setString(1, set.getString("code"));
-			statement.executeUpdate();
-			return user;
+			return new NewPassword(user,code);
 		} catch (SQLException e) {
 			throw new IpassException(e.getMessage());
+		}
+	}
+	public User getUser() {
+		return user;
+	}
+	public void delete() {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM newPassword WHERE code=?");
+			statement.setString(1, this.getCode());
+			statement.executeUpdate();
+		} catch(SQLException e) {
+			throw new IpassException("Verwijderen mislukt");
 		}
 	}
 }

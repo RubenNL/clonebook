@@ -59,8 +59,11 @@ public class AuthenticationResource {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response login(@FormParam("email") String email, @FormParam("password") String password, @FormParam("long") String ingelogdBlijvenString) {
 		User user = User.getUserByEmail(email);
+		if(user==null) {
+			User.hash(password,"4Y-F1iXjxHXbuvm5rweBAsBs6e0IT_-_LWNVYwV5c2zZI15yk0HBhG2uFqqI3BGbNd8_nsn8AkKC9A5wi8PBcQ");//random hash
+			return Response.status(Response.Status.UNAUTHORIZED).build();
+		}
 		boolean ingelogdBlijven=ingelogdBlijvenString!=null;
-		if(user==null) return Response.status(Response.Status.UNAUTHORIZED).build();
 		if(user.checkPassword(password)) {
 			String token=createToken(user,ingelogdBlijven);
 			AbstractMap.SimpleEntry<String, String> JWT=new AbstractMap.SimpleEntry<>("JWT",token);

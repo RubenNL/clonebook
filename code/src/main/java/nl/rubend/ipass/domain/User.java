@@ -94,8 +94,8 @@ public class User implements Principal {
 		return null;
 	}
 	public void setPassword(String password)  {
-		if (password == null) throw new IpassException("Ongeldig wachtwoord");
-		if (password.length() < 8) throw new IpassException("Wachtwoord is te kort!");
+		if (password == null) throw new IllegalArgumentException("Wachtwoord is te kort!");
+		if (password.length() < 8) throw new IllegalArgumentException("Wachtwoord is te kort!");
 		byte[] salt = new byte[64];
 		random.nextBytes(salt);
 		Base64.Encoder enc = Base64.getUrlEncoder().withoutPadding();

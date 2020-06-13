@@ -26,26 +26,31 @@ function load() {
 }
 function savePassword() {
 	LoginSignup.savePassword(generateFormData("#newPasswordScreen"))
-		.catch(error=>{
-			console.log(error);
-			alert(error)
-		})
 		.then(()=> {
 			$('#newPasswordScreen').hide();
 			$('#loginOptions').show();
 			alert("Wachtwoord ingesteld.");
 			window.location.hash = "";
-		}).then(load)
+		},error=>{
+			if(error.error) error=error.error;
+			console.log(error);
+			alert(error);
+			return Promise.reject(error);
+		})
+		.then().then(load)
 }
 function login() {
 	LoginSignup.login(generateFormData("#loginScreen"))
-	.catch(error=>{
+	.then(()=> {
+		$('#notLoggedIn').hide();
+		load().then(handleHash);
+	},error=>{
+		if(error==401) alert("email/wachtwoord verkeerd");
+		else throw error;
+	}).catch(error=>{
 		console.log(error);
 		alert(error);
 		return Promise.reject(error);
-	}).then(()=> {
-		$('#notLoggedIn').hide();
-		load().then(handleHash);
 	})
 }
 function logout() {
