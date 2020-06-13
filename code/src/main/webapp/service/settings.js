@@ -47,6 +47,7 @@ class Settings {
 	}
 	static unsubscribe() {
 		return Settings.getSubscription().then(subscription=> {
+			if(!subscription) return Promise.resolve();
 			return Utils.sendDelete('notification/' + JSON.parse(JSON.stringify(subscription)).keys.auth)
 				.catch(message => {
 					if (message == 404) return

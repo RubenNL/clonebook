@@ -10,7 +10,7 @@ function passwordRequest() {
 }
 function load() {
 	return LoginSignup.getLoggedinUser().catch(message=>{
-		$('#leden').hide();
+		$('.afterLogin').hide();
 		if(message==403 || message=="niet ingelogd") $('#notLoggedIn').show();
 		else {
 			console.log(message);
@@ -18,8 +18,7 @@ function load() {
 		}
 		return Promise.reject(403);
 	}).then(user=> {
-		$('#leden').show();
-		$('#userMenu').show();
+		$('.afterLogin').show()
 		$('#userMenuName').text(user.name);
 		$('#userMenuPicture').attr('src','/rest/media/'+user.profilePicture);
 		return user
@@ -27,16 +26,16 @@ function load() {
 }
 function savePassword() {
 	LoginSignup.savePassword(generateFormData("#newPasswordScreen"))
-	.then(()=> {
-		$('#newPasswordScreen').hide();
-		$('#loginOptions').show();
-		alert("Wachtwoord ingesteld.");
-		window.location.hash = "";
-	}).then(load)
-	.catch(error=>{
-		console.log(error);
-		alert(error)
-	});
+		.catch(error=>{
+			console.log(error);
+			alert(error)
+		})
+		.then(()=> {
+			$('#newPasswordScreen').hide();
+			$('#loginOptions').show();
+			alert("Wachtwoord ingesteld.");
+			window.location.hash = "";
+		}).then(load)
 }
 function login() {
 	LoginSignup.login(generateFormData("#loginScreen"))

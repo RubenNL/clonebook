@@ -11,12 +11,12 @@
 		<header role="banner" id="topBar">
 			<img src="icon.svg" height="32px" alt="">
 			<span id="siteName">CloneBook</span>
-			<div id="meldingenMenu">
+			<div class="afterLogin" id="meldingenMenu">
 				<button id="meldingButton">🔔</button>
 				<div id="meldingen">
 				</div>
 			</div>
-			<div id="userMenu">
+			<div class="afterLogin" id="userMenu">
 				<button id="userMenuButton"><img height="32px" class="squarePicture" id="userMenuPicture"><span id="userMenuName"></span></button>
 				<div id="userMenuItems">
 					<a href="#" onclick="openSettings()">Instellingen</a>
@@ -68,7 +68,7 @@
 				<button id="logoutAll" type="button">verwijder alle sessies</button>
 				<button id="subscribeNotif" type="button">meldingen</button>
 			</form>
-			<div id="page">
+			<div class="afterLogin" id="page">
 				<header id="pageHeader" class="border">
 					<form id="pageImageUpload">
 						<input type="file" accept="image/*" required>
@@ -86,7 +86,7 @@
 				</div>
 			</div>
 		</main>
-		<aside id="leden">Leden</aside>
+		<aside class="afterLogin" id="leden">Leden</aside>
 		<footer id="copyright">Copyright Ruben van Dijk</footer>
 		<template id="postTemplate">
 			<article class="post border" role="article">
