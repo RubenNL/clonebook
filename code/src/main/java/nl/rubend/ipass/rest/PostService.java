@@ -3,6 +3,7 @@ package nl.rubend.ipass.rest;
 import nl.rubend.ipass.domain.*;
 import nl.rubend.ipass.security.SecurityBean;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -14,6 +15,7 @@ import java.util.Objects;
 
 @Path("/post")
 @Produces(MediaType.APPLICATION_JSON)
+@RolesAllowed("user")
 public class PostService {
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)

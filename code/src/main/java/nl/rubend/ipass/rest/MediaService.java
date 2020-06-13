@@ -5,6 +5,7 @@ import nl.rubend.ipass.domain.User;
 import nl.rubend.ipass.security.SecurityBean;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -16,6 +17,7 @@ import java.io.*;
 public class MediaService {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("user")
 	@POST
 	public Response upload(@FormDataParam("file") InputStream file,@BeanParam SecurityBean securityBean) {
 		Media media=new Media(file,securityBean.getSender().getId(), "/");
