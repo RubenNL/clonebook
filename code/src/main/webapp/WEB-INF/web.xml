@@ -12,7 +12,7 @@
         </init-param>
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>nl.rubend.ipass.rest, nl.rubend.ipass.security</param-value>
+            <param-value>nl.rubend.clonebook.rest, nl.rubend.clonebook.security</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

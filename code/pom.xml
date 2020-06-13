@@ -4,36 +4,36 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>nl.rubend.ipass</groupId>
-    <artifactId>ipass</artifactId>
+    <groupId>nl.rubend.clonebook</groupId>
+    <artifactId>clonebook</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
-    <name>ipass</name>
+    <name>clonebook</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <ipass.smalldeploy>compile</ipass.smalldeploy><!--kan aangepast worden naar provided wanneer de libraries al zijn geupload.-->
-        <ipass.include>**</ipass.include><!--als de static bestanden extern worden gehost, kan hier "*-INF/**" staan.-->
+        <clonebook.smalldeploy>compile</clonebook.smalldeploy><!--kan aangepast worden naar provided wanneer de libraries al zijn geupload.-->
+        <clonebook.include>**</clonebook.include><!--als de static bestanden extern worden gehost, kan hier "*-INF/**" staan.-->
     </properties>
     <dependencies>
         <dependency>
             <groupId>javax.json</groupId>
             <artifactId>javax.json-api</artifactId>
             <version>1.1.4</version>
-            <scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
             <version>1.1.4</version>
-            <scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
-            <scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -45,67 +45,67 @@
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <version>2.6.0</version>
-            <scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
             <version>2.31</version>
-            <scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
             <version>2.31</version>
-            <scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-multipart</artifactId>
             <version>2.31</version>
-            <scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
             <version>2.31</version>
-            <scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
             <version>1.4.7</version>
-            <scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
             <version>1.24.1</version>
-            <scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>nl.martijndwars</groupId>
             <artifactId>web-push</artifactId>
             <version>5.1.0</version>
-			<scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.pulsar</groupId>
             <artifactId>pulsar-client-messagecrypto-bc</artifactId>
             <version>2.5.2</version>
-			<scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>org.imgscalr</groupId>
             <artifactId>imgscalr-lib</artifactId>
             <version>4.2</version>
-            <scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.30</version><!--waarschuwingen verbergen bij deploy-->
-            <scope>${ipass.smalldeploy}</scope>
+            <scope>${clonebook.smalldeploy}</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -127,14 +127,14 @@
                 <configuration>
                     <url>http://pi3.wire:18080/manager/text</url>
                     <server>pi3</server>
-                    <path>/ipass</path>
+                    <path>/clonebook</path>
                 </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <packagingIncludes>${ipass.include}</packagingIncludes>
+                    <packagingIncludes>${clonebook.include}</packagingIncludes>
                 </configuration>
             </plugin>
         </plugins>
