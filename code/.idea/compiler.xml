@@ -6,8 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ipass" />
         <module name="code" />
+        <module name="clonebook" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11" />
