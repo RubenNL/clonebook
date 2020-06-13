@@ -1,16 +1,25 @@
 let picker=new EmojiButton();
 function showPageHeader(pageId) {
 	return Page.getPage(pageId).then(page=>{
+		$('#leden').html('');
 		$('#forbidden').hide();
+		$('#notFound').hide();
 		setTimeout(showLeden,1000);
 		return page;
 	},message=>{
+		$('#leden').html('');
+		if(message==404) {
+			$('#pageHeader').hide();
+			$('#notFound').show();
+		}
 		if(message.id) {
 			$('#forbidden').show();
 			message.last10Posts=[];
 			return Page.fromRaw(message);
 		} else throw message;
 	}).then(page=>{
+		$('#pageHeader').show();
+		$('#notFound').hide();
 		$('#pageImageUpload').hide();
 		currentPage=page;
 		$('#pageHeader > h1').text(page.name);

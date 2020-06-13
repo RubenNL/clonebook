@@ -54,6 +54,7 @@ function login() {
 	})
 }
 function logout() {
+	$('#leden').html('');
 	return unsubscribe()
 		.then(LoginSignup.logout)
 		.then(()=>{

@@ -61,7 +61,7 @@ main {grid-area:main;}
 	font-size:14pt;
 	
 }
-#settings,#notLoggedIn,#newPasswordScreen,#page,#userMenu {
+#settings,#notLoggedIn,#newPasswordScreen,#page,#userMenu,#forbidden,#pageImageUpload,#notFound {
 	display:none;
 }
 #loginOptions fieldset {
@@ -161,7 +161,7 @@ textarea:focus {
 .mediaImage {
 	width:100px;
 }
-#meldingenMenu:active #meldingen,#meldingenMenu:hover #meldingen,#forbidden,#pageImageUpload {
+#meldingenMenu:active #meldingen,#meldingenMenu:hover #meldingen {
 	display:block;
 }
 #meldingen {
@@ -193,4 +193,18 @@ textarea:focus {
 }
 .squarePicture {
 	border-radius:50%;
+}
+#forbidden > *, #notFound > * {
+	text-align: center;
+	display: block;
+	margin:auto;
+}
+#lock {
+	filter: grayscale(100%);
+	font-size: 200px;
+}
+#notFoundHead {
+	font-size: 100px;
+	color: red;
+	font-weight: bold;
 }
