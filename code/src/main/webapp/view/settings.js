@@ -37,6 +37,7 @@ function unsubscribe() {
 function subscribe() {
 	Settings.subscribe().then(()=>alert('meldingen staan aan!'))
 	.catch(function(err) {
+		if(err=="long") err="Log opnieuw in met \"ingelogd blijven\" aan."
 		console.log('Failed to subscribe the user: ', err);
 		alert(err);
 	});
