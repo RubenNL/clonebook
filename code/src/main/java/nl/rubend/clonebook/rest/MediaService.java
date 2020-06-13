@@ -31,16 +31,13 @@ public class MediaService {
 	@Path("/{fileId}")
 	public Response download(@PathParam("fileId") String fileId) {
 		Media media=Media.getMedia(fileId);
-		if(media==null) throw new NotFoundException("Media niet gevonden");
 		File file=media.getFile();
-		if(file==null) throw new NotFoundException("File niet gevonden");
 		return Response.ok(file).type(media.getMime()).build();
 	}
 	@GET
 	@Path("/{fileId}/crop")
 	public Response crop(@PathParam("fileId") String fileId) {
 		Media media=Media.getMedia(fileId);
-		if(media==null) throw new NotFoundException("Media niet gevonden");
 		try {
 			media.cropSquare();
 		} catch (IOException e) {

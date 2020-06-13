@@ -1,5 +1,21 @@
 package nl.rubend.clonebook.exceptions;
 
-public class ClonebookException extends RuntimeException {
-	public ClonebookException(String errorMessage) {super(errorMessage);}
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.AbstractMap;
+
+public class ClonebookException extends WebApplicationException {
+	private String message;
+	public ClonebookException(Response.Status code,String message) {
+		super(Response.status(code).entity(new AbstractMap.SimpleEntry<String,String>("error",message)).type(MediaType.APPLICATION_JSON).build());
+		this.message=message;
+	}
+	public ClonebookException(String message) {
+		this(Response.Status.BAD_REQUEST,message);
+	}
+	@Override
+	public String getMessage() {
+		return message;
+	}
 }

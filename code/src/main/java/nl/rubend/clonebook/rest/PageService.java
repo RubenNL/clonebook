@@ -67,8 +67,6 @@ public class PageService {
 	@Path("/{pageId}/lidAanvraag")
 	public Response addLidAanvraag(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {
 		User user=securityBean.getSender();
-		if(bean.isLid()) return Response.status(Response.Status.CONFLICT).entity(new AbstractMap.SimpleEntry<String,String>("error","al lid")).build();
-		if(bean.getPage().hasLidAanvraagVanUser(user)) return Response.status(Response.Status.CONFLICT).entity(new AbstractMap.SimpleEntry<String,String>("error","al lidaanvraag verstuurd")).build();
 		bean.getPage().addLidAanvraag(user);
 		return Response.ok(true).build();
 	}

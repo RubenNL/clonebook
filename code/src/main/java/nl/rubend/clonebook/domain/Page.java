@@ -159,7 +159,8 @@ public class Page {
 	}
 	@JsonIgnore
 	public void addLidAanvraag(User user) {
-		if(isLid(user)) throw new IllegalArgumentException("user is al lid!");
+		if(isLid(user)) throw new ClonebookException("user is al lid!");
+		if(hasLidAanvraagVanUser(user)) throw new ClonebookException("aanvraag is al verstuurd!");
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO lidAanvraag(userID,pageID) VALUES (?,?)");
 			statement.setString(1, user.getId());

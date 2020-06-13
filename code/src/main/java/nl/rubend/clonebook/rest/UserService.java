@@ -28,14 +28,7 @@ public class UserService {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Path("/newPassword")
 	public Response use(@FormParam("code") String code, @FormParam("password") String password) {
-		NewPassword newPassword;
-		try {
-			newPassword=NewPassword.use(code);
-		} catch(ClonebookException e) {
-			if(e.getMessage().equals("Code is niet meer geldig")) return Response.status(Response.Status.GONE).build();
-			else if(e.getMessage().equals("Code niet gevonden.")) return Response.status(Response.Status.NOT_FOUND).build();
-			throw new IllegalStateException(e);
-		}
+		NewPassword newPassword=NewPassword.use(code);
 		User user=newPassword.getUser();
 		try {
 			user.setPassword(password);

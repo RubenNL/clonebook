@@ -3,6 +3,7 @@ package nl.rubend.clonebook.domain;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.utils.SqlInterface;
 
+import javax.ws.rs.core.Response;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,12 +40,12 @@ public class NewPassword {
 			try {
 				set.next();
 			} catch (SQLException e) {
-				throw new ClonebookException("Code niet gevonden.");
+				throw new ClonebookException(Response.Status.NOT_FOUND,"Code niet gevonden.");
 			}
 			User user;
 			if (set.getDate("validUntil").before(new Date(System.currentTimeMillis())))
 				user = User.getUserById(set.getString("userId"));
-			else throw new ClonebookException("Code is niet meer geldig.");
+			else throw new ClonebookException(Response.Status.GONE,"Code is niet meer geldig.");
 			return new NewPassword(user,code);
 		} catch (SQLException e) {
 			throw new ClonebookException(e.getMessage());
