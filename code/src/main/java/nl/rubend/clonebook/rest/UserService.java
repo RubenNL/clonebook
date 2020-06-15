@@ -3,6 +3,7 @@ package nl.rubend.clonebook.rest;
 import nl.rubend.clonebook.domain.*;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.security.SecurityBean;
+import nl.rubend.clonebook.websocket.WebSocket;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
@@ -83,5 +84,11 @@ public class UserService {
 	public Response sendTestNotif(@BeanParam SecurityBean securityBean) {
 		securityBean.getSender().sendToUser("testNotif!");
 		return Response.ok().build();
+	}
+	@POST
+	@RolesAllowed("user")
+	@Path("/{userId}/ws")
+	public Response addSocket(@BeanParam SecurityBean securityBean) {
+		return Response.ok(new AbstractMap.SimpleEntry<String,String>("code",WebSocket.addWaiting(securityBean.allowedUser()))).build();
 	}
 }
