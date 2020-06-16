@@ -157,10 +157,18 @@
 		<script src="view/melding.js"></script>
 		<script src="view/hashHandler.js"></script>
 		<script src="service/ws.js"></script>
+		<script src="view/ws.js"></script>
 		<script>
 			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.register('service-worker.js', { scope: '/' });
 			}
 		</script>
+		<div id="chatTest">
+			<span id="chatId"></span>
+			<button onclick="connectWs()">maak verbinding</button>
+			dest:<input id="chatDest"><br>
+			message:<input id="chatMessage"><br>
+			<button onclick="sendMessage()">verstuur</button>
+		</div>
 	</body>
 </html>
