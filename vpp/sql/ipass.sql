@@ -41,7 +41,7 @@ CREATE TABLE post (ID varchar(36) NOT NULL, userID varchar(36) NOT NULL, pageID 
 CREATE TABLE vote (postID varchar(36) NOT NULL, userID varchar(36) NOT NULL, vote tinyint, PRIMARY KEY (postID, userID));
 CREATE TABLE chat (ID varchar(36) NOT NULL, PRIMARY KEY (ID), UNIQUE INDEX (ID));
 CREATE TABLE user_chat (userID varchar(36) NOT NULL, chatID varchar(36) NOT NULL, PRIMARY KEY (userID, chatID));
-CREATE TABLE chatMessage (ID varchar(36) NOT NULL, userID varchar(36) NOT NULL, chatID varchar(36) NOT NULL, message text NOT NULL, PRIMARY KEY (ID), UNIQUE INDEX (ID));
+CREATE TABLE chatMessage (userID varchar(36) NOT NULL, chatID varchar(36) NOT NULL, message text NOT NULL, `date` timestamp NOT NULL);
 CREATE TABLE media (ID varchar(36) NOT NULL, location varchar(50) NOT NULL, mime varchar(100) NOT NULL, owner varchar(36) NOT NULL, PRIMARY KEY (ID), UNIQUE INDEX (ID));
 CREATE TABLE media_post (mediaid varchar(36) NOT NULL, postID varchar(36) NOT NULL, PRIMARY KEY (mediaid, postID));
 CREATE TABLE newPassword (validUntil date NOT NULL, code varchar(36) NOT NULL, userID varchar(36) NOT NULL);

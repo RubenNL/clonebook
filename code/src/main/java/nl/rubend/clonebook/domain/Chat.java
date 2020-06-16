@@ -1,8 +1,12 @@
 package nl.rubend.clonebook.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.utils.SqlInterface;
+import nl.rubend.clonebook.websocket.WebSocket;
 
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -69,19 +73,20 @@ public class Chat {
 	public String getId() {
 		return this.id;
 	}
+	@JsonProperty("name")
 	public String getNameForUser(User current) {
 		for (User found : getUsers()) if (current != found) return found.getName();
 		throw new ClonebookException(Response.Status.NOT_FOUND, "geen andere user gevonden in chat.");
 	}
 	public ArrayList<ChatMessage> getMessagesBefore(Date date) {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT ID,chatID,userID,message,date FROM chatMessage WHERE date > ? AND chatID=? ORDER BY date DESC limit 10");
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT chatID,userID,message,date FROM chatMessage WHERE date < ? AND chatID=? ORDER BY date DESC limit 10");
 			statement.setTimestamp(1, new Timestamp(date.getTime()));
 			statement.setString(2,this.id);
 			ResultSet set=statement.executeQuery();
 			ArrayList<ChatMessage> response=new ArrayList<>();
 			while(set.next()) {
-				response.add(new ChatMessage(set.getString("ID"),set.getString("chatID"),set.getString("userID"),set.getTimestamp("date"),set.getString("message")));
+				response.add(new ChatMessage(set.getString("chatID"),set.getString("userID"),set.getTimestamp("date"),set.getString("message")));
 			}
 			return response;
 		} catch (SQLException e) {
@@ -89,6 +94,24 @@ public class Chat {
 		}
 	}
 	public ArrayList<ChatMessage> getLastMessages() {
-		return getMessagesBefore(new Date(9999,12,31));
+		return getMessagesBefore(new Date(Long.parseLong("253402128000000")));//9999-12-30 00:00:00.0, zou ook geen problemen met tijdzones moeten geven.
+	}
+	public void sendMessage(User sender,String message) {
+		ChatMessage chatMessage=new ChatMessage(this,sender,message);
+		User receiver=null;
+		for(User user:getUsers()) {
+			if(user!=sender) receiver=user;
+		}
+		if(receiver==null) throw new IllegalStateException("geen andere gebruiker in chat!");
+		JsonObjectBuilder builder= Json.createObjectBuilder();
+		builder.add("from",sender.getId());
+		builder.add("message",message);
+		builder.add("type","chat");
+		WebSocket.sendToUser(receiver,builder.build().toString());
+		builder=Json.createObjectBuilder();
+		builder.add("dest",receiver.getId());
+		builder.add("message",message);
+		builder.add("type","chat");
+		WebSocket.sendToUser(sender,builder.build().toString());
 	}
 }

@@ -10,31 +10,37 @@ import java.util.Date;
 import java.util.UUID;
 
 public class ChatMessage {
-	private String id;
 	private String chatId;
 	private String userId;
 	private String message;
 	private Date date;
-	public ChatMessage(String id,String chatId,String userId,Date date,String message) {
-		this.id=id;
+	public ChatMessage(String chatId,String userId,Date date,String message) {
 		this.chatId=chatId;
 		this.userId=userId;
 		this.message=message;
 		this.date=date;
 	}
 	public ChatMessage(Chat chat,User user,String message) {
-		this(UUID.randomUUID().toString(),chat.getId(),user.getId(),new Date(System.currentTimeMillis()),message);
+		this(chat.getId(),user.getId(),new Date(System.currentTimeMillis()),message);
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO chatMessage(ID,chatID,userID,message,date) VALUES (?,?,?,?,?)");
-			statement.setString(1, this.id);
-			statement.setString(2, this.chatId);
-			statement.setString(3, this.userId);
-			statement.setString(4, this.message);
-			statement.setTimestamp(5, new Timestamp(this.date.getTime()));
+			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO chatMessage(chatID,userID,message,date) VALUES (?,?,?,?)");
+			statement.setString(1, this.chatId);
+			statement.setString(2, this.userId);
+			statement.setString(3, this.message);
+			statement.setTimestamp(4, new Timestamp(this.date.getTime()));
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new ClonebookException(e.getMessage());
 		}
+	}
+	public Date getDate() {
+		return this.date;
+	}
+	public String getUserId() {
+		return this.userId;
+	}
+	public String getMessage() {
+		return this.message;
 	}
 }
