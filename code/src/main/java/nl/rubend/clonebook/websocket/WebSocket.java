@@ -26,15 +26,20 @@ public class WebSocket {
 		waiting.put(id,user);
 		return id;
 	}
-	public static int sendToUser(User user,String message) {
+	public static void sendToUser(User user,String message) {
 		for(Session session:connected.get(user)) {
 			try {
 				session.getBasicRemote().sendText(message);
 			} catch (IOException e) {
 				e.printStackTrace();
+				try {
+					session.close();
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
-		return connected.get(user).size();
+		if(connected.get(user).size()==0) user.sendToUser("/#chat",message);
 	}
 	public static void logoutAll(User user) {
 		sendToUser(user,"logoutAll");
@@ -60,7 +65,6 @@ public class WebSocket {
 			if(!connected.containsKey(user)) connected.put(user, new ArrayList<>());
 			connected.get(user).add(session);
 			waiting.remove(id);
-			session.getBasicRemote().sendText("hai "+user.getName());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -68,19 +72,13 @@ public class WebSocket {
 	@OnMessage
 	public void onMessage(@PathParam("id") String id,Session session,String message) {
 		User user=links.get(id);
-		try {
-			session.getBasicRemote().sendText("ontvangen:"+message+" van "+user.getName());
-			//message routing is moeilijk.
-			JsonStructure structure = Json.createReader(new StringReader(message)).read();
-			if(structure.getValueType()!= JsonValue.ValueType.OBJECT) return;
-			JsonObject data=(JsonObject) structure;
-			switch(data.getString("type")) {
-				case "chat":
-					chatReceived(user,data);
-					break;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		JsonStructure structure = Json.createReader(new StringReader(message)).read();
+		if(structure.getValueType()!= JsonValue.ValueType.OBJECT) return;
+		JsonObject data=(JsonObject) structure;
+		switch(data.getString("type")) {
+			case "chat":
+				chatReceived(user,data);
+				break;
 		}
 	}
 	private void chatReceived(User user,JsonObject data) {
@@ -91,6 +89,11 @@ public class WebSocket {
 		builder.add("message",message);
 		builder.add("type","chat");
 		sendToUser(dest,builder.build().toString());
+		builder=Json.createObjectBuilder();
+		builder.add("dest",dest.getId());
+		builder.add("message",message);
+		builder.add("type","chat");
+		sendToUser(user,builder.build().toString());
 	}
 	@OnClose
 	public void onClose(@PathParam("id") String id,Session session) {

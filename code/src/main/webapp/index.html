@@ -164,11 +164,16 @@
 			}
 		</script>
 		<div id="chatTest">
-			<span id="chatId"></span>
+			<div id="chatHeaders"></div>
+			<br>
+			<div id="chats"></div>
+			<template id="chatTemplate">
+				<div class="chat">
+					<div class="chatMessages">messages</div><br>
+					<input class="chatBox"><button class="sendMessage">verstuur</button>
+				</div>
+			</template>
 			<button onclick="connectWs()">maak verbinding</button>
-			dest:<input id="chatDest"><br>
-			message:<input id="chatMessage"><br>
-			<button onclick="sendMessage()">verstuur</button>
 		</div>
 	</body>
 </html>
