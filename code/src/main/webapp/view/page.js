@@ -14,6 +14,13 @@ function showPageHeader(pageId) {
 		}
 		if(message.id) {
 			$('#forbidden').show();
+			if(message.request) {
+				$('#forbiddenAlreadyAsked').show();
+				$('#askPermission').hide();
+			} else {
+				$('#forbiddenAlreadyAsked').hide();
+				$('#askPermission').show();
+			}
 			message.last10Posts=[];
 			return Page.fromRaw(message);
 		} else throw message;
@@ -51,8 +58,7 @@ function showLeden() {
 $('#newPost').on('click', () =>{
 	if($('#page').children('.messageDiv').length) $('#page').children('.messageDiv').toggle();
 	else {
-		clone=$('#messageBoxTemplate').contents("div").clone();
-		clone.insertBefore('#posts');
+		$('#messageBoxTemplate').contents("div").clone().insertBefore('#posts');
 	}
 });
 picker.on('emoji',emoji=>lastSelectedField.value+=emoji);
@@ -61,9 +67,7 @@ $(document).on('click','.messageEmoticon',(event)=>{
 	lastSelectedField=$(event.target).parent().find('.messageBox')[0];
 });
 $('#askPermission').on('click',()=>{
-	currentPage.askPermissions().then(()=>{
-		alert('toegang gevraagd.');
-	})
+	currentPage.askPermissions().then(()=>showPageHeader(currentPage.id))
 });
 
 $(document).on('click','#pageHeader > img',event=>{

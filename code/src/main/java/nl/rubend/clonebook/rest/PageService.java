@@ -23,9 +23,10 @@ public class PageService {
 		User user= securityBean.getSender();
 		if(bean.getPage()==null) return Response.status(Response.Status.NOT_FOUND).build();
 		if(bean.getPage().isLid(user)) return Response.ok(bean.getPage()).build();
-		Map<String,String> response=new HashMap<>();
+		Map<String,Object> response=new HashMap<>();
 		response.put("id",bean.getPage().getId());
 		response.put("name",bean.getPage().getName());
+		response.put("request",bean.getPage().hasLidAanvraagVanUser(user));
 		return Response.status(Response.Status.FORBIDDEN).entity(response).build();
 	}
 	@GET
