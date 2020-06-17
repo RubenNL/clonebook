@@ -74,6 +74,6 @@ function showSinglePost(postId) {
 }
 function logoutPost() {
 	$('#posts').html('');
-	$('#pageHeader > h1').text("");
+	$('#pageHeader > span').text("");
 	$("#page").hide();
 }

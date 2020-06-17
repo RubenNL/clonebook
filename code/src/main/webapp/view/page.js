@@ -29,8 +29,8 @@ function showPageHeader(pageId) {
 		$('#notFound').hide();
 		$('#pageImageUpload').hide();
 		currentPage=page;
-		if(currentPage.isAdmin()) $('#pageHeader > h1').html('<input id="pageName" value="'+page.name+'">');
-		else $('#pageHeader > h1').text(page.name);
+		if(currentPage.isAdmin()) $('#pageHeader > span').html('<label for="pageName">pagina naam</label><input id="pageName" value="'+page.name+'">');
+		else $('#pageHeader > span').text(page.name);
 		$('#pageHeader > img').attr('src','/rest/media/'+page.logo);
 		$('#page').show();
 		return page;
