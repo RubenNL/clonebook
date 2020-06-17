@@ -46,17 +46,15 @@ public class UserService {
 		User user = securityBean.allowedUser();
 		Map<String,String> map=new HashMap<>();
 		map.put("email",user.getEmail());
-		map.put("name",user.getName());
 		return Response.ok(map).build();
 	}
 	@POST
 	@Path("/{userId}/settings")
 	@RolesAllowed("user")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response setProfile(@FormParam("name") String name, @FormParam("email") String email, @BeanParam SecurityBean securityBean) {
+	public Response setProfile(@FormParam("email") String email, @BeanParam SecurityBean securityBean) {
 		User user = securityBean.allowedUser();
 		if (!user.getEmail().equals(email)) user.setEmail(email);
-		if (!user.getName().equals(name)) user.setName(name);
 		return Response.ok().build();
 	}
 	@GET

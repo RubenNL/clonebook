@@ -10,7 +10,6 @@ function openSettings() {
 }
 function settingsSave() {
 	settings.email=$('#settingsEmail').val();
-	settings.name=$('#settingsName').val();
 	settings.save().then(()=>{
 		alert("Instellingen zijn opgeslagen");
 		$('#settings').hide();

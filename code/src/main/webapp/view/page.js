@@ -29,12 +29,16 @@ function showPageHeader(pageId) {
 		$('#notFound').hide();
 		$('#pageImageUpload').hide();
 		currentPage=page;
-		$('#pageHeader > h1').text(page.name);
+		if(currentPage.isAdmin()) $('#pageHeader > h1').html('<input id="pageName" value="'+page.name+'">');
+		else $('#pageHeader > h1').text(page.name);
 		$('#pageHeader > img').attr('src','/rest/media/'+page.logo);
 		$('#page').show();
 		return page;
 	})
 }
+$(document).on('keydown','#pageName',event=>{
+	if(event.originalEvent.key=="Enter") currentPage.setName($('#pageName').val());
+});
 function showPage(pageId) {
 	showPageHeader(pageId).then(page=>{
 		window.location.hash='#page='+page.id;

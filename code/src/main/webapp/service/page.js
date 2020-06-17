@@ -33,6 +33,12 @@ class Page {
 		formData.append("image",media.id);
 		return Utils.sendPost('page/'+this.id+'/image',formData)
 	}
+	setName(name) {
+		this.name=name;
+		let formData = new FormData();
+		formData.append("name",name);
+		return Utils.sendPost('page/'+this.id+'/name',formData)
+	}
 	isAdmin() {
 		return this.owner.id==getLoggedInId();
 	}
