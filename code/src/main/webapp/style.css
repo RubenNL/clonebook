@@ -306,3 +306,6 @@ textarea:focus {
 .him:first-of-type {
 	border-bottom-left-radius: 5px;
 }
+.fill {
+	height:100%;
+}

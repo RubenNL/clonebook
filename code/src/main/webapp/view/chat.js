@@ -55,14 +55,17 @@ function showChats() {
 		})
 	})
 }
-function chat(userId,message) {
-	chats[userChats[userId]].send(message);
+function sendChat(event) {
+	const box=$(event.currentTarget).parent().find('input');
+	let val=box.val();
+	val=val.trim();
+	if(val=="") return;
+	const userId=box.parent().parent().attr('userid');
+	chats[userChats[userId]].send(val);
 }
-$(document).on('click','.sendMessage',event=>{
-	chat($(event.currentTarget).parent().parent().attr('userid'),$(event.currentTarget).parent().find('input').val());
-});
-$(document).on('click','.lid',event=>{
-
+$(document).on('click','.sendMessage',sendChat);
+$(document).on('keydown','.chatBox',event=>{
+	if(event.originalEvent.key=="Enter") sendChat(event);
 });
 $(document).on('click','.chatTab',event=>{
 	const target=$(event.currentTarget);
