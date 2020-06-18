@@ -1,5 +1,6 @@
 package nl.rubend.clonebook.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.utils.SqlInterface;
@@ -27,6 +28,20 @@ public class Chat {
 			return new Chat(set.getString("ID"));
 		} catch (SQLException e) {
 			throw new ClonebookException(Response.Status.NOT_FOUND,"Chat niet gevonden");
+		}
+	}
+	public static ArrayList<Chat> getChats(User user) {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT chatID FROM user_chat WHERE userID=?");
+			statement.setString(1,user.getId());
+			ResultSet set=statement.executeQuery();
+			ArrayList<Chat> response=new ArrayList<>();
+			while(set.next()) {
+				response.add(Chat.getChat(set.getString("chatID")));
+			}
+			return response;
+		} catch (SQLException e) {
+			throw new ClonebookException(e.getMessage());
 		}
 	}
 	private Chat(String id) {
@@ -93,6 +108,7 @@ public class Chat {
 			throw new ClonebookException(e.getMessage());
 		}
 	}
+	@JsonProperty("messages")
 	public ArrayList<ChatMessage> getLastMessages() {
 		return getMessagesBefore(new Date(Long.parseLong("253402128000000")));//9999-12-30 00:00:00.0, zou ook geen problemen met tijdzones moeten geven.
 	}
@@ -100,7 +116,7 @@ public class Chat {
 		ChatMessage chatMessage=new ChatMessage(this,sender,message);
 		User receiver=null;
 		for(User user:getUsers()) {
-			if(user!=sender) receiver=user;
+			if(!user.equals(sender)) receiver=user;
 		}
 		if(receiver==null) throw new IllegalStateException("geen andere gebruiker in chat!");
 		JsonObjectBuilder builder= Json.createObjectBuilder();
@@ -113,5 +129,6 @@ public class Chat {
 		builder.add("message",message);
 		builder.add("type","chat");
 		WebSocket.sendToUser(sender,builder.build().toString());
+		System.out.println("send");
 	}
 }

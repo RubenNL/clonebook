@@ -1,21 +1,19 @@
 class WS {
-	constructor(userId) {
-		this.userId=userId;
-		this.messageListeners=[];
-	}
-	async connect() {
-		this.ws = new WebSocket("wss://clonebook.rubend.nl/ws/" + (await Utils.sendPost("user/" + this.userId + '/ws')).code);
-		this.ws.onmessage=(message)=>{
-			this.messageListeners.forEach(func=>func(message.data));
+	static ws;
+	static messageListeners=[];
+	static async connect() {
+		WS.ws=new WebSocket("wss://clonebook.rubend.nl/ws/" + (await Utils.sendPost("user/" + getLoggedInId() + '/ws')).code);
+		WS.ws.onmessage=(message)=>{
+			WS.messageListeners.forEach(func=>func(message.data));
 		}
 	}
-	send(message) {
-		this.ws.send(JSON.stringify(message));
+	static send(message) {
+		WS.ws.send(JSON.stringify(message));
 	}
-	close() {
-		this.ws.close();
+	static close() {
+		WS.ws.close();
 	}
-	onMessage(f) {
-		this.messageListeners.push(f);
+	static onMessage(f) {
+		WS.messageListeners.push(f);
 	}
 }

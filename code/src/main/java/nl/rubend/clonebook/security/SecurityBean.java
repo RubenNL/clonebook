@@ -1,11 +1,13 @@
 package nl.rubend.clonebook.security;
 
 import nl.rubend.clonebook.domain.User;
+import nl.rubend.clonebook.exceptions.ClonebookException;
 
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 public class SecurityBean {
@@ -16,7 +18,7 @@ public class SecurityBean {
 	}
 	public User getRequested() {
 		User user=User.getUserById(this.id);
-		if(user==null) throw new NotFoundException();
+		if(user==null) throw new ClonebookException(Response.Status.NOT_FOUND,"requested user niet gevonden!");
 		return user;
 	}
 	public boolean isAllowed() {

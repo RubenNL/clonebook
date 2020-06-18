@@ -18,11 +18,15 @@ import java.util.Date;
 @RolesAllowed("user")
 @Produces(MediaType.APPLICATION_JSON)
 public class ChatService {
+	@GET
+	public Response getChats(@BeanParam SecurityBean securityBean) {
+		return Response.ok(Chat.getChats(securityBean.getSender())).build();
+	}
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response newChat(@BeanParam SecurityBean securityBean,@FormParam("user") String otherUser) {
-		Chat chat=new Chat(securityBean.getSender(), User.getUserById(otherUser));
-		return Response.ok(new AbstractMap.SimpleEntry<String,String>("id",chat.getId())).build();
+		Chat chat = new Chat(securityBean.getSender(), User.getUserById(otherUser));
+		return Response.ok(new AbstractMap.SimpleEntry<String, String>("id", chat.getId())).build();
 	}
 	@GET
 	@Path("/{chatId}")

@@ -156,19 +156,21 @@
 		<script src="view/melding.js"></script>
 		<script src="view/hashHandler.js"></script>
 		<script src="service/ws.js"></script>
-		<script src="view/ws.js"></script>
+		<script src="service/chat.js"></script>
+		<script src="view/chat.js"></script>
 		<script>
 			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.register('service-worker.js', { scope: '/' });
 			}
 		</script>
-		<div id="chatTest" hidden="hidden">
+		<div id="chatTest">
 			<div id="chatHeaders"></div>
 			<br>
 			<div id="chats"></div>
 			<template id="chatTemplate">
 				<div class="chat">
-					<div class="chatMessages">messages</div><br>
+					<button class="getMoreChats">meer weergeven</button>
+					<div class="chatMessages"></div><br>
 					<input class="chatBox"><button class="sendMessage">verstuur</button>
 				</div>
 			</template>

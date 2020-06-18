@@ -75,7 +75,12 @@ public class WebSocket {
 	}
 	@OnMessage
 	public void onMessage(@PathParam("id") String id,Session session,String message) {
-		//Dit blijft leeg, websocket is op dit moment alleen voor server->client.
+		//dit stuurt het bericht gewoon direct terug, omdat het kan.
+		try {
+			session.getBasicRemote().sendText(message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	@OnClose
 	public void onClose(@PathParam("id") String id,Session session) {
