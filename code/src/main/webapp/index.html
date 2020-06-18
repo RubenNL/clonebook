@@ -165,16 +165,19 @@
 		</script>
 		<div id="chatTest">
 			<div id="chatHeaders"></div>
-			<br>
 			<div id="chats"></div>
 			<template id="chatTemplate">
 				<div class="chat">
-					<button class="getMoreChats">meer weergeven</button>
-					<div class="chatMessages"></div><br>
-					<input class="chatBox"><button class="sendMessage">verstuur</button>
+					<div class="scroll">
+						<button class="getMoreChats">meer weergeven</button>
+						<div class="chatMessages"></div>
+					</div>
+					<div class="noscroll">
+						<input class="chatBox">
+						<button class="sendMessage">verstuur</button>
+					</div>
 				</div>
 			</template>
-			<button onclick="connectWs()">maak verbinding</button>
 		</div>
 	</body>
 </html>

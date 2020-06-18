@@ -236,3 +236,18 @@ textarea:focus {
 .chatTab.active {
 	background-color: #ccc;
 }
+#chatTest {
+	position: fixed;
+	bottom: 0px;
+	right: 0px;
+	background-color: #49a74b;
+	border-radius: 5%;
+}
+.chat {
+	height:50vh;
+	overflow-y:scroll;
+}
+.noScroll {
+	position:sticky;
+	bottom:0px;
+}

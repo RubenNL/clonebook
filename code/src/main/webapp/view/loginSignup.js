@@ -20,9 +20,13 @@ function load() {
 	}).then(user=> {
 		$('.afterLogin').show()
 		$('#userMenuName').text(user.name);
-		$('#userMenuPicture').attr('src','/rest/media/'+user.profilePicture);
+		$('#userMenuPicture').attr('src', '/rest/media/' + user.profilePicture);
+		setTimeout(()=>{
+			WS.connect().then(showChats);
+		},1000);
 		return user
 	})
+
 }
 function savePassword() {
 	LoginSignup.savePassword(generateFormData("#newPasswordScreen"))
