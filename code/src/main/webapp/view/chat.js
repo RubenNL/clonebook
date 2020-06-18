@@ -24,7 +24,7 @@ function showChat(chat) {
 		const userid=message.from||message.dest;
 		const chatDiv=$('.chat[userid="'+userid+'"]');
 		const scrollBack=chatDiv[0].scrollTopMax==chatDiv[0].scrollTop;
-		chatDiv.find('.chatMessages').append('<li class="'+(message.from?"him":"me")+'">'+message.message+'</li>');
+		chatDiv.find('.chatMessages').append('<li class="chatMessage '+(message.from?"him":"me")+'">'+message.message+'</li>');
 		if(scrollBack) chatDiv[0].scrollTop=chatDiv[0].scrollTopMax;
 	})
 	node.find('.getMoreChats').on('click',()=>{
@@ -32,17 +32,18 @@ function showChat(chat) {
 		const chat=chats[userChats[userid]];
 		chat.before(chat.messages[0].date).then(messages=>{
 			messages.forEach(message=> {
-				chatDiv.find('.chatMessages').prepend('<li class="'+(message.userId==getLoggedInId()?"me":"him")+'">'+message.message+'</li>');
+				chatDiv.find('.chatMessages').prepend('<li class="chatMessage '+(message.userId==getLoggedInId()?"me":"him")+'">'+message.message+'</li>');
 			})
 		});
 	})
 	$('#chats').append(node);
 	const chatDiv=$('.chat[userid="'+userid+'"]');
 	chat.messages.reverse().forEach(message=>{
-		chatDiv.find('.chatMessages').append('<li class="'+(message.userId==getLoggedInId()?"me":"him")+'">'+message.message+'</li>');
+		chatDiv.find('.chatMessages').append('<li class="chatMessage '+(message.userId==getLoggedInId()?"me":"him")+'">'+message.message+'</li>');
 	})
 	$('#chatHeaders').append('<button class="chatTab" userid="'+userid+'">'+name+'</button>');
 	$('#chatHeaders > button[userid="'+userid+'"]').trigger('click');
+	chatDiv[0].scrollTop=chatDiv[0].scrollTopMax;
 }
 function showChats() {
 	Chat.getAll().then(chatsReceived=>{

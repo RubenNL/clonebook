@@ -242,24 +242,21 @@ textarea:focus {
 	right: 0px;
 	background-color: #49a74b;
 	border-radius: 5%;
+	max-width:min-content;
 }
 .chat {
 	height:50vh;
 	overflow-y:scroll;
+	overflow-wrap:anywhere;
 }
 .noScroll {
 	position:sticky;
 	bottom:0px;
 	clear:both;
+	white-space: nowrap;
 }
 
-ul{
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-
-ul li{
+.chatMessage {
 	display:inline-block;
 	clear: both;
 	padding: 20px;
@@ -267,7 +264,11 @@ ul li{
 	margin-bottom: 2px;
 	font-family: Helvetica, Arial, sans-serif;
 }
-
+.chatMessages {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
 .him{
 	background: #eee;
 	float: left;
