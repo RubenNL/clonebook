@@ -113,22 +113,28 @@ public class Chat {
 		return getMessagesBefore(new Date(Long.parseLong("253402128000000")));//9999-12-30 00:00:00.0, zou ook geen problemen met tijdzones moeten geven.
 	}
 	public void sendMessage(User sender,String message) {
-		ChatMessage chatMessage=new ChatMessage(this,sender,message);
 		User receiver=null;
 		for(User user:getUsers()) {
 			if(!user.equals(sender)) receiver=user;
 		}
 		if(receiver==null) throw new IllegalStateException("geen andere gebruiker in chat!");
-		JsonObjectBuilder builder= Json.createObjectBuilder();
-		builder.add("from",sender.getId());
-		builder.add("message",message);
-		builder.add("type","chat");
-		WebSocket.sendToUser(receiver,builder.build().toString());
-		builder=Json.createObjectBuilder();
-		builder.add("dest",receiver.getId());
-		builder.add("message",message);
-		builder.add("type","chat");
-		WebSocket.sendToUser(sender,builder.build().toString());
-		System.out.println("send");
+		User finalReceiver = receiver;
+		new Thread(() -> {
+			JsonObjectBuilder builder = Json.createObjectBuilder();
+			builder.add("from", sender.getId());
+			builder.add("message", message);
+			builder.add("type", "chat");
+			WebSocket.sendToUser(finalReceiver, builder.build().toString());
+		}).start();
+		new Thread(() -> {
+			JsonObjectBuilder builder = Json.createObjectBuilder();
+			builder.add("dest",finalReceiver.getId());
+			builder.add("message",message);
+			builder.add("type","chat");
+			WebSocket.sendToUser(sender,builder.build().toString());
+		}).start();
+		new Thread(() -> {
+			new ChatMessage(this,sender,message);
+		}).start();
 	}
 }

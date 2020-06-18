@@ -1,5 +1,6 @@
 package nl.rubend.clonebook.websocket;
 
+import nl.rubend.clonebook.domain.Chat;
 import nl.rubend.clonebook.domain.User;
 
 import javax.json.*;
@@ -75,11 +76,14 @@ public class WebSocket {
 	}
 	@OnMessage
 	public void onMessage(@PathParam("id") String id,Session session,String message) {
-		//dit stuurt het bericht gewoon direct terug, omdat het kan.
-		try {
-			session.getBasicRemote().sendText(message);
-		} catch (IOException e) {
-			e.printStackTrace();
+		User user=links.get(id);
+		JsonStructure structure = Json.createReader(new StringReader(message)).read();
+		if(structure.getValueType()!= JsonValue.ValueType.OBJECT) return;
+		JsonObject data=(JsonObject) structure;
+		switch(data.getString("type")) {
+			case "chat":
+				Chat.getChat(data.getString("id")).sendMessage(user,data.getString("message"));
+				break;
 		}
 	}
 	@OnClose

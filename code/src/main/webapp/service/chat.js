@@ -24,7 +24,8 @@ class Chat {
 		})
 	}
 	send(message) {
-		return Utils.sendPost('chat/'+this.id,generateFormData({message:message}))
+		//return Utils.sendPost('chat/'+this.id,generateFormData({message:message}))
+		WS.send({id:this.id,message:message,type:"chat"});
 	}
 	onMessage(func) {
 		this.messageListeners.push(func);
