@@ -91,6 +91,26 @@
 			</div>
 		</main>
 		<aside id="leden"></aside>
+		<div id="chatTest">
+			<div id="chatHeaders">
+				<button id="closeChat">X</button>
+			</div>
+			<div id="chats"></div>
+			<template id="chatTemplate">
+				<div class="chat">
+					<div class="scroll">
+						<button class="getMoreChats">meer weergeven</button>
+						<ul class="chatMessages"></ul>
+					</div>
+					<div class="fill"></div>
+					<div class="noscroll">
+						<input class="chatBox">
+						<button class="sendMessage">verstuur</button>
+					</div>
+				</div>
+			</template>
+		</div>
+		<button id="showChat">Chat</button>
 		<footer id="copyright">Copyright Ruben van Dijk</footer>
 		<template id="postTemplate">
 			<article class="post border" role="article">
@@ -163,22 +183,5 @@
 				navigator.serviceWorker.register('service-worker.js', { scope: '/' });
 			}
 		</script>
-		<div id="chatTest">
-			<div id="chatHeaders"></div>
-			<div id="chats"></div>
-			<template id="chatTemplate">
-				<div class="chat">
-					<div class="scroll">
-						<button class="getMoreChats">meer weergeven</button>
-						<ul class="chatMessages"></ul>
-					</div>
-					<div class="fill"></div>
-					<div class="noscroll">
-						<input class="chatBox">
-						<button class="sendMessage">verstuur</button>
-					</div>
-				</div>
-			</template>
-		</div>
 	</body>
 </html>
