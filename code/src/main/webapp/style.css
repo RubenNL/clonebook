@@ -277,6 +277,8 @@ textarea:focus {
 	background-color: #3b9859;
 	border-top-right-radius: 10px;
 	border-top-left-radius: 10px;
+	overflow-x:scroll;
+	display:flex;
 }
 .him{
 	background: #eee;
@@ -315,8 +317,11 @@ textarea:focus {
 .him:first-of-type {
 	border-bottom-left-radius: 5px;
 }
-.fill {
+.vfill {
 	height:100%;
+}
+.hfill {
+	width:100%;
 }
 #closeChat {
 	float:right;
@@ -331,4 +336,7 @@ textarea:focus {
 	font-size:14pt;
 	width:15%;
 	height:25px;
+}
+.name {
+	overflow-wrap:anywhere;
 }

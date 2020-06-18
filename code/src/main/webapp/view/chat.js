@@ -41,7 +41,7 @@ function showChat(chat) {
 	chat.messages.reverse().forEach(message=>{
 		chatDiv.find('.chatMessages').append('<li class="chatMessage '+(message.userId==getLoggedInId()?"me":"him")+'">'+message.message+'</li>');
 	})
-	$('#chatHeaders').prepend('<button class="chatTab" userid="'+userid+'">'+name+'</button>');
+	$('#chatHeaders').prepend('<button class="chatTab" userid="'+userid+'">'+name.substring(0,10)+'</button>');
 	$('#chatHeaders > button[userid="'+userid+'"]').trigger('click');
 	chatDiv[0].scrollTop=chatDiv[0].scrollTopMax;
 }
