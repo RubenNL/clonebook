@@ -1,6 +1,6 @@
 let ws;
 let chats={};
-let userChats={};
+//let userChats={};
 async function connectWs() {
 	$('#page').hide();
 	$('body').attr('style','display:unset');
@@ -9,35 +9,34 @@ async function connectWs() {
 	ws.onMessage(onMessage);
 }
 function showChat(chat) {
-	const userid=chat.otherUser.id;
-	let button=$('#chatHeaders > button[userid="'+userid+'"]');
+	const chatId=chat.id;
+	let button=$('#chatHeaders > button[chatId="'+chatId+'"]');
 	if(button.length>0) {
 		button.trigger('click');
 		return;
 	}
 	const name=chat.otherUser.name;
 	let node = $('#chatTemplate').contents("div").clone();
-	node.attr("userid",userid);
+	node.attr("chatId",chatId);
 	node.attr("name",name);
 	chat.onMessage(message=>{
 		message=JSON.parse(message);
-		const userid=message.from||message.dest;
-		const chatDiv=$('.chat[userid="'+userid+'"]');
+		const chatDiv=$('.chat[chatId="'+chatId+'"]');
 		const scrollBack=chatDiv[0].scrollTopMax==chatDiv[0].scrollTop;
 		chatDiv.find('.chatMessages').append('<li class="chatMessage '+(message.from?"him":"me")+'">'+message.message+'</li>');
 		if(scrollBack) chatDiv[0].scrollTop=chatDiv[0].scrollTopMax;
 	})
 	$('#chats').append(node);
-	const chatDiv=$('.chat[userid="'+userid+'"]');
+	const chatDiv=$('.chat[chatId="'+chatId+'"]');
 	chatDiv.on('scroll',event=>{
 		console.log('scroll!');
-		if(event.currentTarget.scrollTop==0) displayMoreChats($(event.currentTarget).attr('userid'));
+		if(event.currentTarget.scrollTop==0) displayMoreChats($(event.currentTarget).attr('chatId'));
 	});
 	chat.messages.reverse().forEach(message=>{
 		chatDiv.find('.chatMessages').append('<li class="chatMessage '+(message.userId==getLoggedInId()?"me":"him")+'">'+message.message+'</li>');
 	})
-	$('#chatHeaders').prepend('<button class="chatTab" userid="'+userid+'">'+name.substring(0,10)+'</button>');
-	$('#chatHeaders > button[userid="'+userid+'"]').trigger('click');
+	$('#chatHeaders').prepend('<button class="chatTab" chatId="'+chatId+'">'+name.substring(0,10)+'</button>');
+	$('#chatHeaders > button[chatId="'+chatId+'"]').trigger('click');
 	chatDiv[0].scrollTop=chatDiv[0].scrollTopMax;
 	if(chat.allLoaded) $('#getMoreChats').hide();
 }
@@ -45,7 +44,7 @@ function showChats() {
 	Chat.getAll().then(chatsReceived=>{
 		chatsReceived.forEach(chat=>{
 			chats[chat.id]=chat;
-			userChats[chat.otherUser.id]=chat.id;
+			//userChats[chat.otherUser.id]=chat.id;
 			console.log(chat);
 			showChat(chat);
 		})
@@ -57,8 +56,8 @@ function sendChat(event) {
 	val=val.trim();
 	if(val=="") return;
 	box.val("");
-	const userId=box.parent().parent().attr('userid');
-	chats[userChats[userId]].send(val);
+	const chatId=box.parent().parent().attr('chatId');
+	chats[chatId].send(val);
 }
 $(document).on('click','.sendMessage',sendChat);
 $(document).on('keydown','.chatBox',event=>{
@@ -69,7 +68,7 @@ $(document).on('click','.chatTab',event=>{
 	$('.chatTab').removeClass("active");
 	target.addClass('active');
 	$('#chats > *').hide();
-	$('#chats > [userid="'+target.attr('userid')+'"]').show();
+	$('#chats > [chatId="'+target.attr('chatId')+'"]').show();
 });
 function toggleChat() {
 	$("#chatTest").toggle();
@@ -77,10 +76,10 @@ function toggleChat() {
 }
 $('#closeChat').on('click',toggleChat);
 $('#showChat').on('click',toggleChat);
-function displayMoreChats(userid) {
-	console.log('moreChats!')
-	const chatDiv=$('.chat[userid="'+userid+'"]');
-	const chat=chats[userChats[userid]];
+function displayMoreChats(chatId) {
+	console.log('moreChats!');
+	const chatDiv=$('.chat[chatId="'+chatId+'"]');
+	const chat=chats[chatId];
 	if(chat.allLoaded) return;
 	const scrollBottom=chatDiv[0].scrollTopMax-chatDiv[0].scrollTop;
 	chat.before(chat.messages[0].date).then(messages=>{
@@ -93,6 +92,6 @@ function displayMoreChats(userid) {
 		});
 }
 $(document).on('click','.getMoreChats',(event)=>{
-	const userId=$(event.currentTarget).parent().parent().attr('userid');
-	displayMoreChats(userId);
+	const chatId=$(event.currentTarget).parent().parent().attr('chatId');
+	displayMoreChats(chatId);
 });

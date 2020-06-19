@@ -36,6 +36,18 @@ self.addEventListener("notificationclick",event=>{
 })
 self.addEventListener('push',event=>{
 	let data=event.data.json();
+	data.action=data.data;
+	if(data.action=="CHAT") {
+		const parsed=JSON.parse(data.options.body)
+		data={
+			options:{
+				body:parsed.message,
+				tag:parsed.chatId,
+				data:"/#chat="+parsed.chatId
+			},
+			title:"chat van "+parsed.title
+		}
+	}
 	event.waitUntil(self.registration.showNotification(data.title, data.options));
 	if(data.action=="LOGOUT") self.registration.unregister();
 });

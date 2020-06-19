@@ -122,6 +122,8 @@ public class Chat {
 		new Thread(() -> {
 			JsonObjectBuilder builder = Json.createObjectBuilder();
 			builder.add("from", sender.getId());
+			builder.add("title", sender.getName());
+			builder.add("chatId", this.id);
 			builder.add("message", message);
 			builder.add("type", "chat");
 			WebSocket.sendToUser(finalReceiver, builder.build().toString());
@@ -129,6 +131,8 @@ public class Chat {
 		new Thread(() -> {
 			JsonObjectBuilder builder = Json.createObjectBuilder();
 			builder.add("dest",finalReceiver.getId());
+			builder.add("title", finalReceiver.getName());
+			builder.add("chatId", this.id);
 			builder.add("message",message);
 			builder.add("type","chat");
 			WebSocket.sendToUser(sender,builder.build().toString());
