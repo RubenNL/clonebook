@@ -345,3 +345,6 @@ textarea:focus {
 	padding: 1px;
 	border-radius: 25%;
 }
+#chatEmoticon {
+	padding:0px;
+}

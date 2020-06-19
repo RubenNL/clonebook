@@ -56,6 +56,7 @@ function sendChat(event) {
 	let val=box.val();
 	val=val.trim();
 	if(val=="") return;
+	box.val("");
 	const userId=box.parent().parent().attr('userid');
 	chats[userChats[userId]].send(val);
 }
