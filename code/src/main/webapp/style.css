@@ -72,7 +72,7 @@ main {grid-area:main;}
 	font-size:14pt;
 	
 }
-#settings,#notLoggedIn,#newPasswordScreen,#page,#userMenu,#forbidden,#pageImageUpload,#notFound,#pageName {
+#settings,#notLoggedIn,#newPasswordScreen,#page,#userMenu,#forbidden,#pageImageUpload,#notFound,#pageName,.chat {
 	display:none;
 }
 #loginOptions fieldset {

@@ -108,10 +108,6 @@ public class Chat {
 			throw new ClonebookException(e.getMessage());
 		}
 	}
-	@JsonProperty("messages")
-	public ArrayList<ChatMessage> getLastMessages() {
-		return getMessagesBefore(new Date(Long.parseLong("253402128000000")));//9999-12-30 00:00:00.0, zou ook geen problemen met tijdzones moeten geven.
-	}
 	public void sendMessage(User sender,String message) {
 		User receiver=null;
 		for(User user:getUsers()) {

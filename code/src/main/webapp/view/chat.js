@@ -1,6 +1,5 @@
 let ws;
 let chats={};
-//let userChats={};
 async function connectWs() {
 	$('#page').hide();
 	$('body').attr('style','display:unset');
@@ -37,7 +36,6 @@ function showChat(chat) {
 		chatDiv.find('.chatMessages').append('<li class="chatMessage '+(message.userId==getLoggedInId()?"me":"him")+'">'+message.message+'</li>');
 	})
 	$('#chatHeaders').prepend('<button class="chatTab" chatId="'+chatId+'">'+name.substring(0,10)+'</button>');
-	$('#chatHeaders > button[chatId="'+chatId+'"]').trigger('click');
 	chatDiv[0].scrollTop=chatDiv[0].scrollTopMax;
 	if(chat.allLoaded) $('#getMoreChats').hide();
 }
@@ -64,7 +62,9 @@ $(document).on('click','.chatTab',event=>{
 	$('.chatTab').removeClass("active");
 	target.addClass('active');
 	$('#chats > *').hide();
-	$('#chats > [chatId="'+target.attr('chatId')+'"]').show();
+	const chatId=target.attr('chatId');
+	$('#chats > [chatId="'+chatId+'"]').show();
+	if(!chats[chatId].firstLoaded) displayMoreChats(chatId);
 });
 function toggleChat() {
 	$("#chatTest").toggle();
@@ -78,7 +78,7 @@ function displayMoreChats(chatId) {
 	const chat=chats[chatId];
 	if(chat.allLoaded) return;
 	const scrollBottom=chatDiv[0].scrollTopMax-chatDiv[0].scrollTop;
-	chat.before(chat.messages[0].date).then(messages=>{
+	chat.before(chat.messages[0]?chat.messages[0].date:253402128000000).then(messages=>{
 		messages.forEach(message=> {
 			chatDiv.find('.chatMessages').prepend('<li class="chatMessage '+(message.userId==getLoggedInId()?"me":"him")+'">'+message.message+'</li>');
 		})
