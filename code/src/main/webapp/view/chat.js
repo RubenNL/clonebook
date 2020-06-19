@@ -9,6 +9,7 @@ async function connectWs() {
 	ws.onMessage(onMessage);
 }
 function showChat(chat) {
+	chats[chat.id]=chat;
 	const chatId=chat.id;
 	let button=$('#chatHeaders > button[chatId="'+chatId+'"]');
 	if(button.length>0) {
@@ -42,12 +43,7 @@ function showChat(chat) {
 }
 function showChats() {
 	Chat.getAll().then(chatsReceived=>{
-		chatsReceived.forEach(chat=>{
-			chats[chat.id]=chat;
-			//userChats[chat.otherUser.id]=chat.id;
-			console.log(chat);
-			showChat(chat);
-		})
+		chatsReceived.forEach(showChat);
 	})
 }
 function sendChat(event) {
@@ -95,3 +91,11 @@ $(document).on('click','.getMoreChats',(event)=>{
 	const chatId=$(event.currentTarget).parent().parent().attr('chatId');
 	displayMoreChats(chatId);
 });
+
+$(document).on('click','.lid',(event)=>{
+	Chat.create($(event.currentTarget).attr('userId')).then(showChat);
+})
+$(()=>{
+	$('#chatHeaders').width($('#noscroll').width());
+	$('#noscroll').hide();
+})

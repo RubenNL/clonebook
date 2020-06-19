@@ -8,8 +8,8 @@ class Chat {
 		WS.onMessage(message=>(this.messageReceived(message)));
 	}
 	static create(otherUser) {
-		return Utils.sendPost('chat',generateFormData({user:otherUser.id})).then(response=>{
-			return new Chat(response.id,otherUser,[]);
+		return Utils.sendPost('chat',generateFormData({user:otherUser})).then(response=>{
+			return Chat.getChat(response.id);
 		})
 	}
 	static getChat(id) {
