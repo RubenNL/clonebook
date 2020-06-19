@@ -21,4 +21,10 @@ class User {
 	deleteSessions() {
 		return Utils.sendDelete('user/'+this.id+'/sessions');
 	}
+	getPages() {
+		return Utils.sendGet('user/'+this.id+'/pages').then(pages=>pages.map(Page.fromRaw))
+	}
+	getOwnPages() {
+		return Utils.sendGet('user/'+this.id+'/ownPages').then(pages=>pages.map(Page.fromRaw))
+	}
 }

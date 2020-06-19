@@ -4,7 +4,7 @@ function showPageHeader(pageId) {
 		$('#leden').html('');
 		$('#forbidden').hide();
 		$('#notFound').hide();
-		setTimeout(showLeden,1000);
+		setTimeout(showLeden);
 		return page;
 	},message=>{
 		$('#leden').html('');
@@ -60,6 +60,7 @@ $(document).on('keydown','#pageName',event=>{
 });
 function showPage(pageId) {
 	showPageHeader(pageId).then(page=>{
+		autoChanged();
 		window.location.hash='#page='+page.id;
 		$('#posts').html('');
 		page.last10Posts.forEach(post=>addPost(post));

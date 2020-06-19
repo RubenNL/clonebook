@@ -1,3 +1,13 @@
+let autoChangedBool=false;
+let autoChangedTimeout;
+function autoChanged() {
+	autoChangedBool=true;
+	clearTimeout(autoChangedTimeout);
+	autoChangedTimeout=setTimeout(()=>autoChangedBool=false,5);
+}
+$(window).on('hashchange', function() {
+	if(!autoChangedBool) handleHash()
+})
 function handleHash() {
 	let hash=window.location.hash;
 	if(hash) hash=hash.split('#')[1];

@@ -64,6 +64,7 @@ function showSinglePost(postId) {
 	Post.getPost(postId).then(post=>{
 		$('#posts').html('');
 		addPost(post);
+		autoChanged();
 		window.location.hash='#post='+post.id;
 		return showPageHeader(post.pageId);
 	},message=>{

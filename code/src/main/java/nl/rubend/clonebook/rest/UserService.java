@@ -89,4 +89,16 @@ public class UserService {
 	public Response addSocket(@BeanParam SecurityBean securityBean) {
 		return Response.ok(new AbstractMap.SimpleEntry<String,String>("code",WebSocket.addWaiting(securityBean.allowedUser()))).build();
 	}
+	@GET
+	@RolesAllowed("user")
+	@Path("/{userId}/pages")
+	public Response getPages(@BeanParam SecurityBean securityBean) {
+		return Response.ok(securityBean.allowedUser().getPages()).build();
+	}
+	@GET
+	@RolesAllowed("user")
+	@Path("/{userId}/ownPages")
+	public Response getOwnPages(@BeanParam SecurityBean securityBean) {
+		return Response.ok(securityBean.allowedUser().getOwnPages()).build();
+	}
 }

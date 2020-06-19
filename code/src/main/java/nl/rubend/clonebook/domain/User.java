@@ -113,6 +113,21 @@ public class User implements Principal {
 		}
 	}
 	@JsonIgnore
+	public ArrayList<Page> getOwnPages() {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM page WHERE ownerId=?");
+			statement.setString(1,userId);
+			ResultSet set=statement.executeQuery();
+			ArrayList<Page> response=new ArrayList<>();
+			while(set.next()) {
+				response.add(Page.getPage(set.getString("ID")));
+			}
+			return response;
+		} catch (SQLException e) {
+			throw new ClonebookException(e.getMessage());
+		}
+	}
+	@JsonIgnore
 	public String getKey() {
 		return userKey;
 	}

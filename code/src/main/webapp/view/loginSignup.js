@@ -23,6 +23,7 @@ function load() {
 		$('#userMenuPicture').attr('src', '/rest/media/' + user.profilePicture);
 		setTimeout(()=>{
 			WS.connect().then(showChats);
+			onLogin(user);
 		},1000);
 		return user
 	})
@@ -34,6 +35,7 @@ function savePassword() {
 			$('#newPasswordScreen').hide();
 			$('#loginOptions').show();
 			alert("Wachtwoord ingesteld.");
+			autoChanged();
 			window.location.hash = "";
 		},error=>{
 			if(error.error) error=error.error;
