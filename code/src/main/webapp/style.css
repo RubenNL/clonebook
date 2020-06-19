@@ -2,7 +2,7 @@ body {
 	display: grid;
 	grid-template-areas:
 			"header header header header"
-			". main . leden"
+			". main . aside"
 			". footer footer footer";
 	grid-template-columns:5% 75% 5%;
 	grid-template-rows:32px 1fr auto;
@@ -26,7 +26,7 @@ body {
 }
 
 @media (max-width:1000px) {
-	#leden {display:none;}
+	aside {display:none;}
 	body {
 		grid-template-areas:
 			"header header header"
@@ -54,8 +54,8 @@ body {
 		display:none;
 	}
 }
-aside#leden {
-	grid-area:leden;
+aside {
+	grid-area:aside;
 	background-color:#8bc39d;
 }
 main {grid-area:main;}
@@ -339,4 +339,9 @@ textarea:focus {
 }
 .name {
 	overflow-wrap:anywhere;
+}
+.asideTab {
+	border: 1px;
+	padding: 1px;
+	border-radius: 25%;
 }

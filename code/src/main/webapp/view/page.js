@@ -76,7 +76,7 @@ function showLid(lid) {
 function showLeden() {
 	currentPage.getLeden().then(leden=>{
 		leden.forEach(showLid);
-	})
+	}).then(()=>$('.asideTab[tab="leden"]').trigger('click'))
 }
 $('#newPost').on('click', () =>{
 	if($('#page').children('.messageDiv').length) $('#page').children('.messageDiv').toggle();

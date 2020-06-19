@@ -93,7 +93,16 @@
 				</div>
 			</div>
 		</main>
-		<aside id="leden"></aside>
+		<aside>
+			<div id="asideHeaders">
+				<button class="asideTab" tab="leden">leden</button>
+				<button class="asideTab" tab="pages">pagina's</button>
+				<button class="asideTab" tab="myPages">mijn pagina's</button>
+			</div>
+			<div class="asideBar" id="leden"></div>
+			<div class="asideBar" id="pages"></div>
+			<div class="asideBar" id="myPages"></div>
+		</aside>
 		<div id="chatTest">
 			<div id="chatHeaders">
 				<div class="hfill"></div>
@@ -182,6 +191,7 @@
 		<script src="service/ws.js"></script>
 		<script src="service/chat.js"></script>
 		<script src="view/chat.js"></script>
+		<script src="view/aside.js"></script>
 		<script>
 			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.register('service-worker.js', { scope: '/' });
