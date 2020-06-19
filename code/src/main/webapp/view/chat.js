@@ -39,6 +39,7 @@ function showChat(chat) {
 	$('#chatHeaders').prepend('<button class="chatTab" userid="'+userid+'">'+name.substring(0,10)+'</button>');
 	$('#chatHeaders > button[userid="'+userid+'"]').trigger('click');
 	chatDiv[0].scrollTop=chatDiv[0].scrollTopMax;
+	if(chat.allLoaded) $('#getMoreChats').hide();
 }
 function showChats() {
 	Chat.getAll().then(chatsReceived=>{
@@ -79,12 +80,16 @@ function displayMoreChats(userid) {
 	console.log('moreChats!')
 	const chatDiv=$('.chat[userid="'+userid+'"]');
 	const chat=chats[userChats[userid]];
+	if(chat.allLoaded) return;
 	const scrollBottom=chatDiv[0].scrollTopMax-chatDiv[0].scrollTop;
 	chat.before(chat.messages[0].date).then(messages=>{
 		messages.forEach(message=> {
 			chatDiv.find('.chatMessages').prepend('<li class="chatMessage '+(message.userId==getLoggedInId()?"me":"him")+'">'+message.message+'</li>');
 		})
-	}).then(()=>chatDiv[0].scrollTop=chatDiv[0].scrollTopMax-scrollBottom);
+	}).then(()=>chatDiv[0].scrollTop=chatDiv[0].scrollTopMax-scrollBottom)
+		.then(()=>{
+			if(chat.allLoaded) $('#getMoreChats').hide();
+		});
 }
 $(document).on('click','.getMoreChats',(event)=>{
 	const userId=$(event.currentTarget).parent().parent().attr('userid');

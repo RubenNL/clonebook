@@ -20,6 +20,7 @@
 				<button id="userMenuButton"><img height="32px" class="squarePicture" alt="" id="userMenuPicture"><span id="userMenuName"></span></button>
 				<div id="userMenuItems">
 					<a href="#" onclick="openSettings()">Instellingen</a>
+					<a href="#" onclick="newPage()">Nieuwe pagina</a>
 					<a href="#" onclick="logout()">Uitloggen</a>
 				</div>
 			</div>
@@ -72,8 +73,10 @@
 						<label>pagina afbeelding<input type="file" accept="image/*" required></label>
 						<input type="submit" value="opslaan">
 					</form>
-					<img class="squarePicture" alt="pagina icon">
+					<img id="pageIcon" class="squarePicture" alt="pagina icon">
 					<span>Pagina naam</span>
+					<input id="pageName">
+					<button id="pageSettings">instellingen</button>
 					<button id="newPost">Nieuw bericht</button>
 				</header>
 				<div id="notFound">

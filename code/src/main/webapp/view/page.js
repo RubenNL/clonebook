@@ -25,16 +25,35 @@ function showPageHeader(pageId) {
 			return Page.fromRaw(message);
 		} else throw message;
 	}).then(page=>{
+		if(page.isAdmin()) $('#pageSettings').show();
+		else $('#pageSettings').hide();
+		$('#pageHeader > span').show();
+		$('#pageName').hide();
 		$('#pageHeader').show();
 		$('#notFound').hide();
 		$('#pageImageUpload').hide();
 		currentPage=page;
-		if(currentPage.isAdmin()) $('#pageHeader > span').html('<label for="pageName">pagina naam</label><input id="pageName" value="'+page.name+'">');
-		else $('#pageHeader > span').text(page.name);
-		$('#pageHeader > img').attr('src','/rest/media/'+page.logo);
+		$('#pageHeader > span').text(page.name);
+		if(page.logo==null) url='icon.svg';
+		else url='/rest/media/'+page.logo;
+		$('#pageHeader > img').attr('src',url);
 		$('#page').show();
 		return page;
 	})
+}
+$('#pageSettings').on('click',()=>{
+	if(!currentPage.isAdmin()) return;
+	$('#pageHeader > span').toggle();
+	$('#pageName').val(currentPage.name);
+	$('#pageName').toggle();
+	$('#pageImageUpload').toggle();
+	$('#pageIcon').toggle();
+})
+function newPage() {
+	const name=prompt("welke naam?");
+	if(name=="") return;
+	if(name==null) return;
+	Page.new(name).then(showPage);
 }
 $(document).on('keydown','#pageName',event=>{
 	if(event.originalEvent.key=="Enter") currentPage.setName($('#pageName').val());
@@ -74,9 +93,6 @@ $('#askPermission').on('click',()=>{
 	currentPage.askPermissions().then(()=>showPageHeader(currentPage.id))
 });
 
-$(document).on('click','#pageHeader > img',event=>{
-	if(currentPage.isAdmin()) $('#pageImageUpload').toggle();
-});
 $(document).on('submit','#pageImageUpload',event=>{
 	event.preventDefault();
 	const file=$(event.target).find('input[type="file"]')[0];

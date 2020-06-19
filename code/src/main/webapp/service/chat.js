@@ -4,6 +4,7 @@ class Chat {
 		this.otherUser = otherUser;
 		this.messages= messages;
 		this.messageListeners = [];
+		this.allLoaded=messages.length<10;
 		WS.onMessage(message=>(this.messageReceived(message)));
 	}
 	static create(otherUser) {
@@ -36,6 +37,7 @@ class Chat {
 	before(date) {
 		return Utils.sendGet('chat/'+this.id+'/'+date)
 			.then(chats=>{
+				this.allLoaded=chats.length<10;
 				chats.forEach(chat=>{
 					this.messages.unshift(chat)
 				});

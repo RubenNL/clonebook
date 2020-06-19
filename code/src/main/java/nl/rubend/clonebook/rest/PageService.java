@@ -17,6 +17,13 @@ import java.util.Map;
 @RolesAllowed("user")
 @Produces(MediaType.APPLICATION_JSON)
 public class PageService {
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Response createPage(@BeanParam SecurityBean securityBean,@FormParam("name") String name) {
+		Page page=new Page(securityBean.getSender(),name);
+		page.addLid(securityBean.getSender());
+		return Response.ok(new AbstractMap.SimpleEntry<>("id", page.getId())).build();
+	}
 	@GET
 	@Path("/{pageId}")
 	public Response publicPage(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {

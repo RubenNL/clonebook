@@ -13,6 +13,9 @@ class Page {
 		raw.last10Posts=raw.last10Posts.map(sourcePost=>Post.fromRaw(sourcePost));
 		return new Page(raw.id,raw.last10Posts,raw.logo,raw.name,raw.owner);
 	}
+	static new(name) {
+		return Utils.sendPost('page',generateFormData({name:name})).then(response=>response.id)
+	}
 	askPermissions() {
 		return Utils.sendPost('page/'+this.id+'/lidAanvraag','');
 	}
@@ -40,6 +43,7 @@ class Page {
 		return Utils.sendPost('page/'+this.id+'/name',formData)
 	}
 	isAdmin() {
+		if(!this.owner) return false;
 		return this.owner.id==getLoggedInId();
 	}
 }
