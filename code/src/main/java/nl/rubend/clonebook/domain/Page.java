@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -248,11 +250,11 @@ public class Page {
 			throw new ClonebookException(e.getMessage());
 		}
 	}
-	public ArrayList<Post> getPostsLimit(int start,int amount) {
+	public ArrayList<Post> getPostsLimit(Date date, int amount) {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT ID FROM post WHERE repliedTo IS NULL AND pageID=? ORDER BY date DESC LIMIT ?,?");
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT ID FROM post WHERE repliedTo IS NULL AND pageID=? AND date < ? ORDER BY date DESC LIMIT ?");
 			statement.setString(1,id);
-			statement.setInt(2,start);
+			statement.setTimestamp(2,new Timestamp(date.getTime()));
 			statement.setInt(3,amount);
 			ResultSet set=statement.executeQuery();
 			ArrayList<Post> response=new ArrayList<>();
@@ -265,7 +267,7 @@ public class Page {
 		}
 	}
 	public ArrayList<Post> getLast10Posts() {
-		return getPostsLimit(0,10);
+		return getPostsLimit(new Date(Long.parseLong("253402128000000")),10);
 	}
 	public String getName() {
 		return this.name;
