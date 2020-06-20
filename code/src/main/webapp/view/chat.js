@@ -67,7 +67,7 @@ $(document).on('click','.chatTab',event=>{
 	if(!chats[chatId].firstLoaded) displayMoreChats(chatId);
 });
 function toggleChat() {
-	$("#chatTest").toggle();
+	$("#chatPopup").toggle();
 	$('#showChat').toggle();
 }
 $('#closeChat').on('click',toggleChat);

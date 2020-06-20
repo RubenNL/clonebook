@@ -239,7 +239,7 @@ textarea:focus {
 .chatTab:first-of-type {
 	border-top-left-radius:10px;
 }
-#chatTest {
+#chatPopup {
 	position: fixed;
 	bottom: 0px;
 	right: 0px;
