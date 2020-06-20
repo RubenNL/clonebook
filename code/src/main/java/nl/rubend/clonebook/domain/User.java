@@ -194,7 +194,7 @@ public class User implements Principal {
 	@JsonIgnore
 	public ArrayList<Page> getPages() {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pageLid WHERE userID=?");
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pageLid WHERE userID=? AND blocked=false AND accepted=true");
 			statement.setString(1,userId);
 			ResultSet set=statement.executeQuery();
 			ArrayList<Page> response=new ArrayList<>();
