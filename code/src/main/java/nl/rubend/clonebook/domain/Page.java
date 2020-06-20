@@ -10,10 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class Page {
 	private String id;
@@ -126,9 +123,21 @@ public class Page {
 	}
 	public void addLid(User user) {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO pageLid(userID,pageID) VALUES (?,?)");
+			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO pageLid(userID,pageID,blocked,accepted) VALUES (?,?,false,true)");
 			statement.setString(1,user.getId());
 			statement.setString(2, this.id);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new ClonebookException(e.getMessage());
+		}
+	}
+	public void blockUnblockLid(User user,boolean blocked) {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE pageLid SET blocked = ? WHERE userID=? AND pageID=?");
+			statement.setBoolean(1,blocked);
+			statement.setString(2, user.getId());
+			statement.setString(3, this.id);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -146,9 +155,22 @@ public class Page {
 			throw new ClonebookException(e.getMessage());
 		}
 	}
+	public boolean isBlocked(User user) {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("select COUNT(userID) as count from pageLid where pageID=? and userID=? AND blocked=true");
+			statement.setString(1, this.id);
+			statement.setString(2,user.getId());
+			ResultSet set=statement.executeQuery();
+			set.next();
+			return set.getInt("count")==1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new ClonebookException(e.getMessage());
+		}
+	}
 	public boolean isLid(User user) {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("select COUNT(userID) as count from pageLid where pageID=? and userID=?");
+			PreparedStatement statement = SqlInterface.prepareStatement("select COUNT(userID) as count from pageLid where pageID=? and userID=? AND blocked=false AND accepted=true");
 			statement.setString(1, this.id);
 			statement.setString(2,user.getId());
 			ResultSet set=statement.executeQuery();
@@ -163,8 +185,9 @@ public class Page {
 	public void addLidAanvraag(User user) {
 		if(isLid(user)) throw new ClonebookException("user is al lid!");
 		if(hasLidAanvraagVanUser(user)) throw new ClonebookException("aanvraag is al verstuurd!");
+		if(isBlocked(user)) throw new ClonebookException("geblokkeerd!");
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO lidAanvraag(userID,pageID) VALUES (?,?)");
+			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO pageLid(userID,pageID,blocked,accepted) VALUES (?,?,false,false)");
 			statement.setString(1, user.getId());
 			statement.setString(2,this.id);
 			statement.executeUpdate();
@@ -177,7 +200,7 @@ public class Page {
 	@JsonIgnore
 	public boolean hasLidAanvraagVanUser(User user) {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("select COUNT(userID) as count from lidAanvraag where pageID=? and userID=?");
+			PreparedStatement statement = SqlInterface.prepareStatement("select COUNT(userID) as count from pageLid where pageID=? and userID=? AND accepted=false");
 			statement.setString(1, this.id);
 			statement.setString(2,user.getId());
 			ResultSet set=statement.executeQuery();
@@ -188,9 +211,31 @@ public class Page {
 		}
 	}
 	@JsonIgnore
+	public ArrayList<HashMap<String,String>> getBlocked() {
+		try {
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT userID FROM pageLid WHERE pageID=? AND blocked=true");
+			statement.setString(1,id);
+			ResultSet set=statement.executeQuery();
+			ArrayList<HashMap<String,String>> response=new ArrayList<>();
+			while(set.next()) {
+				User user=User.getUserById(set.getString("userID"));
+				HashMap<String,String> tempHash=new HashMap<>();
+				tempHash.put("userId",user.getId());
+				tempHash.put("name",user.getName());
+				Media picture=user.getProfilePicture();
+				if(picture!=null) tempHash.put("picture",picture.getId());
+				else tempHash.put("picture","");
+				response.add(tempHash);
+			}
+			return response;
+		} catch (SQLException e) {
+			throw new ClonebookException(e.getMessage());
+		}
+	}
+	@JsonIgnore
 	public ArrayList<String> getLidAanvragen() {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT userID FROM lidAanvraag WHERE pageID=?");
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT userID FROM pageLid WHERE pageID=? AND accepted=false AND blocked=false");
 			statement.setString(1,id);
 			ResultSet set=statement.executeQuery();
 			ArrayList<String> response=new ArrayList<>();
@@ -202,9 +247,9 @@ public class Page {
 			throw new ClonebookException(e.getMessage());
 		}
 	}
-	public void removeLidAanvraag(User user) {
+	public void acceptUser(User user) {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM lidAanvraag WHERE userID=? AND pageID=?");
+			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE pageLid SET accepted = true WHERE userID=? AND pageID=?");
 			statement.setString(1, user.getId());
 			statement.setString(2, this.id);
 			statement.executeUpdate();
@@ -212,13 +257,6 @@ public class Page {
 			e.printStackTrace();
 			throw new ClonebookException(e.getMessage());
 		}
-	}
-	public void acceptUser(User user) {
-		if(hasLidAanvraagVanUser(user)) {
-			addLid(user);
-			removeLidAanvraag(user);
-			user.sendToUser("/#page="+getId(),"je bent geaccepteerd op "+getName()+".");
-		} else throw new IllegalArgumentException("gebruiker heeft geen aanvraag");
 	}
 	@JsonIgnore
 	public ArrayList<User> getLeden() {

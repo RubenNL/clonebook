@@ -35,6 +35,7 @@ public class PageService {
 		response.put("id",bean.getPage().getId());
 		response.put("name",bean.getPage().getName());
 		response.put("request",bean.getPage().hasLidAanvraagVanUser(user));
+		response.put("blocked",bean.getPage().isBlocked(user));
 		return Response.status(Response.Status.FORBIDDEN).entity(response).build();
 	}
 	@GET
@@ -77,10 +78,26 @@ public class PageService {
 		return Response.ok(true).build();
 	}
 	@DELETE
-	@Path("/{pageId}/lidAanvraag/{userId}")
-	public Response removeLidAanvraag(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {
+	@Path("/{pageId}/lid/{userId}")
+	public Response removeLid(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {
 		if(securityBean.isAllowed() || bean.isAdmin()) {
-			bean.existsThrows().getPage().removeLidAanvraag(securityBean.getRequested());
+			bean.existsThrows().getPage().removeLid(securityBean.getRequested());
+			return Response.ok(true).build();
+		} else throw new ForbiddenException();
+	}
+	@POST
+	@Path("/{pageId}/block/{userId}")
+	public Response blockUser(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {
+		if(securityBean.isAllowed() || bean.isAdmin()) {
+			bean.existsThrows().getPage().blockUnblockLid(securityBean.getRequested(),true);
+			return Response.ok(true).build();
+		} else throw new ForbiddenException();
+	}
+	@DELETE
+	@Path("/{pageId}/block/{userId}")
+	public Response unblockUser(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {
+		if(securityBean.isAllowed() || bean.isAdmin()) {
+			bean.existsThrows().getPage().blockUnblockLid(securityBean.getRequested(),false);
 			return Response.ok(true).build();
 		} else throw new ForbiddenException();
 	}
@@ -90,6 +107,12 @@ public class PageService {
 		if(!bean.existsThrows().isAdmin()) throw new ForbiddenException();
 		bean.getPage().acceptUser(securityBean.getRequested());
 		return Response.ok(true).build();
+	}
+	@GET
+	@Path("/{pageId}/blocked")
+	public Response getBlocked(@BeanParam Bean bean) {
+		if(!bean.existsThrows().isAdmin()) throw new ForbiddenException();
+		return Response.ok(bean.getPage().getBlocked()).build();
 	}
 	@GET
 	@Path("/{pageId}/before/{date}")

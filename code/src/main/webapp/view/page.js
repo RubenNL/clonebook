@@ -14,13 +14,11 @@ function showPageHeader(pageId) {
 		}
 		if(message.id) {
 			$('#forbidden').show();
-			if(message.request) {
-				$('#forbiddenAlreadyAsked').show();
-				$('#askPermission').hide();
-			} else {
-				$('#forbiddenAlreadyAsked').hide();
-				$('#askPermission').show();
-			}
+			$('#askPermission').hide();
+			$('#forbiddenAlreadyAsked').hide();
+			if(message.blocked) $('#forbiddenBlocked').show();
+			else if(message.request) $('#forbiddenAlreadyAsked').show();
+			else $('#askPermission').show();
 			message.last10Posts=[];
 			return Page.fromRaw(message);
 		} else throw message;

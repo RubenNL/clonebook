@@ -24,7 +24,10 @@ class Page {
 		return Utils.sendPost('page/'+this.id+'/acceptLid/'+user.id,'');
 	}
 	denyLid(user) {
-		return Utils.sendDelete('page/'+this.id+'/lidAanvraag/'+user.id,'');
+		return Utils.sendDelete('page/'+this.id+'/lid/'+user.id,'');
+	}
+	blockLid(user) {
+		return Utils.sendPost('page/'+this.id+'/block/'+user.id,'')
 	}
 	getLeden() {
 		console.log('getleden',this);
