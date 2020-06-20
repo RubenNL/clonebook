@@ -13,7 +13,7 @@ class Utils {
 			if (contentType && contentType.indexOf("application/json") !== -1) {
 				if(response.ok) resolve(await response.json());
 				else reject(await response.json());
-			} else if(response.ok) resolve();
+			} else if(response.ok) resolve(response.text());
 			else reject(response.status);
 		})
 	}

@@ -3,23 +3,59 @@ package nl.rubend.clonebook.rest;
 import nl.rubend.clonebook.domain.*;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.security.SecurityBean;
+import nl.rubend.clonebook.utils.Recaptcha;
 import nl.rubend.clonebook.websocket.WebSocket;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 
 import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.*;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
 public class UserService {
+	public static boolean isThisMyIpAddress(String stringAddr) {
+		InetAddress addr;
+		try {
+			addr=InetAddress.getByName(stringAddr);
+		} catch (UnknownHostException e) {
+			return false;
+		}
+		if (addr.isAnyLocalAddress() || addr.isLoopbackAddress()) return true;
+		try {
+			return NetworkInterface.getByInetAddress(addr) != null;
+		} catch (SocketException e) {
+			return false;
+		}
+	}
 	@POST
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response newPasswordMail(@FormParam("email") String email) {
+	public Response newPasswordMail(@Context HttpHeaders httpHeaders, @Context HttpServletRequest httpServletRequest, @FormParam("email") String email, @FormParam("g-recaptcha-response") String recaptchaResponse) {
+		String ip=httpServletRequest.getRemoteAddr();
+		if(isThisMyIpAddress(ip)) ip=httpHeaders.getHeaderString("X-Forwarded-For");//lokaal IP, grote kans dat het een apache2 aanvraag is.
+		if(ip==null || ip.equals("")) ip=httpServletRequest.getRemoteAddr();//toch niet een apache2 proxy, dus toch maar het originele IP gebruiken.
+		if(!Recaptcha.isCaptchaValid(recaptchaResponse,ip)) return Response.status(Response.Status.UNAUTHORIZED).entity(new AbstractMap.SimpleEntry<String,String>("error","captcha invalid")).build();
 		User user=User.getUserByEmail(email);
 		if(user==null) user=new User(email);
 		user.sendPasswordForgottenUrl();

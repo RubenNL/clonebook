@@ -8,10 +8,18 @@ function passwordRequest() {
 		alert(error)
 	});
 }
+async function renderCaptcha() {
+	grecaptcha.render('recaptcha', {
+		sitekey: await Utils.sendGet("recaptchaKey")
+	})
+}
 function load() {
 	return LoginSignup.getLoggedinUser().catch(message=>{
 		$('.afterLogin').hide();
-		if(message==403 || message=="niet ingelogd") $('#notLoggedIn').show();
+		if(message==403 || message=="niet ingelogd") {
+			document.write('<script src="https://www.google.com/recaptcha/api.js?onload=renderCaptcha&render=explicit" type="text/javascript"></script>');
+			$('#notLoggedIn').show();
+		}
 		else {
 			console.log(message);
 			alert(message);
@@ -48,8 +56,7 @@ function savePassword() {
 function login() {
 	LoginSignup.login(generateFormData("#loginScreen"))
 	.then(()=> {
-		$('#notLoggedIn').hide();
-		load().then(handleHash);
+		location.reload();//bescherming tegen google tracking.
 	},error=>{
 		if(error==401) alert("email/wachtwoord verkeerd");
 		else throw error;
