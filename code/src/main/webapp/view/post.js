@@ -7,6 +7,9 @@ function addPost(post,prepend) {
 	node.find('.name').text(post.user.name);
 	node.find('.name').attr('user',post.user.id);
 	node.find('.text').text(post.text);
+	const momentObj=moment(post.date);
+	node.find('.date').text(momentObj.fromNow());
+	node.find('.dateHover').text(momentObj.format('LLLL'));
 	post.media.forEach(media=>{
 		node.find('.media').append('<a href="'+media.getUrl()+'"><img class="mediaImage" alt="'+post.user.name+" media object"+'" src="'+media.getUrl()+'"></a>');
 	});

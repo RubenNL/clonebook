@@ -357,3 +357,24 @@ textarea:focus {
 #noscrollScrolBar {
 	overflow-y:scroll;
 }
+.dateHover {
+	visibility:hidden;
+	background-color: white;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+}
+.dateHoverEvent:active .dateHover, .dateHoverEvent:hover .dateHover {
+	visibility:visible;
+}
+.dateHoverEvent {
+	float:right;
+}
+.flexGrow {
+	flex-grow:100;
+}
+.dateHoverEvent > * {
+	text-align: right;
+	width: 100%;
+	display: inline-block;
+}

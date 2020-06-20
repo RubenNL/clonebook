@@ -137,6 +137,9 @@ public class Post {
 	public User getUser() {
 		return User.getUserById(userId);
 	}
+	public Date getDate() {
+		return this.date;
+	}
 	public ArrayList<Post> getChildren() {
 		ArrayList<Post> response=new ArrayList<>();
 		try {

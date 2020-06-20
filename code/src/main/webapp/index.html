@@ -139,6 +139,12 @@
 				<header class="postHeader">
 					<img alt="" class="squarePicture profilePicture">
 					<a href="#" class="name"></a>
+					<span class="flexGrow"></span>
+					<span class="dateHoverEvent">
+						<span class="date"></span>
+						<br>
+						<span class="dateHover"></span>
+					</span>
 				</header>
 				<div class="media"></div>
 				<p class="text"></p>
@@ -180,8 +186,8 @@
 				<span class="name"></span>
 			</div>
 		</template>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
+		<script src="jslibs/jquery.slim.min.js"></script>
+		<script src="jslibs/emoji-button.min.js"></script>
 		<script src="view/jwtHandler.js"></script>
 		<script src="service/loginSignup.js"></script>
 		<script src="service/media.js"></script>
@@ -201,7 +207,10 @@
 		<script src="service/chat.js"></script>
 		<script src="view/chat.js"></script>
 		<script src="view/aside.js"></script>
+		<script src="jslibs/moment/moment.min.js"></script>
+		<script src="jslibs/moment/locale/nl.js" charset="UTF-8"></script>
 		<script>
+			moment.locale("nl");
 			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.register('service-worker.js', { scope: '/' });
 			}
