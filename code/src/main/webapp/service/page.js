@@ -5,6 +5,7 @@ class Page {
 		this.logo=logo;
 		this.name=name;
 		this.owner=owner;
+		this.loading=false;
 	}
 	static getPage(id) {
 		return Utils.sendGet("page/"+id).then(Page.fromRaw);
@@ -47,6 +48,8 @@ class Page {
 		return this.owner.id==getLoggedInId();
 	}
 	before(date) {
+		if(this.loading) return Promise.reject();
+		this.loading=true;
 		return Utils.sendGet('page/'+this.id+'/before/'+date).then(posts=>{
 			return posts.map(Post.fromRaw);
 		})

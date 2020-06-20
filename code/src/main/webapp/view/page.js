@@ -108,10 +108,16 @@ $(document).on('submit','#pageImageUpload',event=>{
 		alert('afbeelding geupload!');
 	});
 });
-$('#nextPosts').on('click',()=>{
+function showMorePosts() {
 	currentPage.before($('#posts').children().last().find('.dateHoverEvent').attr('date')).then(posts=>{
 		posts.forEach(post=>{
 			addPost(post,false);
 		})
-	})
-})
+	}).catch(()=>{});
+}
+$('#nextPosts').on('click',showMorePosts);
+$(document).on('scroll',event=>{
+	console.log('scroll!');
+	const element=$('body')[0];
+	if(element.scrollTop==element.scrollTopMax) showMorePosts();
+});
