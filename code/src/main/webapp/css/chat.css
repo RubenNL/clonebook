@@ -1,0 +1,135 @@
+.chatTab, #closeChat {
+	background-color: inherit;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	transition: 0.3s;
+	font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.chatTab:hover, #closeChat:hover {
+	background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.chatTab.active {
+	background-color: #ccc;
+}
+.chatTab:first-of-type {
+	border-top-left-radius:10px;
+}
+#chatPopup {
+	position: fixed;
+	bottom: 0px;
+	right: 0px;
+	background-color: #49a74b;
+	border-radius: 5%;
+	max-width:min-content;
+	display:none;
+}
+.chat {
+	height:50vh;
+	overflow-y:scroll;
+	overflow-wrap:anywhere;
+}
+.noScroll {
+	position:sticky;
+	bottom:0px;
+	clear:both;
+	white-space: nowrap;
+}
+
+.chatMessage {
+	display:inline-block;
+	clear: both;
+	padding: 20px;
+	border-radius: 30px;
+	margin-bottom: 2px;
+	font-family: Helvetica, Arial, sans-serif;
+}
+.chatMessages {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#chatHeaders {
+	background-color: #3b9859;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	overflow-x:scroll;
+	height: 10vh;
+	white-space: nowrap;
+}
+.him{
+	background: #eee;
+	float: left;
+}
+
+.me{
+	float: right;
+	background: #0084ff;
+	color: #fff;
+}
+
+.him + .me{
+	border-bottom-right-radius: 5px;
+}
+.me + .him {
+	border-bottom-left-radius: 5px;
+}
+.me + .me{
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+.him + .him{
+	border-top-left-radius:5px;
+	border-bottom-left-radius: 5px;
+}
+.me:last-of-type {
+	border-bottom-right-radius: 30px;
+}
+.me:first-of-type {
+	border-bottom-right-radius: 5px;
+}
+.him:last-of-type {
+	border-bottom-left-radius: 30px;
+}
+.him:first-of-type {
+	border-bottom-left-radius: 5px;
+}
+.vfill {
+	height:80%;
+}
+.hfill {
+	width:100%;
+}
+#closeChat {
+	border-top-right-radius: 10px;
+	right: 0px;
+	position: absolute;
+	top: 0px;
+}
+#showChat {
+	position: fixed;
+	bottom: 0px;
+	right: 0px;
+	background-color: #49a74b;
+	border:none;
+	font-size:14pt;
+	width:15%;
+	height:25px;
+}
+.name {
+	overflow-wrap:anywhere;
+}
+.chatEmoticon {
+	padding:0px;
+}
+#noscroll {
+	position:fixed;
+}
+#noscrollScrolBar {
+	overflow-y:scroll;
+}

@@ -1,0 +1,25 @@
+#loginOptions {
+	display:grid;
+	grid-template-areas: "loginScreen loginSeparator newAccountScreen";
+	width:100%;
+}
+#loginScreen {grid-area:loginScreen;}
+#loginSeparator {grid-area:loginSeparator;margin:auto;}
+#newAccountScreen {grid-area:newAccountScreen;}
+.border {
+	border: 1px solid black;
+	border-radius: 20px;
+	padding: 5px;
+}
+@media (max-width:720px) {
+	#loginOptions {
+		grid-template-areas: "loginScreen" "loginSeparator" "newAccountScreen";
+		grid-template-columns:auto;
+	}
+	.border {
+		padding-right: 0px;
+	}
+}
+#loginOptions fieldset {
+	text-align:center;
+}

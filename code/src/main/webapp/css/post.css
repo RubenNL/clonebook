@@ -1,0 +1,74 @@
+.postHeader {
+	height:50px;
+	display:flex;
+}
+.postHeader > img {
+	height:inherit;
+}
+.postHeader > h2 {
+	margin:10px;
+}
+.postHeader > img, .post > p {
+	margin-left:10px;
+	margin-right:10px;
+}
+.vote {
+	font-size:14pt;
+}
+.replyButton {
+	margin-left:auto;
+	margin-right:auto;
+}
+.postFooter {
+	margin-left:auto;
+	margin-right:auto;
+	width:40%;
+	display:flex;
+}
+.messageBox {
+	font-family: inherit;
+}
+.messageDiv {
+	display:flex;
+	width:100%;
+}
+.messageForm {
+	margin-left:auto;
+	margin-right:auto;
+	width:50%;
+}
+.messageForm > label {
+	width:100%;
+	display:inline-block;
+}
+.messageForm > label > textarea {
+	width:100%;
+	background-color:#f2f8f3;
+}
+textarea:focus {
+	outline: thin dotted invert
+}
+.mediaImage {
+	width:100px;
+}
+.dateHover {
+	visibility:hidden;
+	background-color: white;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+}
+.dateHoverEvent:active .dateHover, .dateHoverEvent:hover .dateHover {
+	visibility:visible;
+}
+.dateHoverEvent {
+	float:right;
+}
+.flexGrow {
+	flex-grow:100;
+}
+.dateHoverEvent > * {
+	text-align: right;
+	width: 100%;
+	display: inline-block;
+}

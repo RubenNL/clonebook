@@ -1,0 +1,75 @@
+#topBar {
+	display:flex;
+	background-color: #3b9859;
+}
+#topBar #siteName {
+	margin:auto;
+	color:white;
+	font-weight:bold;
+	font-size:14pt;
+
+}
+#userMenuButton {
+	background-color: #49A74B;/*#4CAF50 was niet goed volgens wave?*/
+	color: white;
+	font-size: 14pt;
+	font-weight:bold;
+	height:100%;
+	border: none;
+}
+#userMenuName {
+	float:right;
+}
+#userMenuItems {
+	position: absolute;
+	background-color: #f1f1f1;
+	min-width: 160px;
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+	z-index: 1;
+	right:0;
+	display:none;
+}
+#userMenuItems a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+#userMenu:hover #userMenuItems {
+	display:block;
+}
+#meldingenMenu:active #meldingen,#meldingenMenu:hover #meldingen {
+	display:block;
+}
+#meldingen {
+	position: absolute;
+	background-color: #f1f1f1;
+	min-width: 160px;
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+	z-index: 1;
+	right:0;
+	display:none;
+}
+#meldingButton {
+	background-color: #49A74B;/*#4CAF50 was niet goed volgens wave?*/
+	color: white;
+	font-size: 14pt;
+	font-weight:bold;
+	height:100%;
+	border: none;
+}
+.melding {
+	padding: 12px 16px;
+}
+.meldingButton {
+	width:32.5%;
+}
+.meldingUserName, .meldingPageName {
+	color:inherit;
+	font-weight:bold;
+}
+.asideTab {
+	border: 1px;
+	padding: 1px;
+	border-radius: 25%;
+}

@@ -1,0 +1,13 @@
+@import 'grid.css';
+@import 'topbar.css';
+@import 'login.css';
+@import 'page.css';
+@import 'post.css';
+@import 'chat.css';
+
+#settings,#notLoggedIn,#newPasswordScreen,#page,#userMenu,#forbidden,#pageImageUpload,#notFound,#pageName,.chat {
+	display:none;
+}
+.squarePicture {
+	border-radius:50%;
+}

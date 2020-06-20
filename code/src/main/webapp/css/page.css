@@ -1,0 +1,27 @@
+#pageHeader {
+	height:64px;
+	display:flex;
+}
+#pageHeader > img {
+	height:inherit;
+}
+#pageHeader > span {
+	margin:auto;
+	font-size: 2em;
+	font-weight: bold;
+}
+[for="pageName"] { display: none;}
+#forbidden > *, #notFound > * {
+	text-align: center;
+	display: block;
+	margin:auto;
+}
+#lock {
+	filter: grayscale(100%);
+	font-size: 200px;
+}
+#notFoundHead {
+	font-size: 100px;
+	color: red;
+	font-weight: bold;
+}
