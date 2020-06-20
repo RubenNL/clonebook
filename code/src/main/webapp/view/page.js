@@ -108,3 +108,10 @@ $(document).on('submit','#pageImageUpload',event=>{
 		alert('afbeelding geupload!');
 	});
 });
+$('#nextPosts').on('click',()=>{
+	currentPage.before($('#posts').children().last().find('.dateHoverEvent').attr('date')).then(posts=>{
+		posts.forEach(post=>{
+			addPost(post,false);
+		})
+	})
+})

@@ -8,6 +8,7 @@ function addPost(post,prepend) {
 	node.find('.name').attr('user',post.user.id);
 	node.find('.text').text(post.text);
 	const momentObj=moment(post.date);
+	node.find('.dateHoverEvent').attr('date',post.date);
 	node.find('.date').text(momentObj.fromNow());
 	node.find('.dateHover').text(momentObj.format('LLLL'));
 	post.media.forEach(media=>{

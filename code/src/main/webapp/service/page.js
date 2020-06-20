@@ -46,4 +46,9 @@ class Page {
 		if(!this.owner) return false;
 		return this.owner.id==getLoggedInId();
 	}
+	before(date) {
+		return Utils.sendGet('page/'+this.id+'/before/'+date).then(posts=>{
+			return posts.map(Post.fromRaw);
+		})
+	}
 }

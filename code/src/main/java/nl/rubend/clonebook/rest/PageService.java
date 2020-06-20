@@ -11,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.AbstractMap;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,6 +90,11 @@ public class PageService {
 		if(!bean.existsThrows().isAdmin()) throw new ForbiddenException();
 		bean.getPage().acceptUser(securityBean.getRequested());
 		return Response.ok(true).build();
+	}
+	@GET
+	@Path("/{pageId}/before/{date}")
+	public Response getChatBefore(@BeanParam Bean bean, @PathParam("date") String before) {
+		return Response.ok(bean.onlyPageLid().getPage().getPostsLimit(new Date(Long.parseLong(before)),10)).build();
 	}
 	static class Bean {
 		@PathParam("pageId") String pageId;
