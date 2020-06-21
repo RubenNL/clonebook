@@ -128,14 +128,14 @@ $(document).on('scroll',event=>{
 $(document).on('click','.kick',event=>{
 	User.getUser($(event.currentTarget).parent().parent().attr('userid')).then(user=>{
 		currentPage.kick(user).then(()=>{
-			$(event.currentTarget).parent().remove();
+			$(event.currentTarget).remove();
 		})
 	})
 })
 $(document).on('click','.ban',event=>{
 	User.getUser($(event.currentTarget).parent().parent().attr('userid')).then(user=>{
 		currentPage.ban(user).then(()=>{
-			$(event.currentTarget).parent().remove();
+			$(event.currentTarget).remove();
 		})
 	})
 })
