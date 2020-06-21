@@ -3,9 +3,12 @@
 	padding: 1px;
 	border-radius: 25%;
 }
-.banOptions {
+.banOptions,.unbanOptions {
 	display:none;
 }
 .admin .lid:hover .banOptions {
+	display:block;
+}
+#bannedList .lid:hover .unbanOptions {
 	display:block;
 }

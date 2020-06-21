@@ -24,10 +24,14 @@ function showPageHeader(pageId) {
 			return Page.fromRaw(message);
 		} else throw message;
 	}).then(page=>{
+		currentPage=page;
 		if(page.isAdmin()) {
+			$('#viewBanned').show();
 			$('#pageSettings').show();
 			$('#leden').addClass("admin");
+			showBannedUsers();
 		} else {
+			$('#viewBanned').hide();
 			$('#pageSettings').hide();
 			$('#leden').removeClass("admin");
 		}
@@ -35,7 +39,6 @@ function showPageHeader(pageId) {
 		$('#pageHeader').show();
 		$('#notFound').hide();
 		$('#pageImageUpload').hide();
-		currentPage=page;
 		$('#pageHeader > span').text(page.name);
 		if(page.logo==null) url='icon.svg';
 		else url='/rest/media/'+page.logo;
@@ -44,6 +47,9 @@ function showPageHeader(pageId) {
 		return page;
 	})
 }
+$('#viewBanned').on('click',()=>{
+	$('#blockedUserDialog')[0].showModal();
+})
 $('#pageSettings').on('click',()=>{
 	if(!currentPage.isAdmin()) return;
 	$('#pageHeader > span').toggle();
@@ -51,6 +57,20 @@ $('#pageSettings').on('click',()=>{
 	$('#pageImageUpload').toggle();
 	$('#pageIcon').toggle();
 })
+function showBannedUser(lid) {
+	let node = $('#lidTemplate').contents("div").clone();
+	node.attr("userId",lid.id);
+	console.log(lid);
+	if(lid.profilePicture) node.find('.lidProfilePicture').attr('src','/rest/media/'+lid.profilePicture);
+	node.find('.name').text(lid.name);
+	$('#bannedList').append(node);
+}
+
+function showBannedUsers() {
+	currentPage.getBanned().then(users=>{
+		users.forEach(showBannedUser);
+	})
+}
 function newPage() {
 	const name=prompt("welke naam?");
 	if(name=="") return;
@@ -139,3 +159,10 @@ $(document).on('click','.ban',event=>{
 		})
 	})
 })
+$(document).on('click','.unbanAdd',(event)=>{
+	User.getUser($(event.currentTarget).parent().parent().attr('userid')).then(user=>{
+		currentPage.acceptLid(user).then(()=>{
+			$(event.currentTarget).remove();
+		})
+	})
+});

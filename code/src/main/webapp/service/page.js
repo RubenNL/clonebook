@@ -32,8 +32,12 @@ class Page {
 		return Utils.sendPost('page/'+this.id+'/block/'+user.id,'')
 	}
 	getLeden() {
-		console.log('getleden',this);
 		return Utils.sendGet('page/'+this.id+'/leden').then(ledenData=>{
+			return ledenData.map(User.fromRaw);
+		})
+	}
+	getBanned() {
+		return Utils.sendGet('page/'+this.id+'/blocked').then(ledenData=>{
 			return ledenData.map(User.fromRaw);
 		})
 	}

@@ -78,8 +78,11 @@
 					</form>
 					<img id="pageIcon" class="squarePicture" alt="pagina icon">
 					<span>Pagina naam</span>
-					<button id="pageSettings">instellingen</button>
-					<button id="newPost">Nieuw bericht</button>
+					<div id="pageHeaderButtons">
+						<button id="viewBanned">geblokkeerde gebruikers</button>
+						<button id="pageSettings">instellingen</button>
+						<button id="newPost">Nieuw bericht</button>
+					</div>
 				</header>
 				<div id="notFound">
 					<span id="notFoundHead">404</span>
@@ -194,8 +197,15 @@
 					<button class="ban">blokkeer</button>
 					<button class="kick">kick</button>
 				</div>
+				<div class="unbanOptions">
+					<button class="kick">kick</button>
+					<button class="unbanAdd">toevoegen</button>
+				</div>
 			</div>
 		</template>
+		<dialog id="blockedUserDialog">
+			<div id="bannedList"></div>
+		</dialog>
 		<script src="jslibs/jquery.slim.min.js"></script>
 		<script src="jslibs/emoji-button.min.js"></script>
 		<script src="view/jwtHandler.js"></script>

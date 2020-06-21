@@ -211,21 +211,14 @@ public class Page {
 		}
 	}
 	@JsonIgnore
-	public ArrayList<HashMap<String,String>> getBlocked() {
+	public ArrayList<User> getBlocked() {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT userID FROM pageLid WHERE pageID=? AND blocked=true");
 			statement.setString(1,id);
 			ResultSet set=statement.executeQuery();
-			ArrayList<HashMap<String,String>> response=new ArrayList<>();
+			ArrayList<User> response=new ArrayList<>();
 			while(set.next()) {
-				User user=User.getUserById(set.getString("userID"));
-				HashMap<String,String> tempHash=new HashMap<>();
-				tempHash.put("userId",user.getId());
-				tempHash.put("name",user.getName());
-				Media picture=user.getProfilePicture();
-				if(picture!=null) tempHash.put("picture",picture.getId());
-				else tempHash.put("picture","");
-				response.add(tempHash);
+				response.add(User.getUserById(set.getString("userID")));
 			}
 			return response;
 		} catch (SQLException e) {
@@ -249,7 +242,7 @@ public class Page {
 	}
 	public void acceptUser(User user) {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE pageLid SET accepted = true WHERE userID=? AND pageID=?");
+			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE pageLid SET accepted = true,blocked=false WHERE userID=? AND pageID=?");
 			statement.setString(1, user.getId());
 			statement.setString(2, this.id);
 			statement.executeUpdate();
