@@ -32,7 +32,6 @@ function showPageHeader(pageId) {
 			$('#leden').removeClass("admin");
 		}
 		$('#pageHeader > span').show();
-		$('#pageName').hide();
 		$('#pageHeader').show();
 		$('#notFound').hide();
 		$('#pageImageUpload').hide();
@@ -49,7 +48,6 @@ $('#pageSettings').on('click',()=>{
 	if(!currentPage.isAdmin()) return;
 	$('#pageHeader > span').toggle();
 	$('#pageName').val(currentPage.name);
-	$('#pageName').toggle();
 	$('#pageImageUpload').toggle();
 	$('#pageIcon').toggle();
 })
@@ -59,9 +57,9 @@ function newPage() {
 	if(name==null) return;
 	Page.new(name).then(showPage);
 }
-$(document).on('keydown','#pageName',event=>{
+/*$(document).on('keydown','#pageName',event=>{
 	if(event.originalEvent.key=="Enter") currentPage.setName($('#pageName').val());
-});
+});*/
 function showPage(pageId) {
 	showPageHeader(pageId).then(page=>{
 		autoChanged();
@@ -102,6 +100,7 @@ $('#askPermission').on('click',()=>{
 $(document).on('submit','#pageImageUpload',event=>{
 	event.preventDefault();
 	const file=$(event.target).find('input[type="file"]')[0];
+	currentPage.setName($('#pageName').val());
 	if(!file.files[0]) return;
 	Media.create(file.files[0]).catch(message=>{
 		if(message===415) alert("bestandstype niet toegestaan.");

@@ -6,7 +6,7 @@
 @import 'chat.css';
 @import 'side.css';
 
-#settings,#notLoggedIn,#newPasswordScreen,#page,#userMenu,#forbidden,#pageImageUpload,#notFound,#pageName,.chat {
+#settings,#notLoggedIn,#newPasswordScreen,#page,#userMenu,#forbidden,#pageImageUpload,#notFound,.chat {
 	display:none;
 }
 .squarePicture {
