@@ -67,6 +67,7 @@ function showBannedUser(lid) {
 }
 
 function showBannedUsers() {
+	$('#bannedList').html('');
 	currentPage.getBanned().then(users=>{
 		users.forEach(showBannedUser);
 	})
@@ -156,6 +157,7 @@ $(document).on('click','.ban',event=>{
 	User.getUser($(event.currentTarget).parent().parent().attr('userid')).then(user=>{
 		currentPage.ban(user).then(()=>{
 			$(event.currentTarget).remove();
+			showBannedUsers();
 		})
 	})
 })
@@ -163,6 +165,6 @@ $(document).on('click','.unbanAdd',(event)=>{
 	User.getUser($(event.currentTarget).parent().parent().attr('userid')).then(user=>{
 		currentPage.acceptLid(user).then(()=>{
 			$(event.currentTarget).remove();
-		})
+		}).then(showLeden);
 	})
 });
