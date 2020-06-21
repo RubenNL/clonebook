@@ -23,7 +23,16 @@
 	margin-left:auto;
 	margin-right:auto;
 	width:40%;
-	display:flex;
+	display:inline-flex;
+}
+.points {
+	width:15%;
+	display:inline-block;
+	text-align:right;
+}
+.pointsText {
+	width:15%;
+	display:inline-block;
 }
 .messageBox {
 	font-family: inherit;

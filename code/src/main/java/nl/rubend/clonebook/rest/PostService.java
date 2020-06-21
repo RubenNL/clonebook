@@ -55,7 +55,7 @@ public class PostService {
 		if(vote.equals("up")) new Vote(user,bean.getPost(),1);
 		else if(vote.equals("down")) new Vote(user,bean.getPost(),-1);
 		else throw new javax.ws.rs.BadRequestException();
-		return Response.ok().build();
+		return Response.ok(new AbstractMap.SimpleEntry<String,Integer>("punten",bean.getPost().getVoteTotal())).build();
 	}
 	static class Bean {
 		@PathParam("postId") String postId;

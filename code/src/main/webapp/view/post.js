@@ -11,6 +11,7 @@ function addPost(post,prepend) {
 	node.find('.dateHoverEvent').attr('date',post.date);
 	node.find('.date').text(momentObj.fromNow());
 	node.find('.dateHover').text(momentObj.format('LLLL'));
+	node.find('.points').text(post.voteTotal);
 	post.media.forEach(media=>{
 		node.find('.media').append('<a href="'+media.getUrl()+'"><img class="mediaImage" alt="'+post.user.name+" media object"+'" src="'+media.getUrl()+'"></a>');
 	});
@@ -26,7 +27,8 @@ $(document).on('click','.name',event=>{
 	console.log('user:',$(event.target).attr('user'));
 });
 $(document).on('click','.vote',event=>{
-	Utils.sendPost('post/'+$(event.target).parent().parent().attr('id')+'/vote',generateFormData({vote:$(event.target).attr('action')}));
+	Utils.sendPost('post/'+$(event.currentTarget).parent().parent().attr('id')+'/vote',generateFormData({vote:$(event.target).attr('action')}))
+		.then(response=>$(event.currentTarget).parent().parent().find('.points').text(response.punten));
 });
 $(document).on('click','.replyButton',(event)=>{
 	if($(event.target).parent().parent().find('.messageForm').length>0) $(event.target).parent().parent().find('.messageForm').toggle();
