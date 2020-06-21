@@ -261,7 +261,7 @@ public class Page {
 	@JsonIgnore
 	public ArrayList<User> getLeden() {
 		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT userID FROM pageLid WHERE pageID=?");
+			PreparedStatement statement = SqlInterface.prepareStatement("SELECT userID FROM pageLid WHERE pageID=? AND blocked=false AND accepted=true");
 			statement.setString(1,id);
 			ResultSet set=statement.executeQuery();
 			ArrayList<User> response=new ArrayList<>();

@@ -14,6 +14,7 @@ function showPageHeader(pageId) {
 		}
 		if(message.id) {
 			$('#forbidden').show();
+			$('#forbiddenBlocked').hide();
 			$('#askPermission').hide();
 			$('#forbiddenAlreadyAsked').hide();
 			if(message.blocked) $('#forbiddenBlocked').show();
@@ -23,8 +24,13 @@ function showPageHeader(pageId) {
 			return Page.fromRaw(message);
 		} else throw message;
 	}).then(page=>{
-		if(page.isAdmin()) $('#pageSettings').show();
-		else $('#pageSettings').hide();
+		if(page.isAdmin()) {
+			$('#pageSettings').show();
+			$('#leden').addClass("admin");
+		} else {
+			$('#pageSettings').hide();
+			$('#leden').removeClass("admin");
+		}
 		$('#pageHeader > span').show();
 		$('#pageName').hide();
 		$('#pageHeader').show();
@@ -119,3 +125,17 @@ $(document).on('scroll',event=>{
 	const element=$('body')[0];
 	if(element.scrollTop==element.scrollTopMax) showMorePosts();
 });
+$(document).on('click','.kick',event=>{
+	User.getUser($(event.currentTarget).parent().parent().attr('userid')).then(user=>{
+		currentPage.kick(user).then(()=>{
+			$(event.currentTarget).parent().remove();
+		})
+	})
+})
+$(document).on('click','.ban',event=>{
+	User.getUser($(event.currentTarget).parent().parent().attr('userid')).then(user=>{
+		currentPage.ban(user).then(()=>{
+			$(event.currentTarget).parent().remove();
+		})
+	})
+})

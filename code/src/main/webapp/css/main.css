@@ -4,6 +4,7 @@
 @import 'page.css';
 @import 'post.css';
 @import 'chat.css';
+@import 'side.css';
 
 #settings,#notLoggedIn,#newPasswordScreen,#page,#userMenu,#forbidden,#pageImageUpload,#notFound,#pageName,.chat {
 	display:none;

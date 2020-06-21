@@ -23,10 +23,12 @@ class Page {
 	acceptLid(user) {
 		return Utils.sendPost('page/'+this.id+'/acceptLid/'+user.id,'');
 	}
-	denyLid(user) {
+	kick(user) {
+		if(!this.isAdmin()) return
 		return Utils.sendDelete('page/'+this.id+'/lid/'+user.id,'');
 	}
-	blockLid(user) {
+	ban(user) {
+		if(!this.isAdmin()) return
 		return Utils.sendPost('page/'+this.id+'/block/'+user.id,'')
 	}
 	getLeden() {

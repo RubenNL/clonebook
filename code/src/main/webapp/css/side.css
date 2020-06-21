@@ -1,0 +1,11 @@
+.asideTab {
+	border: 1px;
+	padding: 1px;
+	border-radius: 25%;
+}
+.banOptions {
+	display:none;
+}
+.admin .lid:hover .banOptions {
+	display:block;
+}
