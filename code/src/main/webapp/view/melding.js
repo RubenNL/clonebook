@@ -14,7 +14,9 @@ $(document).on('click','.meldingButton',event=>{
 	const action=target.attr('action');
 	console.log(action,userId,pageId);
 	Promise.all([Page.getPage(pageId),User.getUser(userId)]).then(vars=>{
-		if(action=="accept") return vars[0].acceptLid(vars[1]);
+		if(action=="accept") {
+			return vars[0].acceptLid(vars[1]).then(showLeden);
+		}
 		else if(action=="deny") return vars[0].kick(vars[1]);
 		else if(action=="block") return vars[0].ban(vars[1]);
 	}).then(()=>{

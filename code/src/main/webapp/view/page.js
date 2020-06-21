@@ -79,6 +79,7 @@ function showLid(lid) {
 	$('#leden').append(node);
 }
 function showLeden() {
+	$('#leden').html('');
 	currentPage.getLeden().then(leden=>{
 		leden.forEach(showLid);
 	}).then(()=>$('.asideTab[tab="leden"]').trigger('click'))
