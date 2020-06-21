@@ -1,12 +1,5 @@
 let ws;
-let chats={};
-async function connectWs() {
-	$('#page').hide();
-	$('body').attr('style','display:unset');
-	ws = (new WS(getLoggedInId()));
-	await ws.connect();
-	ws.onMessage(onMessage);
-}
+let chats={}
 function showChat(chat) {
 	chats[chat.id]=chat;
 	const chatId=chat.id;

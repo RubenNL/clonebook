@@ -17,7 +17,9 @@ function load() {
 	return LoginSignup.getLoggedinUser().catch(message=>{
 		$('.afterLogin').hide();
 		if(message==403 || message=="niet ingelogd") {
-			document.write('<script src="https://www.google.com/recaptcha/api.js?onload=renderCaptcha&render=explicit" type="text/javascript"></script>');
+			let script=document.createElement('script');
+			script.src='https://www.google.com/recaptcha/api.js?onload=renderCaptcha&render=explicit';
+			document.querySelector('body').appendChild(script);
 			$('#notLoggedIn').show();
 		}
 		else {
