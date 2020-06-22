@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.utils.SqlInterface;
 
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -133,6 +134,7 @@ public class Page {
 		}
 	}
 	public void blockUnblockLid(User user,boolean blocked) {
+		if(user.equals(getOwner())) throw new ClonebookException(Response.Status.BAD_REQUEST,"kan admin niet blocken/unblocken!");
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE pageLid SET blocked = ? WHERE userID=? AND pageID=?");
 			statement.setBoolean(1,blocked);
@@ -145,6 +147,7 @@ public class Page {
 		}
 	}
 	public void removeLid(User user) {
+		if(user.equals(getOwner())) throw new ClonebookException(Response.Status.BAD_REQUEST,"kan admin niet verwijderen!");
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM pageLid WHERE userID=? AND pageID=?");
 			statement.setString(1, user.getId());
