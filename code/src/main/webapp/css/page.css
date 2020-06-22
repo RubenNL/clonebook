@@ -31,3 +31,18 @@
 #pageHeaderButtons {
 	display:inline-block;
 }
+#viewBanned, #pageSettings {
+	display:none;
+}
+#leavePage {
+	display:inline-block;
+}
+#page.admin header #pageHeaderButtons #viewBanned,#page.admin header #pageHeaderButtons #pageSettings {
+	display:inline-block;
+}
+#page.admin header #pageHeaderButtons #leavePage {
+	display:none;
+}
+#page.admin #posts article header .deletePost {
+	display:inline-block;
+}

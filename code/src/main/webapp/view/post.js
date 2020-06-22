@@ -1,8 +1,11 @@
 let lastSelectedField;
 let currentPage;
+let posts={};
 function addPost(post,prepend) {
+	posts[post.id]=post;
 	let node = $('#postTemplate').contents("article").clone();
 	node.attr("id",post.id);
+	if(post.user.id==getLoggedInId()) node.addClass("own");
 	if(post.user.profilePicture) node.find('.profilePicture').attr('src','/rest/media/'+post.user.profilePicture)
 	node.find('.name').text(post.user.name);
 	node.find('.name').attr('user',post.user.id);
@@ -84,3 +87,9 @@ function logoutPost() {
 	$('#pageHeader > span').text("");
 	$("#page").hide();
 }
+$(document).on('click','.deletePost',event=>{
+	if(!confirm("weet u zeker dat u dit bericht wilt verwijderen?")) return;
+	posts[$(event.currentTarget).parent().parent().attr('id')].delete().then(()=>{
+		$(event.currentTarget).parent().parent().remove();
+	});
+})

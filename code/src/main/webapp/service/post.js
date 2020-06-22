@@ -22,4 +22,7 @@ class Post {
 	getPage() {
 		return Page.getPage(this.pageId);
 	}
+	delete() {
+		return Utils.sendDelete('post/'+this.id,'');
+	}
 }

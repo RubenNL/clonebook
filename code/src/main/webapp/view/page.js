@@ -24,22 +24,19 @@ function showPageHeader(pageId) {
 			return Page.fromRaw(message);
 		} else throw message;
 	}).then(page=>{
+		posts={};
 		currentPage=page;
 		$('#deletePage').hide();
 		if(page.isAdmin()) {
-			$("#leavePage").hide();
-			$('#viewBanned').show();
-			$('#pageSettings').show();
 			$('#leden').addClass("admin");
+			$('#page').addClass("admin");
 			showBannedUsers();
 			LoginSignup.getLoggedinUser().then(user=>{
 				if(user.privatePageId!=currentPage.id) $('#deletePage').show();
 			})
 		} else {
-			$("#leavePage").show();
-			$('#viewBanned').hide();
-			$('#pageSettings').hide();
 			$('#leden').removeClass("admin");
+			$('#page').removeClass("admin");
 		}
 		$('#pageHeader > span').show();
 		$('#pageHeader').show();

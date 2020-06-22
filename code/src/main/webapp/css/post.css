@@ -81,3 +81,10 @@ textarea:focus {
 	width: 100%;
 	display: inline-block;
 }
+.own header .deletePost {
+	display:inline-block;
+}
+.deletePost {
+	display:none;
+	padding:0px;
+}
