@@ -1,5 +1,6 @@
 let ws;
-let chats={}
+let chats={};
+let chatUsers={};
 function showChat(chat) {
 	chats[chat.id]=chat;
 	const chatId=chat.id;
@@ -9,6 +10,7 @@ function showChat(chat) {
 		return;
 	}
 	const name=chat.otherUser.name;
+	chatUsers[chat.otherUser.id]=chatId;
 	let node = $('#chatTemplate').contents("div").clone();
 	node.attr("chatId",chatId);
 	node.attr("name",name);
@@ -86,8 +88,13 @@ $(document).on('click','.getMoreChats',(event)=>{
 });
 
 $(document).on('click','.lid',(event)=>{
-	Chat.create($(event.currentTarget).attr('userId')).then(showChat);
-})
+	const userId=$(event.currentTarget).attr('userId');
+	const chatId=chatUsers[userId];
+	if(chatId) showChat(chats[chatId]);
+	else Chat.create(userId).then(showChat).then(()=>{
+		$('#chatHeaders > button[chatId="'+chatId+'"]').trigger('click');
+	});
+});
 $(()=>{
 	$('#chatHeaders').width($('#noscroll').width());
 	$('#noscroll').hide();
