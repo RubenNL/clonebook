@@ -87,4 +87,7 @@ textarea:focus {
 .deletePost {
 	display:none;
 	padding:0px;
+	height:min-content;
+	border:unset;
+	background-color:unset;
 }
