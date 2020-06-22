@@ -59,6 +59,7 @@ public class Chat {
 		}
 	}
 	public Chat(User user1,User user2) {
+		if(user1.equals(user2)) throw new ClonebookException("minimaal 2 gebruikers nodig!");
 		this.id=UUID.randomUUID().toString();
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO chat(ID) VALUES (?)");
