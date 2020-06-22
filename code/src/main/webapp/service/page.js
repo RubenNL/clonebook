@@ -24,7 +24,7 @@ class Page {
 		return Utils.sendPost('page/'+this.id+'/acceptLid/'+user.id,'');
 	}
 	kick(user) {
-		if(!this.isAdmin()) return
+		if(!this.isAdmin() && user.id!=getLoggedInId()) return
 		return Utils.sendDelete('page/'+this.id+'/lid/'+user.id,'');
 	}
 	ban(user) {

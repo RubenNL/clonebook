@@ -26,11 +26,13 @@ function showPageHeader(pageId) {
 	}).then(page=>{
 		currentPage=page;
 		if(page.isAdmin()) {
+			$("#leavePage").hide();
 			$('#viewBanned').show();
 			$('#pageSettings').show();
 			$('#leden').addClass("admin");
 			showBannedUsers();
 		} else {
+			$("#leavePage").show();
 			$('#viewBanned').hide();
 			$('#pageSettings').hide();
 			$('#leden').removeClass("admin");
@@ -168,3 +170,9 @@ $(document).on('click','.unbanAdd',(event)=>{
 		}).then(showLeden);
 	})
 });
+$('#leavePage').on('click',()=>{
+	if(!confirm("Weet u zeker dat u deze pagina wilt verlaten?")) return;
+	LoginSignup.getLoggedinUser()
+		.then((user)=>currentPage.kick(user))
+		.then(()=>location.reload());
+})
