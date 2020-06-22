@@ -38,6 +38,13 @@ public class PageService {
 		response.put("blocked",bean.getPage().isBlocked(user));
 		return Response.status(Response.Status.FORBIDDEN).entity(response).build();
 	}
+	@DELETE
+	@Path("/{pageId}")
+	public Response deletePage(@BeanParam Bean bean) {
+		if(!bean.existsThrows().isAdmin()) return Response.status(Response.Status.FORBIDDEN).build();
+		bean.getPage().delete();
+		return Response.ok().build();
+	}
 	@GET
 	@Path("/{pageId}/name")
 	public Response name(@BeanParam Bean bean) {
@@ -134,7 +141,7 @@ public class PageService {
 			return getPage().isLid(securityBean.getSender());
 		}
 		Bean existsThrows() {
-			if(getPage()==null) throw new ClonebookException(Response.Status.NOT_FOUND,"pagina niet gevonden");
+			if(getPage()==null) throw new ClonebookException(Response.Status.NOT_FOUND);
 			return this;
 		}
 		Bean onlyPageLid() {

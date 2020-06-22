@@ -97,6 +97,7 @@ public class Page {
 		return Media.getMedia(this.logo);
 	}
 	public void delete() {
+		if(getOwner().getPrivatePage().equals(this)) throw new ClonebookException(Response.Status.BAD_REQUEST,"Kan niet prive pagina verwijderen!");
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM page WHERE ID = ?");
 			statement.setString(1, this.id);

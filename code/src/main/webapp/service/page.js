@@ -17,6 +17,9 @@ class Page {
 	static new(name) {
 		return Utils.sendPost('page',generateFormData({name:name})).then(response=>response.id)
 	}
+	delete() {
+		return Utils.sendDelete('page/'+this.id,'')
+	}
 	askPermissions() {
 		return Utils.sendPost('page/'+this.id+'/lidAanvraag','');
 	}

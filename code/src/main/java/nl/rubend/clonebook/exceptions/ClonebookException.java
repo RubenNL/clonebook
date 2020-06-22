@@ -13,6 +13,11 @@ public class ClonebookException extends WebApplicationException {
 	}
 	public ClonebookException(String message) {
 		this(Response.Status.BAD_REQUEST,message);
+		this.message=message;
+	}
+	public ClonebookException(Response.Status code) {
+		super(Response.status(code).build());
+		this.message=code.toString();
 	}
 	@Override
 	public String getMessage() {

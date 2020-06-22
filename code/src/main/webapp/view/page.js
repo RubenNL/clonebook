@@ -25,12 +25,16 @@ function showPageHeader(pageId) {
 		} else throw message;
 	}).then(page=>{
 		currentPage=page;
+		$('#deletePage').hide();
 		if(page.isAdmin()) {
 			$("#leavePage").hide();
 			$('#viewBanned').show();
 			$('#pageSettings').show();
 			$('#leden').addClass("admin");
 			showBannedUsers();
+			LoginSignup.getLoggedinUser().then(user=>{
+				if(user.privatePageId!=currentPage.id) $('#deletePage').show();
+			})
 		} else {
 			$("#leavePage").show();
 			$('#viewBanned').hide();
@@ -175,4 +179,9 @@ $('#leavePage').on('click',()=>{
 	LoginSignup.getLoggedinUser()
 		.then((user)=>currentPage.kick(user))
 		.then(()=>location.reload());
+})
+$('#deletePage').on('click',()=>{
+	if(!confirm("Weet u zeker dat u deze pagina wilt verwijderen?")) return;
+	if(!confirm("Dit betekent dat alle gegevens van deze pagina blijvend verwijderd worden.")) return;
+	currentPage.delete().then(()=>location.reload());
 })
