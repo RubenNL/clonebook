@@ -7,6 +7,9 @@ import java.util.Objects;
 import java.util.Properties;
 public class SqlInterface implements ServletContextListener {
 	private static Connection conn;
+	static {
+		connect();
+	}
 	private static void connect() {
 		try {
 			Properties prop=new Properties();
