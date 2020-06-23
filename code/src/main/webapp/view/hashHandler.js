@@ -28,5 +28,6 @@ function handleHash() {
 	} else if(parts[0]=="notifications") $('#meldingen').show();
 	else LoginSignup.getLoggedinUser().then(user => showPage(user.privatePageId)).catch(() => {})
 }
+$('.homeButton').on('click',()=>location.hash="");
 handleHash();
 load();
