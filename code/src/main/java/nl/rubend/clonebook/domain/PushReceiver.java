@@ -20,10 +20,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.Objects;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 public class PushReceiver {
-	final static private String filename = "/home/pi/clonebook/push.ser";
+	final static private String filename=getFileName();
+	private static String getFileName() {
+		Properties prop=new Properties();
+		try {
+			prop.load(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream("database.properties")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return prop.getProperty("folder")+"push.ser";
+	}
 	final static private KeyPair keyPair = getKey();
 	final static private PushService pushService = new PushService(keyPair);
 

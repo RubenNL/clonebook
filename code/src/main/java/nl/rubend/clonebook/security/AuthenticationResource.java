@@ -14,11 +14,23 @@ import java.io.*;
 import java.security.Key;
 import java.util.AbstractMap;
 import java.util.Calendar;
+import java.util.Objects;
+import java.util.Properties;
+
 @Path("/login")
 public class AuthenticationResource {
 	final static public Key key= getKey();
-	final static private String filename="/home/pi/clonebook/jwt.ser";
+	private static String getFileName() {
+		Properties prop=new Properties();
+		try {
+			prop.load(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream("database.properties")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return prop.getProperty("folder")+"jwt.ser";
+	}
 	private static SecretKey getKey() {
+		String filename=getFileName();
 		try {
 			FileInputStream fileIn = new FileInputStream(filename);
 			ObjectInputStream in = new ObjectInputStream(fileIn);

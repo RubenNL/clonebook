@@ -16,6 +16,8 @@ import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
+import java.util.Properties;
 import java.util.UUID;
 
 public class Media {
@@ -23,8 +25,17 @@ public class Media {
 	private String location;
 	private String ownerId;
 	private String mime;
-	private static File uploads = new File("/home/pi/clonebook/uploads");
-
+	private static File uploads;
+	static {
+		Properties prop=new Properties();
+		try {
+			prop.load(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream("database.properties")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		uploads=new File(prop.getProperty("folder")+"uploads");
+		if(!uploads.exists()) uploads.mkdir();
+	}
 	public static Media getMedia(String id) {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM media WHERE ID=?");
