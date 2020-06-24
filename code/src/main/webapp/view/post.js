@@ -8,7 +8,7 @@ function addPost(post,prepend) {
 	if(post.user.id==getLoggedInId()) node.addClass("own");
 	if(post.user.profilePicture) node.find('.profilePicture').attr('src','/rest/media/'+post.user.profilePicture)
 	node.find('.name').text(post.user.name);
-	node.find('.name').attr('user',post.user.id);
+	node.find('.name').attr('href','#user='+post.user.id);
 	node.find('.text').text(post.text);
 	const momentObj=moment(post.date);
 	node.find('.dateHoverEvent').attr('date',post.date);
@@ -25,10 +25,6 @@ function addPost(post,prepend) {
 		addPost(child,prepend);
 	})
 }
-$(document).on('click','.name',event=>{
-	event.preventDefault();
-	console.log('user:',$(event.target).attr('user'));
-});
 $(document).on('click','.vote',event=>{
 	Utils.sendPost('post/'+$(event.currentTarget).parent().parent().attr('id')+'/vote',generateFormData({vote:$(event.target).attr('action')}))
 		.then(response=>$(event.currentTarget).parent().parent().find('.points').text(response.punten));
