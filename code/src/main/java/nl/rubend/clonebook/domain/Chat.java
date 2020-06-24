@@ -106,7 +106,9 @@ public class Chat {
 	}
 	public void sendMessage(User sender,String message) {
 		User receiver=null;
-		for(User user:getUsers()) {
+		ArrayList<User> users=getUsers();
+		if(!users.contains(sender)) throw new ClonebookException(Response.Status.FORBIDDEN,"niet-deelnemer mag geen chat sturen.");
+		for(User user:users) {
 			if(!user.equals(sender)) receiver=user;
 		}
 		if(receiver==null) throw new IllegalStateException("geen andere gebruiker in chat!");
@@ -129,8 +131,6 @@ public class Chat {
 			builder.add("type","chat");
 			WebSocket.sendToUser(sender,builder.build().toString());
 		}).start();
-		new Thread(() -> {
-			new ChatMessage(this,sender,message);
-		}).start();
+		new ChatMessage(this,sender,message);
 	}
 }
