@@ -89,11 +89,6 @@ public class Chat {
 	public String getId() {
 		return this.id;
 	}
-	@JsonProperty("name")
-	public String getNameForUser(User current) {
-		for (User found : getUsers()) if (current != found) return found.getName();
-		throw new ClonebookException(Response.Status.NOT_FOUND, "geen andere user gevonden in chat.");
-	}
 	public ArrayList<ChatMessage> getMessagesBefore(Date date) {
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("SELECT chatID,userID,message,date FROM chatMessage WHERE date < ? AND chatID=? ORDER BY date DESC limit 10");
