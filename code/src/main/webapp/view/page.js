@@ -95,6 +95,7 @@ function showPage(pageId) {
 function showLid(lid) {
 	let node = $('#lidTemplate').contents("div").clone();
 	node.attr("userId",lid.id);
+	if(lid.id==getLoggedInId()) node.addClass("loggedInUser");
 	console.log(lid);
 	if(lid.profilePicture) node.find('.lidProfilePicture').attr('src','/rest/media/'+lid.profilePicture);
 	node.find('.name').text(lid.name);

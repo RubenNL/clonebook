@@ -91,7 +91,7 @@ $(document).on('click','.getMoreChats',(event)=>{
 	displayMoreChats(chatId);
 });
 
-$(document).on('click','.lid',(event)=>{
+$(document).on('click','.lid:not(.loggedInUser)',(event)=>{
 	const userId=$(event.currentTarget).attr('userId');
 	const chatId=chatUsers[userId];
 	if(chatId) showChat(chats[chatId]);
