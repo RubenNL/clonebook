@@ -37,6 +37,10 @@ function showChat(chat) {
 function showChats() {
 	Chat.getAll().then(chatsReceived=>{
 		chatsReceived.forEach(showChat);
+	});
+	WS.onClose(()=>{
+		$('#chatPopup').css('background-color','red');
+		$('#chatPopup').text("Verbinding met chatserver verbroken.\nVervers de pagina.");
 	})
 }
 function sendChat(event) {
