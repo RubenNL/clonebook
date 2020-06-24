@@ -58,7 +58,8 @@ function savePassword() {
 function login() {
 	LoginSignup.login(generateFormData("#loginScreen"))
 	.then(()=> {
-		location.reload();//bescherming tegen google tracking.
+		if(window.localStorage.getItem("long")=="true" && confirm("Wilt u meldingen ontvangen? Dit is uit te schakelen in de instellingen.")) return Settings.subscribe().then(()=>location.reload());
+		else location.reload();//bescherming tegen google tracking.
 	},error=>{
 		if(error==401) alert("email/wachtwoord verkeerd");
 		else throw error;
