@@ -15,6 +15,7 @@ public class ChatMessage {
 	private String message;
 	private Date date;
 	public ChatMessage(String chatId,String userId,Date date,String message) {
+		if(message==null || message.length()==0) throw new ClonebookException("lege berichten zijn niet toegestaan!");
 		this.chatId=chatId;
 		this.userId=userId;
 		this.message=message;

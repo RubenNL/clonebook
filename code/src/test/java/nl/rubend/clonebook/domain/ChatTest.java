@@ -52,5 +52,6 @@ public class ChatTest {
 		ArrayList<ChatMessage> before2=chat.getMessagesBefore(firstMessage.getDate());
 		assertEquals(2,before2.size(),"zou alleen bericht1 en bericht2 moeten zijn");
 		assertThrows(ClonebookException.class,()->chat.sendMessage(user3,"test"),"zou een fout moeten geven, een niet-deelnemer zou geen berichten mogen sturen.");
+		assertThrows(ClonebookException.class,()->chat.sendMessage(user2,""),"lege berichten zijn niet toegestaan");
 	}
 }
