@@ -75,6 +75,9 @@ function showBannedUsers() {
 		users.forEach(showBannedUser);
 	})
 }
+$('#closeBannedList').on('click',()=>{
+	$('#blockedUserDialog')[0].close();
+})
 function newPage() {
 	const name=prompt("welke naam?");
 	if(name=="") return;
