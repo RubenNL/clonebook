@@ -1,6 +1,6 @@
 function addMelding(melding) {
 	let node = $('#meldingTemplate').contents("div").clone();
-	node.find('.meldingImage').attr('src','/rest/media/'+melding.picture);
+	if(melding.picture) node.find('.meldingImage').attr('src',Media.fromId(melding.picture).getUrl());
 	node.find('.meldingUserName').text(melding.userName);
 	node.find('.meldingUserName').attr('user',melding.userId);
 	node.find('.meldingPageName').text(melding.pageName);

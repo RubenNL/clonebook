@@ -29,7 +29,8 @@ function load() {
 	}).then(user=> {
 		$('.afterLogin').removeClass('afterLogin');
 		$('#userMenuName').text(user.name);
-		$('#userMenuPicture').attr('src', '/rest/media/' + user.profilePicture);
+		if(user.profilePicture) $('#userMenuPicture').attr('src', Media.fromId(user.profilePicture).getUrl());
+		else $('#userMenuName').show();
 		setTimeout(()=>{
 			WS.connect().then(showChats);
 			onLogin(user);

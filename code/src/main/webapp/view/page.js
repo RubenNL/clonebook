@@ -44,7 +44,7 @@ function showPageHeader(pageId) {
 		$('#pageImageUpload').hide();
 		$('#pageHeader > span').text(page.name);
 		if(page.logo==null) url='icon.svg';
-		else url='/rest/media/'+page.logo;
+		else url=Media.fromId(page.logo).getUrl();
 		$('#pageHeader > img').attr('src',url);
 		$('#page').show();
 		return page;
@@ -64,7 +64,7 @@ function showBannedUser(lid) {
 	let node = $('#lidTemplate').contents("div").clone();
 	node.attr("userId",lid.id);
 	console.log(lid);
-	if(lid.profilePicture) node.find('.lidProfilePicture').attr('src','/rest/media/'+lid.profilePicture);
+	if(lid.profilePicture) node.find('.lidProfilePicture').attr('src',Media.fromId(lid.profilePicture).getUrl());
 	node.find('.name').text(lid.name);
 	$('#bannedList').append(node);
 }
@@ -100,7 +100,7 @@ function showLid(lid) {
 	node.attr("userId",lid.id);
 	if(lid.id==getLoggedInId()) node.addClass("loggedInUser");
 	console.log(lid);
-	if(lid.profilePicture) node.find('.lidProfilePicture').attr('src','/rest/media/'+lid.profilePicture);
+	if(lid.profilePicture) node.find('.lidProfilePicture').attr('src',Media.fromId(lid.profilePicture).getUrl());
 	node.find('.name').text(lid.name);
 	$('#leden').append(node);
 }

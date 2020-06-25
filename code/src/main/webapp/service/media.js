@@ -1,14 +1,9 @@
 class Media {
-	constructor(id,mime,ownerId) {
+	constructor(id) {
 		this.id=id;
-		this.mime=mime;
-		this.ownerId=ownerId;
-	}
-	getOwner() {
-		return User.getUser(this.ownerId);
 	}
 	static fromRaw(raw) {
-		return new Media(raw.id,raw.mime,raw.ownerId);
+		return new Media(raw.id);
 	}
 	static create(file) {
 		let data=new FormData();
@@ -20,5 +15,8 @@ class Media {
 	}
 	getUrl() {
 		return '/rest/media/'+this.id;
+	}
+	static fromId(id) {
+		return new Media(id);
 	}
 }
