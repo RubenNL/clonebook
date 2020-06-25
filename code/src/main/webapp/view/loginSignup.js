@@ -15,7 +15,6 @@ async function renderCaptcha() {
 }
 function load() {
 	return LoginSignup.getLoggedinUser().catch(message=>{
-		$('.afterLogin').hide();
 		if(message==403 || message=="niet ingelogd") {
 			let script=document.createElement('script');
 			script.src='https://www.google.com/recaptcha/api.js?onload=renderCaptcha&render=explicit';
@@ -28,7 +27,7 @@ function load() {
 		}
 		return Promise.reject(403);
 	}).then(user=> {
-		$('.afterLogin').show()
+		$('.afterLogin').removeClass('afterLogin');
 		$('#userMenuName').text(user.name);
 		$('#userMenuPicture').attr('src', '/rest/media/' + user.profilePicture);
 		setTimeout(()=>{

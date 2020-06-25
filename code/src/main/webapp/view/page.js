@@ -129,7 +129,10 @@ $(document).on('submit','#pageImageUpload',event=>{
 	event.preventDefault();
 	const file=$(event.target).find('input[type="file"]')[0];
 	currentPage.setName($('#pageName').val());
-	if(!file.files[0]) return;
+	if(!file.files[0]) {
+		alert("instellingen opgeslagen!");
+		return;
+	}
 	Media.create(file.files[0]).catch(message=>{
 		if(message===415) alert("bestandstype niet toegestaan.");
 		else if(message==413) alert('bestand te groot');
@@ -137,7 +140,7 @@ $(document).on('submit','#pageImageUpload',event=>{
 	}).then(icon=>{
 		return currentPage.setIcon(icon);
 	}).then(()=>{
-		alert('afbeelding geupload!');
+		alert('instellingen opgeslagen!');
 	});
 });
 function showMorePosts() {

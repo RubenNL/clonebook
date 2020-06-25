@@ -1,9 +1,9 @@
 #pageHeader {
-	height:64px;
+	min-height:64px;
 	display:flex;
 }
 #pageHeader > img {
-	height:inherit;
+	height:64px;
 }
 #pageHeader > span {
 	margin:auto;
@@ -45,4 +45,15 @@
 }
 #page.admin #posts article header .deletePost {
 	display:inline-block;
+}
+@media (max-width:1000px) {
+	#pageHeaderButtons {
+		display: none;
+	}
+	#pageHeader > span {
+		user-select:none;
+	}
+	#pageHeader:hover #pageHeaderButtons, #pageHeader:active #pageHeaderButtons {
+		display: block;
+	}
 }

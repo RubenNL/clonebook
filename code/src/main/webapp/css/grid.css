@@ -1,3 +1,6 @@
+.afterLogin {
+	display:none;
+}
 body {
 	display: grid;
 	grid-template-areas:
