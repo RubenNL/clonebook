@@ -14,8 +14,15 @@ body {
 	height:100vh;
 	background-color:#dfeee3;
 }
+
 @media (max-width:1000px) {
 	aside {display:none;}
+	aside {
+		position:fixed;
+		height:100%;
+		left:0px;
+		width:max-content;
+	}
 	body {
 		grid-template-areas:
 				"header header header"
@@ -23,6 +30,12 @@ body {
 				". footer footer";
 		grid-template-columns:5% 90% 5%;
 	}
+	#userMenuItems #showSideBar {
+		display:block !important;
+	}
+}
+#userMenuItems a#showSideBar {
+	display:none;
 }
 @media (max-width:720px) {
 	body {

@@ -14,3 +14,6 @@ function onLogin(user) {
 		})
 	})
 }
+function showSideBar() {
+	$('aside').toggle();
+}
