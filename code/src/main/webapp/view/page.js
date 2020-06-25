@@ -131,6 +131,9 @@ $(document).on('submit','#pageImageUpload',event=>{
 	currentPage.setName($('#pageName').val());
 	if(!file.files[0]) {
 		alert("instellingen opgeslagen!");
+		$('#pageIcon').toggle();
+		$('#pageImageUpload').toggle();
+		$('#pageHeader > span').toggle();
 		return;
 	}
 	Media.create(file.files[0]).catch(message=>{
@@ -141,6 +144,9 @@ $(document).on('submit','#pageImageUpload',event=>{
 		return currentPage.setIcon(icon);
 	}).then(()=>{
 		alert('instellingen opgeslagen!');
+		$('#pageIcon').toggle();
+		$('#pageImageUpload').toggle();
+		$('#pageHeader > span').toggle();
 	});
 });
 function showMorePosts() {

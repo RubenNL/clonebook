@@ -15,7 +15,7 @@ async function renderCaptcha() {
 }
 function load() {
 	return LoginSignup.getLoggedinUser().catch(message=>{
-		if(message==403 || message=="niet ingelogd") {
+		if(message==403 || message=="niet ingelogd" || message==500) { //500 wanneer JWT raar is. ik weet niet hoe het komt, iets in de backend.
 			let script=document.createElement('script');
 			script.src='https://www.google.com/recaptcha/api.js?onload=renderCaptcha&render=explicit';
 			document.querySelector('body').appendChild(script);
@@ -56,6 +56,7 @@ function savePassword() {
 		.then().then(load)
 }
 function login() {
+	unsubscribe();//fix als er nog oude tokens opgeslagen zijn.
 	LoginSignup.login(generateFormData("#loginScreen"))
 	.then(()=> {
 		if(window.localStorage.getItem("long")=="true" && confirm("Wilt u meldingen ontvangen? Dit is uit te schakelen in de instellingen.")) return Settings.subscribe().then(()=>location.reload());
