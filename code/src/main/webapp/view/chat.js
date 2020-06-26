@@ -104,5 +104,5 @@ $(document).on('click','.lid:not(.loggedInUser)',(event)=>{
 });
 $(()=>{
 	$('#chatHeaders').width($('#noscroll').width());
-	$('#noscroll').hide();
+	$('#noscroll').remove();
 })
