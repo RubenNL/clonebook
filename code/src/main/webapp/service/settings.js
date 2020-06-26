@@ -44,14 +44,15 @@ class Settings {
 		return outputArray;
 	}
 	static unsubscribe() {
-		return Settings.getSubscription().then(subscription=> {
+		if(navigator.serviceWorker) return Settings.getSubscription().then(subscription=> {
 			if(!subscription) return Promise.resolve();
 			return Utils.sendDelete('notification/' + JSON.parse(JSON.stringify(subscription)).keys.auth)
 				.catch(message => {
 					if (message == 404) return
 					else throw message
 				}).then(() => subscription.unsubscribe());
-		})
+		}).catch(()=>{})
+		else return Promise.resolve();
 	}
 	static getSw() {
 		return navigator.serviceWorker.register('service-worker.js')
