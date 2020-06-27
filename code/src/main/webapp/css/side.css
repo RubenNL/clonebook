@@ -6,7 +6,7 @@
 .banOptions,.unbanOptions {
 	display:none;
 }
-.admin .lid:hover .banOptions {
+.admin .lid:hover:not(.loggedInUser) .banOptions {
 	display:block;
 }
 #bannedList .lid:hover .unbanOptions {
