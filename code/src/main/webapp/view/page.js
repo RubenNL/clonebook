@@ -165,14 +165,15 @@ $(document).on('scroll',event=>{
 $(document).on('click','.kick',event=>{
 	User.getUser($(event.currentTarget).parent().parent().attr('userid')).then(user=>{
 		currentPage.kick(user).then(()=>{
-			$(event.currentTarget).remove();
+			$(event.currentTarget).parent().parent().remove();
 		})
 	})
 })
 $(document).on('click','.ban',event=>{
+	console.log(event.currentTarget);
 	User.getUser($(event.currentTarget).parent().parent().attr('userid')).then(user=>{
 		currentPage.ban(user).then(()=>{
-			$(event.currentTarget).remove();
+			$(event.currentTarget).parent().parent().remove();
 			showBannedUsers();
 		})
 	})
@@ -180,7 +181,7 @@ $(document).on('click','.ban',event=>{
 $(document).on('click','.unbanAdd',(event)=>{
 	User.getUser($(event.currentTarget).parent().parent().attr('userid')).then(user=>{
 		currentPage.acceptLid(user).then(()=>{
-			$(event.currentTarget).remove();
+			$(event.currentTarget).parent().parent().remove();
 		}).then(showLeden);
 	})
 });

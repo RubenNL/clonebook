@@ -91,11 +91,12 @@ $(document).on('click','.getMoreChats',(event)=>{
 	displayMoreChats(chatId);
 });
 
-$(document).on('click','.lid:not(.loggedInUser)',(event)=>{
-	const userId=$(event.currentTarget).attr('userId');
+$(document).on('click','.lid:not(.loggedInUser) > .lidProfilePicture',(event)=>{
+	const target=$(event.currentTarget).parent();
+	const userId=target.attr('userId');
 	const chatId=chatUsers[userId];
 	if(chatId) showChat(chats[chatId]);
-	else if(!confirm("weet u zeker dat u een chat wilt starten met "+$(event.currentTarget).find('.name').text()+'?')) return;
+	else if(!confirm("weet u zeker dat u een chat wilt starten met "+target.find('.name').text()+'?')) return;
 	else {
 		Chat.create(userId).then(showChat).then(()=>{
 			$('#chatHeaders > button[chatId="'+chatId+'"]').trigger('click');
