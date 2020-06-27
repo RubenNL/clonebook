@@ -100,7 +100,7 @@ function showLid(lid) {
 	node.attr("userId",lid.id);
 	if(lid.id==getLoggedInId()) node.addClass("loggedInUser");
 	console.log(lid);
-	if(lid.profilePicture) node.find('.lidProfilePicture').attr('src',Media.fromId(lid.profilePicture).getUrl());
+	node.find('.lidProfilePicture').attr('src',Media.fromId(lid.profilePicture).getUrl());
 	node.find('.name').text(lid.name);
 	$('#leden').append(node);
 }

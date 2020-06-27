@@ -6,7 +6,7 @@ function addPost(post,prepend) {
 	let node = $('#postTemplate').contents("article").clone();
 	node.attr("id",post.id);
 	if(post.user.id==getLoggedInId()) node.addClass("own");
-	if(post.user.profilePicture) node.find('.profilePicture').attr('src',Media.fromId(post.user.profilePicture).getUrl())
+	node.find('.profilePicture').attr('src',Media.fromId(post.user.profilePicture).getUrl());
 	node.find('.name').text(post.user.name);
 	node.find('.name').attr('href','#user='+post.user.id);
 	node.find('.text').text(post.text);

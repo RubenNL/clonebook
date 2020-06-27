@@ -14,7 +14,8 @@ class Media {
 		}).then(Utils.handleResponse);
 	}
 	getUrl() {
-		return '/rest/media/'+this.id;
+		if(this.id) return '/rest/media/'+this.id;
+		else return 'icon.svg';
 	}
 	static fromId(id) {
 		return new Media(id);
