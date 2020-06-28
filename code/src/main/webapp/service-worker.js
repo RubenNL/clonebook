@@ -9,12 +9,25 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', function(event) {
-	if(event.request.mode!=="navigate") return
-	if(navigator.onLine) event.respondWith(fetch(event.request));
-	else {
-		let headers=new Headers();
-		headers.append("Content-Type","text/html");
-		event.respondWith(new Response("<h1>Browser is offline.</h1>",{headers:headers}));
+	if(event.request.destination=="image") {
+		event.respondWith(
+			caches.open('clonebook').then(function(cache) {
+				return cache.match(event.request).then(function (response) {
+					return response || fetch(event.request).then(function(response) {
+						cache.put(event.request, response.clone());
+						return response;
+					});
+				});
+			})
+		);
+	}
+	else if(event.request.mode=="navigate") {
+		if (navigator.onLine) event.respondWith(fetch(event.request));
+		else {
+			let headers = new Headers();
+			headers.append("Content-Type", "text/html");
+			event.respondWith(new Response("<h1>Browser is offline.</h1>", {headers: headers}));
+		}
 	}
 });
 self.addEventListener("notificationclick",event=>{
