@@ -50,5 +50,11 @@ self.addEventListener('push',event=>{
 		}
 	}
 	event.waitUntil(self.registration.showNotification(data.title, data.options));
-	if(data.action=="LOGOUT") self.registration.unregister();
+	if(data.action=="LOGOUT") {
+		caches.keys().then(function(names) {
+			return Promise.all(names.map(name=>{
+				return caches.delete(name);
+			}));
+		}).then(self.registration.unregister);
+	}
 });

@@ -72,6 +72,8 @@ function login() {
 	})
 }
 function logout() {
+	autoChanged();
+	window.location.hash='';
 	return unsubscribe()
 		.then(LoginSignup.logout)
 		.then(()=>location.reload());//veiligste manier, haalt alle html elementen ook leeg.

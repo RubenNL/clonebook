@@ -12,7 +12,11 @@ class LoginSignup {
 	}
 	static logout() {
 		removeJWT();
-		return Promise.resolve();
+		return caches.keys().then(function(names) {
+			return Promise.all(names.map(name=>{
+				return caches.delete(name);
+			}));
+		});
 	}
 	static getLoggedinUser() {
 		const id=getLoggedInId();
