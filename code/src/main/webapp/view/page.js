@@ -63,7 +63,6 @@ $('#pageSettings').on('click',()=>{
 function showBannedUser(lid) {
 	let node = $('#lidTemplate').contents("div").clone();
 	node.attr("userId",lid.id);
-	console.log(lid);
 	if(lid.profilePicture) node.find('.lidProfilePicture').attr('src',Media.fromId(lid.profilePicture).getUrl());
 	node.find('.name').text(lid.name);
 	$('#bannedList').append(node);
@@ -99,7 +98,6 @@ function showLid(lid) {
 	let node = $('#lidTemplate').contents("div").clone();
 	node.attr("userId",lid.id);
 	if(lid.id==getLoggedInId()) node.addClass("loggedInUser");
-	console.log(lid);
 	node.find('.lidProfilePicture').attr('src',Media.fromId(lid.profilePicture).getUrl());
 	node.find('.name').text(lid.name);
 	$('#leden').append(node);
@@ -158,7 +156,6 @@ function showMorePosts() {
 }
 $('#nextPosts').on('click',showMorePosts);
 $(document).on('scroll',event=>{
-	console.log('scroll!');
 	const element=$('body')[0];
 	if(element.scrollTop==element.scrollTopMax) showMorePosts();
 });
@@ -170,7 +167,6 @@ $(document).on('click','.kick',event=>{
 	})
 })
 $(document).on('click','.ban',event=>{
-	console.log(event.currentTarget);
 	User.getUser($(event.currentTarget).parent().parent().attr('userid')).then(user=>{
 		currentPage.ban(user).then(()=>{
 			$(event.currentTarget).parent().parent().remove();

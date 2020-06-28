@@ -12,7 +12,6 @@ $(document).on('click','.meldingButton',event=>{
 	const userId=target.parent().find('.meldingUserName').attr('user');
 	const pageId=target.parent().find('.meldingPageName').attr('page');
 	const action=target.attr('action');
-	console.log(action,userId,pageId);
 	Promise.all([Page.getPage(pageId),User.getUser(userId)]).then(vars=>{
 		if(action=="accept") {
 			return vars[0].acceptLid(vars[1]).then(showLeden);
@@ -25,7 +24,6 @@ $(document).on('click','.meldingButton',event=>{
 });
 function getNotifications(user) {
 	user.getLidAanvragenOpPaginas().then(aanvragen=>{
-		console.log(aanvragen);
 		aanvragen.forEach(addMelding);
 	})
 }

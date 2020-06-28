@@ -24,7 +24,6 @@ function showChat(chat) {
 	$('#chats').append(node);
 	const chatDiv=$('.chat[chatId="'+chatId+'"]');
 	chatDiv.on('scroll',event=>{
-		console.log('scroll!');
 		if(event.currentTarget.scrollTop==0) displayMoreChats($(event.currentTarget).attr('chatId'));
 	});
 	chat.messages.reverse().forEach(message=>{
@@ -72,7 +71,6 @@ function toggleChat() {
 $('#closeChat').on('click',toggleChat);
 $('#showChat').on('click',toggleChat);
 function displayMoreChats(chatId) {
-	console.log('moreChats!');
 	const chatDiv=$('.chat[chatId="'+chatId+'"]');
 	const chat=chats[chatId];
 	if(chat.allLoaded) return;

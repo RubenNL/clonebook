@@ -8,7 +8,6 @@ class Utils {
 	}
 	static handleResponse(response) {
 		return new Promise(async (resolve,reject)=>{
-			console.log(response);
 			const contentType = response.headers.get("content-type");
 			if (contentType && contentType.indexOf("application/json") !== -1) {
 				if(response.ok) resolve(await response.json());

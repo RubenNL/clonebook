@@ -5,7 +5,8 @@ function passwordRequest() {
 		$("#loginOptions").hide();
 	}).catch(error=>{
 		console.log(error);
-		alert(error)
+		if(error.error) alert(error.error);
+		else alert(error);
 	});
 }
 async function renderCaptcha() {
