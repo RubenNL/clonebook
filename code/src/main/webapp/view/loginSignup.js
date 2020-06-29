@@ -60,7 +60,9 @@ function login() {
 	unsubscribe();//fix als er nog oude tokens opgeslagen zijn.
 	LoginSignup.login(generateFormData("#loginScreen"))
 	.then(()=> {
-		if(navigator.serviceWorker && window.localStorage.getItem("long")=="true" && confirm("Wilt u meldingen ontvangen? Dit is uit te schakelen in de instellingen.")) return Settings.subscribe().then(()=>location.reload());
+		if(navigator.serviceWorker && window.localStorage.getItem("long")=="true" && confirm("Wilt u meldingen ontvangen? Dit is uit te schakelen in de instellingen.")) return Settings.subscribe().catch(err=>{
+			alert(err);
+		}).then(()=>location.reload());
 		else location.reload();//bescherming tegen google tracking.
 	},error=>{
 		if(error==401) alert("email/wachtwoord verkeerd");
