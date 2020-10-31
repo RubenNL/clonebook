@@ -1,8 +1,13 @@
 package nl.rubend.clonebook.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
 import nl.martijndwars.webpush.Subscription;
+import nl.rubend.clonebook.UUIDGenerator;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.utils.SqlInterface;
 import org.apache.http.HttpResponse;
@@ -10,10 +15,16 @@ import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
+import org.hibernate.annotations.GenericGenerator;
 import org.jose4j.lang.JoseException;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.io.*;
 import java.security.*;
 import java.sql.PreparedStatement;
@@ -23,9 +34,14 @@ import java.util.Base64;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
-
+@Entity
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class PushReceiver {
-	final static private String filename=getFileName();
+	final static private String filename="pushfile";
+	/*final static private String filename=getFileName();
 	private static String getFileName() {
 		Properties prop=new Properties();
 		try {
@@ -34,7 +50,7 @@ public class PushReceiver {
 			e.printStackTrace();
 		}
 		return prop.getProperty("folder")+"push.ser";
-	}
+	}*/
 	final static private KeyPair keyPair = getKey();
 	final static private PushService pushService = new PushService(keyPair);
 
@@ -79,46 +95,12 @@ public class PushReceiver {
 		}
 	}
 
-	public static PushReceiver getReceiver(String auth) {
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM pushReceiver WHERE auth=?");
-			statement.setString(1, auth);
-			ResultSet set = statement.executeQuery();
-			set.next();
-			return new PushReceiver(set.getString("endpoint"), set.getString("key"), set.getString("auth"), set.getString("userID"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-
 	private String endpoint;
 	private String key;
+	@Id
 	private String auth;
-	private String userId;
-
-	public PushReceiver(String endpoint, String key, String auth, User user) {
-		this(endpoint, key, auth, user.getId());
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO pushReceiver(endpoint,`key`,auth,userID) VALUES (?,?,?,?)");
-			statement.setString(1, this.endpoint);
-			statement.setString(2, this.key);
-			statement.setString(3, this.auth);
-			statement.setString(4, this.userId);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ClonebookException(e.getMessage());
-		}
-	}
-
-	public PushReceiver(String endpoint, String key, String auth, String user) {
-		this.endpoint = endpoint;
-		this.key = key;
-		this.auth = auth;
-		this.userId = user;
-	}
+	@ManyToOne
+	private User user;
 
 	public void sendNotification(String message) {
 		sendNotification(null,"null", message);
@@ -151,10 +133,7 @@ public class PushReceiver {
 				HttpResponse response = pushService.send(notification);
 				int code = response.getStatusLine().getStatusCode();
 				if (code == 201) return;
-				if (code == 410) {
-					delete();
-					return;
-				}
+				if (code == 410) return;
 				System.out.println("code = " + code);
 				return;
 			} catch (JoseException | InterruptedException | IOException | ExecutionException | GeneralSecurityException e) {
@@ -163,35 +142,5 @@ public class PushReceiver {
 			}
 			throw new UnsupportedOperationException();
 		});
-	}
-
-	public String getUserId() {
-		return this.userId;
-	}
-
-	public User getUser() {
-		return User.getUserById(userId);
-	}
-
-	public void delete() {
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM pushReceiver WHERE auth=?");
-			statement.setString(1, this.auth);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ClonebookException(e.getMessage());
-		}
-	}
-
-	public static void deleteByUser(User user) {
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM pushReceiver WHERE userID=?");
-			statement.setString(1, user.getId());
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ClonebookException(e.getMessage());
-		}
 	}
 }

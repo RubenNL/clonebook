@@ -1,112 +1,37 @@
 package nl.rubend.clonebook.domain;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import nl.rubend.clonebook.UUIDGenerator;
 import nl.rubend.clonebook.exceptions.ClonebookException;
-import nl.rubend.clonebook.utils.SqlInterface;
 import nl.rubend.clonebook.websocket.WebSocket;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
+import javax.persistence.*;
 import javax.ws.rs.core.Response;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.UUID;
+import java.util.List;
 
+@Entity
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class Chat {
+	@Id
+	@GeneratedValue(generator= UUIDGenerator.generatorName)
+	@GenericGenerator(name = UUIDGenerator.generatorName, strategy = "nl.rubend.clonebook.UUIDGenerator")
 	private String id;
-	public static Chat getChat(String id) {
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM chat WHERE ID=?");
-			statement.setString(1, id);
-			ResultSet set = statement.executeQuery();
-			set.next();
-			return new Chat(set.getString("ID"));
-		} catch (SQLException e) {
-			throw new ClonebookException(Response.Status.NOT_FOUND,"Chat niet gevonden");
-		}
-	}
-	public static ArrayList<Chat> getChats(User user) {
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT chatID FROM user_chat WHERE userID=?");
-			statement.setString(1,user.getId());
-			ResultSet set=statement.executeQuery();
-			ArrayList<Chat> response=new ArrayList<>();
-			while(set.next()) {
-				response.add(Chat.getChat(set.getString("chatID")));
-			}
-			return response;
-		} catch (SQLException e) {
-			throw new ClonebookException(e.getMessage());
-		}
-	}
-	private Chat(String id) {
-		this.id=id;
-	}
-	private void addUser(User user) {
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO user_chat(userID,chatID) VALUES (?,?)");
-			statement.setString(1, user.getId());
-			statement.setString(2, this.id);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ClonebookException(e.getMessage());
-		}
-	}
+	@ManyToMany
+	private List<User> users;
+	@OneToMany(mappedBy="chat",cascade=CascadeType.PERSIST)
+	private List<ChatMessage> messages;
 	public Chat(User user1,User user2) {
-		if(user1.equals(user2)) throw new ClonebookException("minimaal 2 gebruikers nodig!");
-		this.id=UUID.randomUUID().toString();
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO chat(ID) VALUES (?)");
-			statement.setString(1, this.id);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ClonebookException(e.getMessage());
-		}
-		addUser(user1);
-		addUser(user2);
-	}
-	public ArrayList<User> getUsers() {
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT userID FROM user_chat WHERE chatID=?");
-			statement.setString(1,this.id);
-			ResultSet set=statement.executeQuery();
-			ArrayList<User> response=new ArrayList<>();
-			while(set.next()) {
-				response.add(User.getUserById(set.getString("userID")));
-			}
-			return response;
-		} catch (SQLException e) {
-			throw new ClonebookException(e.getMessage());
-		}
-	}
-	public String getId() {
-		return this.id;
-	}
-	public ArrayList<ChatMessage> getMessagesBefore(Date date) {
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT chatID,userID,message,date FROM chatMessage WHERE date < ? AND chatID=? ORDER BY date DESC limit 10");
-			statement.setTimestamp(1, new Timestamp(date.getTime()));
-			statement.setString(2,this.id);
-			ResultSet set=statement.executeQuery();
-			ArrayList<ChatMessage> response=new ArrayList<>();
-			while(set.next()) {
-				response.add(new ChatMessage(set.getString("chatID"),set.getString("userID"),set.getTimestamp("date"),set.getString("message")));
-			}
-			return response;
-		} catch (SQLException e) {
-			throw new ClonebookException(e.getMessage());
-		}
+		if (user1.equals(user2)) throw new ClonebookException("minimaal 2 gebruikers nodig!");
+		users.add(user1);
+		users.add(user2);
 	}
 	public void sendMessage(User sender,String message) {
 		User receiver=null;
-		ArrayList<User> users=getUsers();
 		if(!users.contains(sender)) throw new ClonebookException(Response.Status.FORBIDDEN,"niet-deelnemer mag geen chat sturen.");
 		for(User user:users) {
 			if(!user.equals(sender)) receiver=user;
@@ -131,6 +56,10 @@ public class Chat {
 			builder.add("type","chat");
 			WebSocket.sendToUser(sender,builder.build().toString());
 		}).start();
-		new ChatMessage(this,sender,message);
+		ChatMessage chatMessage=new ChatMessage();
+		chatMessage.setChat(this);
+		chatMessage.setUser(sender);
+		chatMessage.setMessage(message);
+		messages.add(chatMessage);
 	}
 }

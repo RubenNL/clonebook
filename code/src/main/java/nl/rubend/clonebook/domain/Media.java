@@ -1,12 +1,20 @@
 package nl.rubend.clonebook.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import nl.rubend.clonebook.UUIDGenerator;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.utils.SqlInterface;
 import org.apache.tika.Tika;
+import org.hibernate.annotations.GenericGenerator;
 import org.imgscalr.Scalr;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.imageio.ImageIO;
+import javax.persistence.*;
 import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,44 +28,25 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.UUID;
 
+@Entity
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class Media {
+	@Id
+	@GeneratedValue(generator= UUIDGenerator.generatorName)
+	@GenericGenerator(name = UUIDGenerator.generatorName, strategy = "nl.rubend.clonebook.UUIDGenerator")
 	private String id;
-	private String location;
-	private String ownerId;
+	@ManyToOne
+	private User owner;
 	private String mime;
-	private static File uploads;
-	static {
-		Properties prop=new Properties();
-		try {
-			prop.load(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream("database.properties")));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		uploads=new File(prop.getProperty("folder")+"uploads");
-		if(!uploads.exists()) uploads.mkdir();
-	}
-	public static Media getMedia(String id) {
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("SELECT * FROM media WHERE ID=?");
-			statement.setString(1, id);
-			ResultSet set = statement.executeQuery();
-			set.next();
-			return new Media(set.getString("ID"), set.getString("owner"), set.getString("location"), set.getString("mime"));
-		} catch (SQLException e) {
-			throw new ClonebookException(Response.Status.NOT_FOUND,"Media niet gevonden");
-		}
-	}
-
-	public Media(String id, String ownerId, String location, String mime) {
-		this.id = id;
-		this.ownerId = ownerId;
-		this.location = location;
-		this.mime = mime;
-	}
-
-	public Media(InputStream file, String ownerId, String location) {
-		this(UUID.randomUUID().toString(), ownerId, location, "");
-		File destination = new File(uploads, id);
+	@ManyToOne
+	private Post post;
+	@Value("${uploads.folder}")
+	private static File folder;
+	public Media(InputStream file, User owner) {
+		File destination = new File(folder, id);
 		try {
 			Files.copy(file, destination.toPath());
 		} catch (IOException e) {
@@ -68,63 +57,16 @@ public class Media {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO media(ID,owner,location,mime) VALUES (?,?,?,?)");
-			statement.setString(1, this.id);
-			statement.setString(2, this.ownerId);
-			statement.setString(3, this.location);
-			statement.setString(4, this.mime);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ClonebookException(e.getMessage());
-		}
 	}
 
 	@JsonIgnore
 	public File getFile() {
-		File file= new File(new File(uploads, location), id);
+		File file= new File(folder, String.valueOf(id));
 		if(!file.exists()) throw new ClonebookException(Response.Status.NOT_FOUND,"file niet gevonden");
 		return file;
 	}
-	@JsonIgnore
-	public String getMime() {
-		return this.mime;
-	}
-
-	public void setMime(String mime) {
-		this.mime=mime;
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("UPDATE media SET mime = ? WHERE ID = ?");
-			statement.setString(1, this.mime);
-			statement.setString(2, this.id);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ClonebookException(e.getMessage());
-		}
-	}
-	public String getId() {
-		return this.id;
-	}
-
-	public String getOwnerId() {
-		return this.ownerId;
-	}
-	@JsonIgnore
-	public User getOwner() {
-		return User.getUserById(this.ownerId);
-	}
 
 	public void delete() {
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM media WHERE ID=?");
-			statement.setString(1, this.id);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ClonebookException(e.getMessage());
-		}
 		try {
 			Files.delete(getFile().toPath());
 		} catch (IOException e) {

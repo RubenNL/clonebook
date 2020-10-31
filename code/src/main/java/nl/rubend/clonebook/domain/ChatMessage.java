@@ -1,47 +1,41 @@
 package nl.rubend.clonebook.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import nl.rubend.clonebook.UUIDGenerator;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.utils.SqlInterface;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
+@Entity
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class ChatMessage {
-	private String chatId;
-	private String userId;
+	@Id
+	@GeneratedValue(generator= UUIDGenerator.generatorName)
+	@GenericGenerator(name = UUIDGenerator.generatorName, strategy = "nl.rubend.clonebook.UUIDGenerator")
+	private int id;
+	@ManyToOne
+	private Chat chat;
+	@ManyToOne
+	private User user;
 	private String message;
+	@CreatedDate
 	private Date date;
-	public ChatMessage(String chatId,String userId,Date date,String message) {
+	@PrePersist
+	private void check() {
 		if(message==null || message.length()==0) throw new ClonebookException("lege berichten zijn niet toegestaan!");
-		this.chatId=chatId;
-		this.userId=userId;
-		this.message=message;
-		this.date=date;
-	}
-	public ChatMessage(Chat chat,User user,String message) {
-		this(chat.getId(),user.getId(),new Date(System.currentTimeMillis()),message);
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO chatMessage(chatID,userID,message,date) VALUES (?,?,?,?)");
-			statement.setString(1, this.chatId);
-			statement.setString(2, this.userId);
-			statement.setString(3, this.message);
-			statement.setTimestamp(4, new Timestamp(this.date.getTime()));
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ClonebookException(e.getMessage());
-		}
-	}
-	public Date getDate() {
-		return this.date;
-	}
-	public String getUserId() {
-		return this.userId;
-	}
-	public String getMessage() {
-		return this.message;
 	}
 }
