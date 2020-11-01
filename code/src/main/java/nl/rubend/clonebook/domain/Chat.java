@@ -8,7 +8,6 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 import javax.persistence.*;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Entity
@@ -32,7 +31,7 @@ public class Chat {
 	}
 	public void sendMessage(User sender,String message) {
 		User receiver=null;
-		if(!users.contains(sender)) throw new ClonebookException(Response.Status.FORBIDDEN,"niet-deelnemer mag geen chat sturen.");
+		if(!users.contains(sender)) throw new ClonebookException("FORBIDDEN","niet-deelnemer mag geen chat sturen.");
 		for(User user:users) {
 			if(!user.equals(sender)) receiver=user;
 		}

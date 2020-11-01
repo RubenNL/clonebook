@@ -1,4 +1,4 @@
-package nl.rubend.clonebook.rest;
+/*package nl.rubend.clonebook.presentation;
 
 import nl.rubend.clonebook.domain.Media;
 import nl.rubend.clonebook.security.SecurityBean;
@@ -10,7 +10,7 @@ import javax.ws.rs.core.*;
 import java.io.*;
 
 @Path("/media")
-public class MediaService {
+public class MediaController {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("user")
@@ -47,3 +47,4 @@ public class MediaService {
 		return Response.ok(media.getFile()).type(media.getMime()).build();
 	}
 }
+*/

@@ -12,12 +12,9 @@ import nl.rubend.clonebook.utils.SqlInterface;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.*;
 @Entity
 @NoArgsConstructor
@@ -48,7 +45,7 @@ public class Page {
 		this.logo=media;
 	}
 	public void delete() {
-		if(getOwner().getPrivatePage().equals(this)) throw new ClonebookException(Response.Status.BAD_REQUEST,"Kan niet prive pagina verwijderen!");
+		if(getOwner().getPrivatePage().equals(this)) throw new ClonebookException("BAD_REQUEST","Kan niet prive pagina verwijderen!");
 		try {
 			PreparedStatement statement = SqlInterface.prepareStatement("DELETE FROM page WHERE ID = ?");
 			statement.setString(1, this.id);
@@ -66,7 +63,7 @@ public class Page {
 		leden.add(user);
 	}
 	public void removeLid(User user) {
-		if(user.equals(getOwner())) throw new ClonebookException(Response.Status.BAD_REQUEST,"kan admin niet verwijderen!");
+		if(user.equals(getOwner())) throw new ClonebookException("BAD_REQUEST","kan admin niet verwijderen!");
 		leden.remove(user);
 	}
 	//TODO block unblock lid

@@ -6,15 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import nl.rubend.clonebook.UUIDGenerator;
-import nl.rubend.clonebook.exceptions.ClonebookException;
-import nl.rubend.clonebook.utils.SqlInterface;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.ws.rs.core.Response;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 @Entity
 @NoArgsConstructor

@@ -1,4 +1,4 @@
-package nl.rubend.clonebook.rest;
+/*package nl.rubend.clonebook.presentation;
 
 import nl.rubend.clonebook.domain.*;
 import nl.rubend.clonebook.security.SecurityBean;
@@ -14,7 +14,7 @@ import java.util.Objects;
 @Path("/post")
 @Produces(MediaType.APPLICATION_JSON)
 @RolesAllowed("user")
-public class PostService {
+public class PostController {
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response newPost(@BeanParam SecurityBean securityBean, @FormParam("pageId") String pageId, @FormParam("repliedTo") String repliedToId, @FormParam("text") String text, @FormParam("file") List<String> files) {
@@ -77,3 +77,4 @@ public class PostService {
 		}
 	}
 }
+*/

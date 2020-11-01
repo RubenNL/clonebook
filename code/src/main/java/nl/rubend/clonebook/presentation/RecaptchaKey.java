@@ -1,4 +1,4 @@
-package nl.rubend.clonebook.rest;
+/*package nl.rubend.clonebook.presentation;
 
 import nl.rubend.clonebook.utils.Recaptcha;
 
@@ -13,3 +13,4 @@ public class RecaptchaKey {
 		return Response.ok(Recaptcha.getKey()).build();
 	}
 }
+*/

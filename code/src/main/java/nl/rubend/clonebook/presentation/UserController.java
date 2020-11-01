@@ -1,19 +1,9 @@
-package nl.rubend.clonebook.rest;
+/*package nl.rubend.clonebook.presentation;
 
 import nl.rubend.clonebook.domain.*;
-import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.security.SecurityBean;
 import nl.rubend.clonebook.utils.Recaptcha;
 import nl.rubend.clonebook.websocket.WebSocket;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
 
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
@@ -22,9 +12,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -33,7 +20,7 @@ import java.util.*;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
-public class UserService {
+public class UserController {
 	public static boolean isThisMyIpAddress(String stringAddr) {
 		InetAddress addr;
 		try {
@@ -138,3 +125,4 @@ public class UserService {
 		return Response.ok(securityBean.allowedUser().getOwnPages()).build();
 	}
 }
+*/

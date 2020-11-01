@@ -15,18 +15,11 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
-import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -62,7 +55,7 @@ public class Media {
 	@JsonIgnore
 	public File getFile() {
 		File file= new File(folder, String.valueOf(id));
-		if(!file.exists()) throw new ClonebookException(Response.Status.NOT_FOUND,"file niet gevonden");
+		if(!file.exists()) throw new ClonebookException("file niet gevonden");
 		return file;
 	}
 

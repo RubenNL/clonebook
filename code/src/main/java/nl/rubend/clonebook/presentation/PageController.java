@@ -1,34 +1,43 @@
-package nl.rubend.clonebook.rest;
+/*package nl.rubend.clonebook.presentation;
 
-import nl.rubend.clonebook.domain.Media;
+import nl.rubend.clonebook.data.SpringMediaRepository;
+import nl.rubend.clonebook.data.SpringPageRepository;
 import nl.rubend.clonebook.domain.Page;
 import nl.rubend.clonebook.domain.User;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.security.SecurityBean;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.AbstractMap;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Path("/page")
+@RestController
+@RequestMapping("/page")
 @RolesAllowed("user")
-@Produces(MediaType.APPLICATION_JSON)
-public class PageService {
-	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response createPage(@BeanParam SecurityBean securityBean,@FormParam("name") String name) {
-		Page page=new Page(securityBean.getSender(),name);
+public class PageController {
+	private final SpringPageRepository repository;
+	private final SpringMediaRepository mediaRepository;
+
+	public PageController(SpringPageRepository repository, SpringMediaRepository mediaRepository) {
+		this.repository = repository;
+		this.mediaRepository = mediaRepository;
+	}
+
+	@PostMapping
+	public EntityModel<Page> createPage(@BeanParam SecurityBean securityBean, @RequestBody NewPageDTO pageDTO) {
+		Page page=new Page();
+		page.setOwner(securityBean.getSender());
+		page.setName(pageDTO.name);
 		page.addLid(securityBean.getSender());
+		page=repository.save(page);
 		return Response.ok(new AbstractMap.SimpleEntry<>("id", page.getId())).build();
 	}
-	@GET
-	@Path("/{pageId}")
-	public Response publicPage(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {
+	@GetMapping("/{pageId}")
+	public Response publicPage(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
+		Bean bean=new Bean(pageId,securityBean);
 		User user= securityBean.getSender();
 		if(bean.existsThrows().isLid()) return Response.ok(bean.getPage()).build();
 		Map<String,Object> response=new HashMap<>();
@@ -38,62 +47,64 @@ public class PageService {
 		response.put("blocked",bean.getPage().isBlocked(user));
 		return Response.status(Response.Status.FORBIDDEN).entity(response).build();
 	}
-	@DELETE
-	@Path("/{pageId}")
-	public Response deletePage(@BeanParam Bean bean) {
+	@DeleteMapping("/{pageId}")
+	public Response deletePage(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
+		Bean bean=new Bean(pageId,securityBean);
 		if(!bean.existsThrows().isAdmin()) return Response.status(Response.Status.FORBIDDEN).build();
 		bean.getPage().delete();
 		return Response.ok().build();
 	}
-	@GET
-	@Path("/{pageId}/name")
-	public Response name(@BeanParam Bean bean) {
+	@GetMapping("/{pageId}/name")
+	public Response name(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
+		Bean bean=new Bean(pageId,securityBean);
 		return Response.ok(bean.existsThrows().getPage().getName()).build();
 	}
-	@GET
-	@Path("/{pageId}/leden")
-	public Response leden(@BeanParam Bean bean) {
+	@GetMapping("/{pageId}/leden")
+	public Response leden(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
+		Bean bean=new Bean(pageId,securityBean);
 		return Response.ok(bean.onlyPageLid().getPage().getLeden()).build();
 	}
-	@POST
-	@Path("/{pageId}/image")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response setPicture(@FormParam("image") String imageId, @BeanParam Bean bean) {
+	@PostMapping("/{pageId}/image")
+	public Response setPicture(@PathVariable String pageId,@BeanParam SecurityBean securityBean,@RequestBody SetImageDTO setImageDTO) {
+		Bean bean=new Bean(pageId,securityBean);
 		if(!bean.existsThrows().isAdmin()) return Response.status(Response.Status.FORBIDDEN).build();
-		bean.getPage().setLogo(Media.getMedia(imageId));
+		Page page=bean.getPage();
+		page.setLogo(mediaRepository.getOne(setImageDTO.imageId));
+		repository.save(page);
 		return Response.ok(true).build();
 	}
-	@POST
-	@Path("/{pageId}/name")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response setName(@FormParam("name") String name, @BeanParam Bean bean) {
+	@PostMapping("/{pageId}/name")
+	public Response setName(@PathVariable String pageId,@BeanParam SecurityBean securityBean,@RequestBody SetNameDTO setNameDTO) {
+		Bean bean=new Bean(pageId,securityBean);
 		if(!bean.existsThrows().isAdmin()) return Response.status(Response.Status.FORBIDDEN).build();
-		bean.getPage().setName(name);
+		Page page=bean.getPage();
+		page.setName(setNameDTO.name);
+		repository.save(page);
 		return Response.ok().build();
 	}
-	@GET
-	@Path("/{pageId}/lidAanvraag")
-	public Response getLidAanvraag(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {
+	@GetMapping("/{pageId}/lidAanvraag")
+	public Response getLidAanvraag(@PathVariable String pageId,@BeanParam SecurityBean securityBean) {
+		Bean bean=new Bean(pageId,securityBean);
 		User user=securityBean.getSender();
 		return Response.ok(bean.existsThrows().getPage().hasLidAanvraagVanUser(user)).build();
 	}
-	@POST
-	@Path("/{pageId}/lidAanvraag")
-	public Response addLidAanvraag(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {
+	@PostMapping("/{pageId}/lidAanvraag")
+	public Response addLidAanvraag(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
+		Bean bean=new Bean(pageId,securityBean);
 		User user=securityBean.getSender();
 		bean.existsThrows().getPage().addLidAanvraag(user);
 		return Response.ok(true).build();
 	}
-	@DELETE
-	@Path("/{pageId}/lid/{userId}")
-	public Response removeLid(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {
+	/*@DeleteMapping("/{pageId}/lid/{userId}")
+	public Response removeLid(@PathVariable String pageId, Principal principal) {
+		principal.
+		Bean bean=new Bean(pageId,securityBean);
 		if(securityBean.isAllowed() || bean.isAdmin()) {
 			bean.existsThrows().getPage().removeLid(securityBean.getRequested());
 			return Response.ok(true).build();
 		} else throw new ForbiddenException();
 	}
-	@POST
-	@Path("/{pageId}/block/{userId}")
+	@PostMapping("/{pageId}/block/{userId}")
 	public Response blockUser(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {
 		if(securityBean.isAllowed() || bean.isAdmin()) {
 			bean.existsThrows().getPage().blockUnblockLid(securityBean.getRequested(),true);
@@ -125,9 +136,12 @@ public class PageService {
 	@Path("/{pageId}/before/{date}")
 	public Response getChatBefore(@BeanParam Bean bean, @PathParam("date") String before) {
 		return Response.ok(bean.onlyPageLid().getPage().getPostsLimit(new Date(Long.parseLong(before)),10)).build();
-	}
-	static class Bean {
-		@PathParam("pageId") String pageId;
+	}*/
+	/*static class Bean {
+		Bean(String pageId,SecurityBean securityBean) {
+			this.pageId=pageId;
+			this.securityBean=securityBean;
+		}
 		@BeanParam SecurityBean securityBean;
 		Page page;
 		Page getPage() {
@@ -149,4 +163,14 @@ public class PageService {
 			return this;
 		}
 	}
-}
+	static class NewPageDTO {
+		public String name;
+	}
+	static class SetImageDTO {
+		public String imageId;
+	}
+	static class SetNameDTO {
+		public String name;
+	}
+
+}*/

@@ -11,6 +11,9 @@ import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.utils.SqlInterface;
 import nl.rubend.clonebook.utils.SendEmail;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -30,7 +33,7 @@ import java.util.*;
 @Getter
 @Setter
 @ToString
-public class User implements Principal {
+public class User implements UserDetails {
 	private static SecureRandom random = new SecureRandom();
 	@Id
 	@GeneratedValue(generator= UUIDGenerator.generatorName)
@@ -38,9 +41,11 @@ public class User implements Principal {
 	private String id;
 	@Email
 	private String email;
-	private String hash;
-	private String salt;
+	//private String hash;
+	//private String salt;
+	private String password;
 	@OneToOne
+	@JsonIgnore
 	private Page privatePage;
 	private String role="user";
 	private String userKey;
@@ -70,7 +75,7 @@ public class User implements Principal {
 			throw new ClonebookException(e.getMessage());
 		}
 	}*/
-	public static String hash(String password, String saltString) {
+	/*public static String hash(String password, String saltString) {
 		byte[] salt = Base64.getUrlDecoder().decode(saltString);
 		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 512);
 		try {
@@ -91,7 +96,7 @@ public class User implements Principal {
 		Base64.Encoder enc = Base64.getUrlEncoder().withoutPadding();
 		this.salt = enc.encodeToString(salt);
 		this.hash = hash(password, this.salt);
-	}
+	}*/
 	@JsonIgnore
 	public String getKey() {
 		return userKey;
@@ -107,10 +112,10 @@ public class User implements Principal {
 	}
 	@JsonIgnore
 	public String getRole() {return this.role;}
-	public boolean checkPassword(String password) {
+	/*public boolean checkPassword(String password) {
 		if(this.salt==null || this.salt.equals("")) return false;
 		return Objects.equals(hash(password, this.salt), this.hash);
-	}
+	}*/
 	public void sendPasswordForgottenUrl() {
 		NewPassword newPassword=new NewPassword();
 		newPassword.setUser(this);
@@ -141,5 +146,42 @@ public class User implements Principal {
 		for (PushReceiver receiver : pushReceivers) {
 			receiver.sendNotification(action, image, message);
 		}
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<SimpleGrantedAuthority> authorities=new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_user"));
+		return authorities;
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 }
