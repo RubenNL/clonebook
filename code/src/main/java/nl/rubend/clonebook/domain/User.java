@@ -40,72 +40,32 @@ public class User implements UserDetails {
 	@GenericGenerator(name = UUIDGenerator.generatorName, strategy = "nl.rubend.clonebook.UUIDGenerator")
 	private String id;
 	@Email
+	@JsonIgnore
 	private String email;
-	//private String hash;
-	//private String salt;
+	@JsonIgnore
 	private String password;
 	@OneToOne(cascade=CascadeType.PERSIST)
 	@JsonIgnore
 	private Page privatePage;
-	private String role="user";
-	private String userKey;
-	@OneToMany(mappedBy="owner")
 	@JsonIgnore
-	private List<Page> ownPages;
+	private String role="user";
+	@JsonIgnore
+	private String userKey;
+	@OneToMany(mappedBy="owner",cascade=CascadeType.PERSIST)
+	@JsonIgnore
+	private List<Page> ownPages=new ArrayList<>();
 	@OneToMany(mappedBy="user")
+	@JsonIgnore
 	private List<PushReceiver> pushReceivers;
 	@PrePersist
 	private void createPage() {
 		privatePage=new Page();
 		privatePage.setOwner(this);
+		ownPages.add(privatePage);
 	}
 	public String getPrivatePageId() {
 		return this.privatePage.getId();
 	}
-	/*public User(String email) throws ClonebookException {
-		this.userId=UUID.randomUUID().toString();
-		this.userKey=UUID.randomUUID().toString();
-		this.email=email;
-		try {
-			PreparedStatement statement = SqlInterface.prepareStatement("INSERT INTO user(ID,email,userKey) VALUES (?,?,?)");
-			statement.setString(1, userId);
-			statement.setString(2, email);
-			statement.setString(3, userKey);
-			statement.executeUpdate();
-			Page page=new Page(this,"Nieuwe gebruiker");
-			this.privatePageId=page.getId();
-			statement = SqlInterface.prepareStatement("UPDATE user SET privatePageId=? WHERE ID=?");
-			statement.setString(1, this.privatePageId);
-			statement.setString(2, userId);
-			statement.executeUpdate();
-			page.addLid(this);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ClonebookException(e.getMessage());
-		}
-	}*/
-	/*public static String hash(String password, String saltString) {
-		byte[] salt = Base64.getUrlDecoder().decode(saltString);
-		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 512);
-		try {
-			SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-			Base64.Encoder enc = Base64.getEncoder();
-			return enc.encodeToString(f.generateSecret(spec).getEncoded());
-		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-			e.printStackTrace();
-			System.out.println("Systeem ondersteund delen van hashing niet,kan niet worden uitgevoerd op dit apparaat.");
-		}
-		return null;
-	}
-	public void setPassword(String password)  {
-		if (password == null) throw new IllegalArgumentException("Wachtwoord is te kort!");
-		if (password.length() < 8) throw new IllegalArgumentException("Wachtwoord is te kort!");
-		byte[] salt = new byte[64];
-		random.nextBytes(salt);
-		Base64.Encoder enc = Base64.getUrlEncoder().withoutPadding();
-		this.salt = enc.encodeToString(salt);
-		this.hash = hash(password, this.salt);
-	}*/
 	@JsonIgnore
 	public String getKey() {
 		return userKey;
@@ -150,7 +110,7 @@ public class User implements UserDetails {
 			receiver.sendNotification(action, image, message);
 		}
 	}
-
+	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<SimpleGrantedAuthority> authorities=new ArrayList<>();
@@ -162,27 +122,27 @@ public class User implements UserDetails {
 	public String getPassword() {
 		return password;
 	}
-
+	@JsonIgnore
 	@Override
 	public String getUsername() {
 		return email;
 	}
-
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
-
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
-
+	@JsonIgnore
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
-
+	@JsonIgnore
 	@Override
 	public boolean isEnabled() {
 		return true;

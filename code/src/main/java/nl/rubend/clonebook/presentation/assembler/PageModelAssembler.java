@@ -1,4 +1,4 @@
-/*package nl.rubend.clonebook.presentation.assembler;
+package nl.rubend.clonebook.presentation.assembler;
 
 import nl.rubend.clonebook.domain.Page;
 import nl.rubend.clonebook.presentation.PageController;
@@ -14,8 +14,6 @@ public class PageModelAssembler implements RepresentationModelAssembler<Page, En
 	@Override
 	public EntityModel<Page> toModel(Page page) {
 		return EntityModel.of(page,
-				linkTo(methodOn(PageController.class).one(page.getId())).withSelfRel(),
-				linkTo(methodOn(PageController.class).all()).withRel("pages"));
+				linkTo(methodOn(PageController.class).publicPage(page.getId(),null)).withSelfRel());
 	}
 }
-*/

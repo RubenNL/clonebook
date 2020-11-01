@@ -11,7 +11,7 @@ class Page {
 		return Utils.sendGet("page/"+id).then(Page.fromRaw);
 	}
 	static fromRaw(raw) {
-		raw.last10Posts=raw.last10Posts.map(sourcePost=>Post.fromRaw(sourcePost));
+		raw.last10Posts=[]//TODO raw.last10Posts.map(sourcePost=>Post.fromRaw(sourcePost));
 		return new Page(raw.id,raw.last10Posts,raw.logo,raw.name,raw.owner);
 	}
 	static new(name) {

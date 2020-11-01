@@ -5,10 +5,13 @@ import nl.rubend.clonebook.data.SpringPageRepository;
 import nl.rubend.clonebook.data.SpringUserRepository;
 import nl.rubend.clonebook.domain.*;
 import nl.rubend.clonebook.exceptions.ClonebookException;
+import nl.rubend.clonebook.presentation.assembler.PageModelAssembler;
 import nl.rubend.clonebook.security.SecurityBean;
 import nl.rubend.clonebook.security.SecurityConfig;
 import nl.rubend.clonebook.utils.SendEmail;
 import nl.rubend.clonebook.websocket.WebSocket;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,10 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/user")
@@ -31,13 +38,15 @@ public class UserController {
 	private final SpringPageRepository pageRepository;
 	private final SendEmail sendEmail;
 	private final SecurityConfig securityConfig;
-	public UserController(RecaptchaKey recaptchaKey, SpringUserRepository repository, SpringNewPasswordRepository newPasswordRepository, SpringPageRepository pageRepository, SendEmail sendEmail, SecurityConfig securityConfig) {
+	private final PageModelAssembler pageAssembler;
+	public UserController(RecaptchaKey recaptchaKey, SpringUserRepository repository, SpringNewPasswordRepository newPasswordRepository, SpringPageRepository pageRepository, SendEmail sendEmail, SecurityConfig securityConfig, PageModelAssembler pageAssembler) {
 		this.recaptchaKey = recaptchaKey;
 		this.repository = repository;
 		this.newPasswordRepository = newPasswordRepository;
 		this.pageRepository = pageRepository;
 		this.sendEmail = sendEmail;
 		this.securityConfig = securityConfig;
+		this.pageAssembler = pageAssembler;
 	}
 
 	public static boolean isThisMyIpAddress(String stringAddr) {
@@ -82,10 +91,10 @@ public class UserController {
 		newPasswordRepository.delete(newPassword);
 		return Response.ok().build();
 	}
-	@GET
-	@Path("/{userId}/settings")
+	@GetMapping("/{userId}/settings")
 	@RolesAllowed("user")
-	public Response getSettings(@AuthenticationPrincipal User user) {
+	public Response getSettings(@PathVariable String userId,@AuthenticationPrincipal User user) {
+		if(!user.getId().equals(userId)) throw new ClonebookException("FORBIDDEN","Verkeerde gebruiker!");
 		Map<String,String> map=new HashMap<>();
 		map.put("email",user.getEmail());
 		return Response.ok(map).build();
@@ -123,11 +132,11 @@ public class UserController {
 		securityBean.getSender().sendToUser("testNotif!");
 		return Response.ok().build();
 	}
-	@POST
+	@PostMapping("/{userId}/ws")
 	@RolesAllowed("user")
-	@Path("/{userId}/ws")
-	public Response addSocket(@BeanParam SecurityBean securityBean) {
-		return Response.ok(new AbstractMap.SimpleEntry<String,String>("code",WebSocket.addWaiting(securityBean.allowedUser()))).build();
+	public Response addSocket(@PathVariable String userId,@AuthenticationPrincipal User user) {
+		if(!user.getId().equals(userId)) throw new ClonebookException("FORBIDDEN","GEEN TOEGANG");
+		return Response.ok(new AbstractMap.SimpleEntry<String,String>("code",WebSocket.addWaiting(user))).build();
 	}
 	/*@GET
 	@RolesAllowed("user")
@@ -135,11 +144,16 @@ public class UserController {
 	public Response getPages(@BeanParam SecurityBean securityBean) {
 		return Response.ok(securityBean.allowedUser().getPages()).build();
 	}*/
-	@GET
 	@RolesAllowed("user")
-	@Path("/{userId}/ownPages")
-	public Response getOwnPages(@BeanParam SecurityBean securityBean) {
-		return Response.ok(securityBean.allowedUser().getOwnPages()).build();
+	@GetMapping("/{userId}/ownPages")
+	public List<EntityModel<Page>> getOwnPages(@PathVariable String userId, @AuthenticationPrincipal String senderUserId) {
+		System.out.println(senderUserId);
+		System.out.println(userId);
+		if(!userId.equals(senderUserId)) throw new ClonebookException("FORBIDDEN","geen toegang");
+		List<EntityModel<Page>> pages = repository.getOne(userId).getOwnPages().stream()
+				.map(pageAssembler::toModel)
+				.collect(Collectors.toList());
+		return pages;
 	}
 	private static class newPasswordDTO {
 		public String code;
