@@ -4,19 +4,17 @@ import nl.rubend.clonebook.data.SpringNewPasswordRepository;
 import nl.rubend.clonebook.data.SpringPageRepository;
 import nl.rubend.clonebook.data.SpringUserRepository;
 import nl.rubend.clonebook.domain.*;
+import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.security.SecurityBean;
+import nl.rubend.clonebook.security.SecurityConfig;
 import nl.rubend.clonebook.utils.SendEmail;
 import nl.rubend.clonebook.websocket.WebSocket;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Email;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -24,21 +22,22 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.*;
 
-@Path("/user")
-@Produces(MediaType.APPLICATION_JSON)
-@Component
+@RestController
+@RequestMapping("/user")
 public class UserController {
 	private final RecaptchaKey recaptchaKey;
 	private final SpringUserRepository repository;
 	private final SpringNewPasswordRepository newPasswordRepository;
 	private final SpringPageRepository pageRepository;
 	private final SendEmail sendEmail;
-	public UserController(RecaptchaKey recaptchaKey, SpringUserRepository repository, SpringNewPasswordRepository newPasswordRepository, SpringPageRepository pageRepository, SendEmail sendEmail) {
+	private final SecurityConfig securityConfig;
+	public UserController(RecaptchaKey recaptchaKey, SpringUserRepository repository, SpringNewPasswordRepository newPasswordRepository, SpringPageRepository pageRepository, SendEmail sendEmail, SecurityConfig securityConfig) {
 		this.recaptchaKey = recaptchaKey;
 		this.repository = repository;
 		this.newPasswordRepository = newPasswordRepository;
 		this.pageRepository = pageRepository;
 		this.sendEmail = sendEmail;
+		this.securityConfig = securityConfig;
 	}
 
 	public static boolean isThisMyIpAddress(String stringAddr) {
@@ -55,7 +54,7 @@ public class UserController {
 			return false;
 		}
 	}
-	@POST
+	/*@POST
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response newPasswordMail(@Context HttpHeaders httpHeaders, @Context HttpServletRequest httpServletRequest, @FormParam("email") String email, @FormParam("g-recaptcha-response") String recaptchaResponse) {
@@ -69,13 +68,14 @@ public class UserController {
 		user=repository.save(user);
 		sendEmail.sendPasswordForgottenUrl(user);
 		return Response.ok(new HashMap<String,String>()).build();
-	}
+	}*/
 	@PostMapping("/newPassword")
-	public Response use(@RequestBody newPasswordDTO newPasswordDTO) {
+	public Response newPassword(@RequestBody newPasswordDTO newPasswordDTO) {
 		NewPassword newPassword=newPasswordRepository.getOne(newPasswordDTO.code);
 		User user=newPassword.use();
 		try {
-			user.setPassword(newPasswordDTO.password);
+			user.setPassword(securityConfig.passwordEncoder().encode(newPasswordDTO.password));
+			repository.save(user);
 		} catch(IllegalArgumentException e) {
 			return Response.status(Response.Status.BAD_REQUEST).entity(new AbstractMap.SimpleEntry<String,String>("error",e.getMessage())).build();
 		}
@@ -85,19 +85,16 @@ public class UserController {
 	@GET
 	@Path("/{userId}/settings")
 	@RolesAllowed("user")
-	public Response getSettings(@BeanParam SecurityBean securityBean) {
-		User user = securityBean.allowedUser();
+	public Response getSettings(@AuthenticationPrincipal User user) {
 		Map<String,String> map=new HashMap<>();
 		map.put("email",user.getEmail());
 		return Response.ok(map).build();
 	}
-	@POST
-	@Path("/{userId}/settings")
+	@PostMapping("/{userId}/settings")
 	@RolesAllowed("user")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response setProfile(@FormParam("email") String email, @BeanParam SecurityBean securityBean) {
-		User user = securityBean.allowedUser();
-		if (!user.getEmail().equals(email)) user.setEmail(email);
+	public Response setProfile(@AuthenticationPrincipal User user,@PathVariable String userId,@RequestBody setEmailDTO setEmailDTO) {
+		if (!user.getEmail().equals(setEmailDTO.email)) user.setEmail(setEmailDTO.email);
+		repository.save(user);
 		return Response.ok().build();
 	}
 	/*@GET
@@ -106,17 +103,17 @@ public class UserController {
 	public Response getLidAanvragen(@BeanParam SecurityBean securityBean) {
 		return Response.ok(securityBean.allowedUser().getLidAanvragenOpPaginas()).build();
 	}*/
-	@GET
 	@RolesAllowed("user")
-	@Path("/{userId}")
-	public Response publicUserProfile(@BeanParam SecurityBean securityBean) {
-		return Response.ok(securityBean.getRequested()).build();
+	@GetMapping("/{userId}")
+	public User publicUserProfile(@PathVariable String userId) {
+		return repository.getOne(userId);
 	}
-	@DELETE
+	@DeleteMapping("/{userId}/sessions")
 	@RolesAllowed("user")
-	@Path("/{userId}/sessions")
-	public Response resetSessions(@BeanParam SecurityBean securityBean) {
-		securityBean.allowedUser().logoutAll();
+	public Response resetSessions(@PathVariable String userId,@AuthenticationPrincipal User user) {
+		if(!user.getId().equals(userId)) throw new ClonebookException("FORBIDDEN","geen toegang!");
+		user.logoutAll();
+		repository.save(user);
 		return Response.ok(true).build();
 	}
 	@POST
@@ -147,5 +144,9 @@ public class UserController {
 	private static class newPasswordDTO {
 		public String code;
 		public String password;
+	}
+	private static class setEmailDTO {
+		@Email
+		public String email;
 	}
 }

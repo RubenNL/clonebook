@@ -58,7 +58,8 @@ public class SendEmail {
 		NewPassword newPassword=new NewPassword();
 		newPassword.setUser(user);
 		newPassword=newPasswordRepository.save(newPassword);
-		String url="https://clonebook.rubend.nl/#newAccount=" + newPassword.getCode();
+		//String url="https://clonebook.rubend.nl/#newAccount=" + newPassword.getCode(); TODO clonebook.rubend.nl
+		String url="http://localhost:8080/#newAccount="+newPassword.getCode();
 		sendEmail(user.getEmail(),"CloneBook nieuw wachtwoord","<h1>Welkom bij Clonebook!</h1><br>Er is een nieuw account of nieuw wachtwoord aangevraagd op <a href=\"https://clonebook.rubend.nl\">Clonebook</a> voor uw e-mail adres.<br> Heeft u dat niet gedaan? dan kunt u deze e-mail gewoon negeren.<br>Gebruik <a href=\""+url+"\">Deze</a> url om je account te activeren.<br>Werkt de URL niet? Copieer/plak dan deze url in de browser: "+url+"<br>Deze url is 1 uur geldig.");
 	}
 }

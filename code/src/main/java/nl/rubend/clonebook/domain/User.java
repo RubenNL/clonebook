@@ -44,15 +44,24 @@ public class User implements UserDetails {
 	//private String hash;
 	//private String salt;
 	private String password;
-	@OneToOne
+	@OneToOne(cascade=CascadeType.PERSIST)
 	@JsonIgnore
 	private Page privatePage;
 	private String role="user";
 	private String userKey;
 	@OneToMany(mappedBy="owner")
+	@JsonIgnore
 	private List<Page> ownPages;
 	@OneToMany(mappedBy="user")
 	private List<PushReceiver> pushReceivers;
+	@PrePersist
+	private void createPage() {
+		privatePage=new Page();
+		privatePage.setOwner(this);
+	}
+	public String getPrivatePageId() {
+		return this.privatePage.getId();
+	}
 	/*public User(String email) throws ClonebookException {
 		this.userId=UUID.randomUUID().toString();
 		this.userKey=UUID.randomUUID().toString();

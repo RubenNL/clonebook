@@ -6,9 +6,21 @@ class LoginSignup {
 		return Utils.sendPost("user/newPassword",form);
 	}
 	static login(form) {
-		return Utils.sendPost("login",form).then(response=>{
-			setJWT(response.JWT);
-		})
+		let next=form.next();
+		let data={};
+		while(!next.done) {
+			data[next.value[0]]=next.value[1];
+			next=form.next();
+		}
+		return Utils.sendFetch("login",{
+			method:'POST',
+			headers: {'Content-Type':"application/json;charset=UTF-8"},
+			//body:new URLSearchParams(formData)
+			body:JSON.stringify(data)
+		}).then(response=>{
+			debugger;
+			setJWT(response.headers.get('Authorization').split(' ')[1]);
+		});
 	}
 	static logout() {
 		removeJWT();

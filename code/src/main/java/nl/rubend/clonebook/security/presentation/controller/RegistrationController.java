@@ -47,7 +47,7 @@ public class RegistrationController {
 		if(isThisMyIpAddress(ip)) ip=forwardedFor;//lokaal IP, grote kans dat het een apache2 aanvraag is.
 		if(ip==null || ip.equals("")) ip=httpServletRequest.getRemoteAddr();//toch niet een apache2 proxy, dus toch maar het originele IP gebruiken.
 		if(!recaptchaKey.isCaptchaValid(registration.recaptchaResponse,ip)) throw new ClonebookException("invalid captcha!");//return Response.status(Response.Status.UNAUTHORIZED).entity(new AbstractMap.SimpleEntry<String,String>("error","captcha invalid")).build();
-		Optional<User> optionalUser=repository.findById(registration.email);
+		Optional<User> optionalUser=repository.findByEmail(registration.email);
 		User user;
 		if(optionalUser.isPresent()) user=optionalUser.get();
 		else {

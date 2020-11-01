@@ -2,34 +2,29 @@ package nl.rubend.clonebook.presentation;
 
 import nl.rubend.clonebook.data.SpringMediaRepository;
 import nl.rubend.clonebook.data.SpringPageRepository;
-import nl.rubend.clonebook.data.SpringPostRepository;
 import nl.rubend.clonebook.domain.Page;
 import nl.rubend.clonebook.domain.User;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.security.SecurityBean;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.AbstractMap;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/page")
 @RolesAllowed("user")
-@Path("page")
 public class PageController {
 	private static SpringPageRepository repository;
-	private final SpringPostRepository postRepository;
-	//private final SpringPageRepository repository;
 	private final SpringMediaRepository mediaRepository;
 
-	public PageController(SpringPageRepository repo, SpringPostRepository postRepository, SpringMediaRepository mediaRepository) {
+	public PageController(SpringPageRepository repo, SpringMediaRepository mediaRepository) {
 		repository = repo;
-		this.postRepository = postRepository;
 		this.mediaRepository = mediaRepository;
 	}
 
@@ -43,9 +38,8 @@ public class PageController {
 		return Response.ok(new AbstractMap.SimpleEntry<>("id", page.getId())).build();
 	}
 	@GetMapping("/{pageId}")
-	public Response publicPage(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
-		Bean bean=new Bean(pageId,securityBean);
-		User user= securityBean.getSender();
+	public Response publicPage(@PathVariable String pageId, @AuthenticationPrincipal User user) {
+		Bean bean=new Bean(pageId,user);
 		if(bean.existsThrows().isLid()) return Response.ok(bean.getPage()).build();
 		Map<String,Object> response=new HashMap<>();
 		response.put("id",bean.getPage().getId());
@@ -55,25 +49,25 @@ public class PageController {
 		return Response.status(Response.Status.FORBIDDEN).entity(response).build();
 	}
 	@DeleteMapping("/{pageId}")
-	public Response deletePage(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
-		Bean bean=new Bean(pageId,securityBean);
+	public Response deletePage(@PathVariable String pageId, @AuthenticationPrincipal User user) {
+		Bean bean=new Bean(pageId,user);
 		if(!bean.existsThrows().isAdmin()) return Response.status(Response.Status.FORBIDDEN).build();
 		repository.delete(bean.getPage());
 		return Response.ok().build();
 	}
 	@GetMapping("/{pageId}/name")
-	public Response name(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
-		Bean bean=new Bean(pageId,securityBean);
+	public Response name(@PathVariable String pageId, @AuthenticationPrincipal User user) {
+		Bean bean=new Bean(pageId,user);
 		return Response.ok(bean.existsThrows().getPage().getName()).build();
 	}
 	@GetMapping("/{pageId}/leden")
-	public Response leden(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
-		Bean bean=new Bean(pageId,securityBean);
+	public Response leden(@PathVariable String pageId, @AuthenticationPrincipal User user) {
+		Bean bean=new Bean(pageId,user);
 		return Response.ok(bean.onlyPageLid().getPage().getLeden()).build();
 	}
 	@PostMapping("/{pageId}/image")
-	public Response setPicture(@PathVariable String pageId,@BeanParam SecurityBean securityBean,@RequestBody SetImageDTO setImageDTO) {
-		Bean bean=new Bean(pageId,securityBean);
+	public Response setPicture(@PathVariable String pageId,@AuthenticationPrincipal User user,@RequestBody SetImageDTO setImageDTO) {
+		Bean bean=new Bean(pageId,user);
 		if(!bean.existsThrows().isAdmin()) return Response.status(Response.Status.FORBIDDEN).build();
 		Page page=bean.getPage();
 		page.setLogo(mediaRepository.getOne(setImageDTO.imageId));
@@ -81,8 +75,8 @@ public class PageController {
 		return Response.ok(true).build();
 	}
 	@PostMapping("/{pageId}/name")
-	public Response setName(@PathVariable String pageId,@BeanParam SecurityBean securityBean,@RequestBody SetNameDTO setNameDTO) {
-		Bean bean=new Bean(pageId,securityBean);
+	public Response setName(@PathVariable String pageId,@AuthenticationPrincipal User user,@RequestBody SetNameDTO setNameDTO) {
+		Bean bean=new Bean(pageId,user);
 		if(!bean.existsThrows().isAdmin()) return Response.status(Response.Status.FORBIDDEN).build();
 		Page page=bean.getPage();
 		page.setName(setNameDTO.name);
@@ -90,29 +84,25 @@ public class PageController {
 		return Response.ok().build();
 	}
 	@GetMapping("/{pageId}/lidAanvraag")
-	public Response getLidAanvraag(@PathVariable String pageId,@BeanParam SecurityBean securityBean) {
-		Bean bean=new Bean(pageId,securityBean);
-		User user=securityBean.getSender();
+	public Response getLidAanvraag(@PathVariable String pageId,@AuthenticationPrincipal User user) {
+		Bean bean=new Bean(pageId,user);
 		return Response.ok(bean.existsThrows().getPage().hasLidAanvraagVanUser(user)).build();
 	}
-	@POST
-	@Path("/{pageId}/lidAanvraag")
-	public Response addLidAanvraag(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
-		Bean bean=new Bean(pageId,securityBean);
-		User user=securityBean.getSender();
+	@PostMapping("/{pageId}/lidAanvraag")
+	public Response addLidAanvraag(@PathVariable String pageId, @AuthenticationPrincipal User user) {
+		Bean bean=new Bean(pageId,user);
 		Page page=bean.existsThrows().getPage();
 		page.addLidAanvraag(user);
 		repository.save(page);
 		bean.getPage();
 		return Response.ok(true).build();
 	}
-	@DELETE
-	@Path("/{pageId}/lid/{userId}")
-	public Response removeLid(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
-		Bean bean=new Bean(pageId,securityBean);
-		if(securityBean.isAllowed() || bean.isAdmin()) {
+	@DeleteMapping("/{pageId}/lid/{userId}")
+	public Response removeLid(@PathVariable String pageId, @PathVariable String userId, @AuthenticationPrincipal User user) {
+		Bean bean=new Bean(pageId,user);
+		if(userId.equals(user.getId()) || bean.isAdmin()) {
 			Page page=bean.existsThrows().getPage();
-			page.removeLid(securityBean.getRequested());
+			page.removeLid(user);
 			repository.save(page);
 			return Response.ok(true).build();
 		} else throw new ForbiddenException();
@@ -152,11 +142,11 @@ public class PageController {
 		return Response.ok(postRepository.getPostsLimit(bean.onlyPageLid().getPage().getPostsLimit()).build();
 	}*/
 	static class Bean {
-		Bean(String pageId,SecurityBean securityBean) {
+		Bean(String pageId,User user) {
 			this.pageId=pageId;
-			this.securityBean=securityBean;
+			this.user=user;
 		}
-		@BeanParam SecurityBean securityBean;
+		User user;
 		String pageId;
 		Page page;
 		Page getPage() {
@@ -164,10 +154,10 @@ public class PageController {
 			return page;
 		}
 		boolean isAdmin() {
-			return getPage().getOwner().equals(securityBean.getSender());
+			return getPage().getOwner().equals(user);
 		}
 		boolean isLid() {
-			return getPage().isLid(securityBean.getSender());
+			return getPage().isLid(user);
 		}
 		Bean existsThrows() {
 			if(getPage()==null) throw new ClonebookException("NOT_FOUND");

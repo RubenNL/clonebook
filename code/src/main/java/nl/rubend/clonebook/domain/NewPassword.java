@@ -29,7 +29,7 @@ public class NewPassword {
 		this.validUntil=LocalDateTime.now().plusHours(1);
 	}
 	public User use() throws ClonebookException {
-		if (validUntil.isBefore(LocalDateTime.now())) return user;
+		if (validUntil.isAfter(LocalDateTime.now())) return user;
 		else throw new ClonebookException("GONE","Code is niet meer geldig.");
 	}
 }

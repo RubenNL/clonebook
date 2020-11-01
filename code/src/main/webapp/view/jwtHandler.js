@@ -20,7 +20,7 @@ function getJWT() {
 	return getStorage().getItem("jwt")||"";
 }
 function setJWT(jwt) {
-	window.localStorage.setItem("long",parseJWT(jwt).long.toString());
+	window.localStorage.setItem("long","false"); //TODO long parseJWT(jwt).long.toString()
 	return getStorage().setItem("jwt",jwt);
 }
 function removeJWT() {

@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 			throws AuthenticationException, IOException, ServletException {
 		Login login = new ObjectMapper()
 				.readValue(request.getInputStream(), Login.class);
-
+		System.out.println(login);
 		return authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(login.email, login.password)
 		);
@@ -79,7 +79,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 				.setHeaderParam("typ", "JWT")
 				.setIssuer("hu-bep2-vliegmaatschappij-api")
 				.setAudience("hu-bep2-vliegmaatschappij")
-				.setSubject(user.getUsername())
+				.setSubject(user.getId())
 				.setExpiration(new Date(System.currentTimeMillis() + this.expirationInMs))
 				.claim("rol", roles)
 				.compact();

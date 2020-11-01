@@ -41,8 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET,"/config.json").permitAll()
 				.antMatchers(HttpMethod.GET,"/v2/**").permitAll()
 				.antMatchers(HttpMethod.GET,"/swagger-ui/**").permitAll()
+				.antMatchers(HttpMethod.POST,"/user/newPassword").permitAll()
 				.antMatchers(HttpMethod.GET,"**").permitAll()
-				.anyRequest().authenticated()
+				//.anyRequest().authenticated()
 				.and()
 				.addFilterBefore(
 						new JwtAuthenticationFilter(
