@@ -42,7 +42,7 @@ public class RegistrationController {
 		}
 	}
 	@PostMapping
-	public void register(@Validated @RequestBody Registration registration, @RequestHeader(value="X-Forwarded-For", required=false) String forwardedFor, HttpServletRequest httpServletRequest) {
+	public String register(@Validated @RequestBody Registration registration, @RequestHeader(value="X-Forwarded-For", required=false) String forwardedFor, HttpServletRequest httpServletRequest) {
 		String ip=httpServletRequest.getRemoteAddr();
 		if(isThisMyIpAddress(ip)) ip=forwardedFor;//lokaal IP, grote kans dat het een apache2 aanvraag is.
 		if(ip==null || ip.equals("")) ip=httpServletRequest.getRemoteAddr();//toch niet een apache2 proxy, dus toch maar het originele IP gebruiken.
@@ -55,7 +55,7 @@ public class RegistrationController {
 			user.setEmail(registration.email);
 		}
 		user=repository.save(user);
-		sendEmail.sendPasswordForgottenUrl(user);
+		return sendEmail.sendPasswordForgottenUrl(user);
 	}
 }
 
