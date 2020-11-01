@@ -1,33 +1,40 @@
-/*package nl.rubend.clonebook.presentation;
+package nl.rubend.clonebook.presentation;
 
 import nl.rubend.clonebook.data.SpringMediaRepository;
 import nl.rubend.clonebook.data.SpringPageRepository;
+import nl.rubend.clonebook.data.SpringPostRepository;
 import nl.rubend.clonebook.domain.Page;
 import nl.rubend.clonebook.domain.User;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.security.SecurityBean;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 import java.util.AbstractMap;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/page")
 @RolesAllowed("user")
+@Path("page")
 public class PageController {
-	private final SpringPageRepository repository;
+	private static SpringPageRepository repository;
+	private final SpringPostRepository postRepository;
+	//private final SpringPageRepository repository;
 	private final SpringMediaRepository mediaRepository;
 
-	public PageController(SpringPageRepository repository, SpringMediaRepository mediaRepository) {
-		this.repository = repository;
+	public PageController(SpringPageRepository repo, SpringPostRepository postRepository, SpringMediaRepository mediaRepository) {
+		repository = repo;
+		this.postRepository = postRepository;
 		this.mediaRepository = mediaRepository;
 	}
 
 	@PostMapping
-	public EntityModel<Page> createPage(@BeanParam SecurityBean securityBean, @RequestBody NewPageDTO pageDTO) {
+	public Response createPage(@BeanParam SecurityBean securityBean, @RequestBody NewPageDTO pageDTO) {
 		Page page=new Page();
 		page.setOwner(securityBean.getSender());
 		page.setName(pageDTO.name);
@@ -51,7 +58,7 @@ public class PageController {
 	public Response deletePage(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
 		Bean bean=new Bean(pageId,securityBean);
 		if(!bean.existsThrows().isAdmin()) return Response.status(Response.Status.FORBIDDEN).build();
-		bean.getPage().delete();
+		repository.delete(bean.getPage());
 		return Response.ok().build();
 	}
 	@GetMapping("/{pageId}/name")
@@ -88,23 +95,30 @@ public class PageController {
 		User user=securityBean.getSender();
 		return Response.ok(bean.existsThrows().getPage().hasLidAanvraagVanUser(user)).build();
 	}
-	@PostMapping("/{pageId}/lidAanvraag")
+	@POST
+	@Path("/{pageId}/lidAanvraag")
 	public Response addLidAanvraag(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
 		Bean bean=new Bean(pageId,securityBean);
 		User user=securityBean.getSender();
-		bean.existsThrows().getPage().addLidAanvraag(user);
+		Page page=bean.existsThrows().getPage();
+		page.addLidAanvraag(user);
+		repository.save(page);
+		bean.getPage();
 		return Response.ok(true).build();
 	}
-	/*@DeleteMapping("/{pageId}/lid/{userId}")
-	public Response removeLid(@PathVariable String pageId, Principal principal) {
-		principal.
+	@DELETE
+	@Path("/{pageId}/lid/{userId}")
+	public Response removeLid(@PathVariable String pageId, @BeanParam SecurityBean securityBean) {
 		Bean bean=new Bean(pageId,securityBean);
 		if(securityBean.isAllowed() || bean.isAdmin()) {
-			bean.existsThrows().getPage().removeLid(securityBean.getRequested());
+			Page page=bean.existsThrows().getPage();
+			page.removeLid(securityBean.getRequested());
+			repository.save(page);
 			return Response.ok(true).build();
 		} else throw new ForbiddenException();
 	}
-	@PostMapping("/{pageId}/block/{userId}")
+	/*@POST
+	@Path("/{pageId}/block/{userId}")
 	public Response blockUser(@BeanParam Bean bean, @BeanParam SecurityBean securityBean) {
 		if(securityBean.isAllowed() || bean.isAdmin()) {
 			bean.existsThrows().getPage().blockUnblockLid(securityBean.getRequested(),true);
@@ -131,21 +145,22 @@ public class PageController {
 	public Response getBlocked(@BeanParam Bean bean) {
 		if(!bean.existsThrows().isAdmin()) throw new ForbiddenException();
 		return Response.ok(bean.getPage().getBlocked()).build();
-	}
-	@GET
+	}*/
+	/*@GET
 	@Path("/{pageId}/before/{date}")
 	public Response getChatBefore(@BeanParam Bean bean, @PathParam("date") String before) {
-		return Response.ok(bean.onlyPageLid().getPage().getPostsLimit(new Date(Long.parseLong(before)),10)).build();
+		return Response.ok(postRepository.getPostsLimit(bean.onlyPageLid().getPage().getPostsLimit()).build();
 	}*/
-	/*static class Bean {
+	static class Bean {
 		Bean(String pageId,SecurityBean securityBean) {
 			this.pageId=pageId;
 			this.securityBean=securityBean;
 		}
 		@BeanParam SecurityBean securityBean;
+		String pageId;
 		Page page;
 		Page getPage() {
-			if(page==null) page=Page.getPage(pageId);
+			if(page==null) page=repository.getOne(pageId);
 			return page;
 		}
 		boolean isAdmin() {
@@ -155,11 +170,11 @@ public class PageController {
 			return getPage().isLid(securityBean.getSender());
 		}
 		Bean existsThrows() {
-			if(getPage()==null) throw new ClonebookException(Response.Status.NOT_FOUND);
+			if(getPage()==null) throw new ClonebookException("NOT_FOUND");
 			return this;
 		}
 		Bean onlyPageLid() {
-			if(!existsThrows().isLid()) throw new ClonebookException(Response.Status.FORBIDDEN,"geen toegang");
+			if(!existsThrows().isLid()) throw new ClonebookException("FORBIDDEN","geen toegang");
 			return this;
 		}
 	}
@@ -172,5 +187,4 @@ public class PageController {
 	static class SetNameDTO {
 		public String name;
 	}
-
-}*/
+}

@@ -1,44 +1,43 @@
-/*package nl.rubend.clonebook.security;
+package nl.rubend.clonebook.security;
 
 import nl.rubend.clonebook.data.SpringUserRepository;
 import nl.rubend.clonebook.domain.User;
 import nl.rubend.clonebook.exceptions.ClonebookException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.security.Principal;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
-@Component("securityBean")
+@Component
 public class SecurityBean {
-
-	private final SpringUserRepository repository;
-	Principal principal;
-	//@Context SecurityContext securityContext;
-
-	public SecurityBean(SpringUserRepository repository) {
-		this.repository = repository;
-	}
-
+	@Autowired
+	private SpringUserRepository repository;
+	@PathParam("userId") private String id;
+	@Context SecurityContext securityContext;
 	public User getSender() {
-		return (User) principal;
+		return (User) securityContext.getUserPrincipal();
 	}
 	public User getRequested() {
 		User user=repository.getOne(this.id);
-		if(user==null) throw new ClonebookException("requested user niet gevonden!");
+		//if(user==null) throw new ClonebookException("NOT_FOUND","requested user niet gevonden!");
 		return user;
 	}
 	public boolean isAllowed() {
 		User sender=getSender();
 		User requested=getRequested();
-		if(requested==null) throw new ClonebookException("clonebook not found!");
+		if(requested==null) throw new NotFoundException();
 		if(!requested.equals(sender)) return false;
 		return true;
 	}
 	public SecurityBean checkLogin() {
 		if(isAllowed()) return this;
-		else throw new ClonebookException("geen toegang.");
+		else throw new ForbiddenException("geen toegang.");
 	}
 	public User allowedUser() {
 		return checkLogin().getRequested();
 	}
 }
-*/

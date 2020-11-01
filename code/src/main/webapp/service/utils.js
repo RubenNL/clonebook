@@ -2,7 +2,8 @@ class Utils {
 	static sendFetch(first,second) {
 		if(!second.headers) second.headers={};
 		second.headers.Authorization='Bearer ' + getJWT();
-		if(navigator.onLine) return fetch('/rest/'+first,second);
+		//if(navigator.onLine) return fetch('/rest/'+first,second);
+		if(navigator.onLine) return fetch(first,second);
 		alert("apparaat is offline! maak verbinding met het internet en probeer opnieuw.");
 		return Promise.reject("offline");
 	}
@@ -17,9 +18,17 @@ class Utils {
 		})
 	}
 	static sendPost(path,formData) {
+		let next=formData.next();
+		let data={};
+		while(!next.done) {
+			data[next.value[0]]=next.value[1];
+			next=formData.next();
+		}
 		return Utils.sendFetch(path,{
 			method:'POST',
-			body:new URLSearchParams(formData)
+			headers: {'Content-Type':"application/json;charset=UTF-8"},
+			//body:new URLSearchParams(formData)
+			body:JSON.stringify(data)
 		}).then(Utils.handleResponse);
 	}
 	static sendGet(path) {

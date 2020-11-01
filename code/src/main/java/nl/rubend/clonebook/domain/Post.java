@@ -45,6 +45,9 @@ public class Post {
 	public void addFile(Media media) {
 		this.media.add(media);
 	}
+	public int getVoteTotal() {
+		return 0;
+	}
 	/*
 	TODO votetotal
 	public int getVoteTotal() {

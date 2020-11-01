@@ -7,16 +7,23 @@ import nl.rubend.clonebook.domain.Chat;
 import nl.rubend.clonebook.domain.User;
 import nl.rubend.clonebook.exceptions.ClonebookException;
 import nl.rubend.clonebook.presentation.assembler.ChatModelAssembler;
+import nl.rubend.clonebook.security.SecurityBean;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,9 +58,9 @@ public class ChatController {
 				.collect(Collectors.toList());
 		return CollectionModel.of(customers, linkTo(methodOn(ChatController.class).allByUser(null)).withSelfRel());
 	}
-	/*@POST
+	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response newChat(@BeanParam SecurityBean securityBean,@FormParam("user") String otherUser) {
+	public Response newChat(@BeanParam SecurityBean securityBean, @FormParam("user") String otherUser) {
 		Chat chat = new Chat(securityBean.getSender(), userRepository.getOne(otherUser));
 		return Response.ok(new AbstractMap.SimpleEntry<String, String>("id", chat.getId())).build();
 	}
@@ -85,8 +92,8 @@ public class ChatController {
 			return getChat().getUsers().contains(securityBean.getSender());
 		}
 		Bean onlyLid() {
-			if(!hasAccess()) throw new ClonebookException(Response.Status.FORBIDDEN,"geen toegang");
+			if(!hasAccess()) throw new ClonebookException("FORBIDDEN","geen toegang");
 			return this;
 		}
-	}*/
+	}
 }

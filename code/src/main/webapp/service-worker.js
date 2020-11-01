@@ -1,4 +1,4 @@
-self.addEventListener('fetch', function(event) {
+/*self.addEventListener('fetch', function(event) {
 	if(event.request.mode=="navigate" && !navigator.onLine) {
 		let headers = new Headers();
 		headers.append("Content-Type", "text/html");
@@ -57,4 +57,4 @@ self.addEventListener('push',event=>{
 			}));
 		}).then(self.registration.unregister);
 	}
-});
+});*/

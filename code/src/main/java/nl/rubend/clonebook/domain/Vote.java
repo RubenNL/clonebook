@@ -27,4 +27,9 @@ public class Vote {
 	@JsonIgnore
 	private User user;
 	private int vote;
+	public Vote(User user,Post post,int vote) {
+		this.user=user;
+		this.post=post;
+		this.vote=vote;
+	}
 }

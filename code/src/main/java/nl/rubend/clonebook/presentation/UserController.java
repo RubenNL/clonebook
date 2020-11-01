@@ -1,9 +1,15 @@
-/*package nl.rubend.clonebook.presentation;
+package nl.rubend.clonebook.presentation;
 
+import nl.rubend.clonebook.data.SpringNewPasswordRepository;
+import nl.rubend.clonebook.data.SpringPageRepository;
+import nl.rubend.clonebook.data.SpringUserRepository;
 import nl.rubend.clonebook.domain.*;
 import nl.rubend.clonebook.security.SecurityBean;
-import nl.rubend.clonebook.utils.Recaptcha;
+import nl.rubend.clonebook.utils.SendEmail;
 import nl.rubend.clonebook.websocket.WebSocket;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +26,21 @@ import java.util.*;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
+@Component
 public class UserController {
+	private final RecaptchaKey recaptchaKey;
+	private final SpringUserRepository repository;
+	private final SpringNewPasswordRepository newPasswordRepository;
+	private final SpringPageRepository pageRepository;
+	private final SendEmail sendEmail;
+	public UserController(RecaptchaKey recaptchaKey, SpringUserRepository repository, SpringNewPasswordRepository newPasswordRepository, SpringPageRepository pageRepository, SendEmail sendEmail) {
+		this.recaptchaKey = recaptchaKey;
+		this.repository = repository;
+		this.newPasswordRepository = newPasswordRepository;
+		this.pageRepository = pageRepository;
+		this.sendEmail = sendEmail;
+	}
+
 	public static boolean isThisMyIpAddress(String stringAddr) {
 		InetAddress addr;
 		try {
@@ -42,24 +62,24 @@ public class UserController {
 		String ip=httpServletRequest.getRemoteAddr();
 		if(isThisMyIpAddress(ip)) ip=httpHeaders.getHeaderString("X-Forwarded-For");//lokaal IP, grote kans dat het een apache2 aanvraag is.
 		if(ip==null || ip.equals("")) ip=httpServletRequest.getRemoteAddr();//toch niet een apache2 proxy, dus toch maar het originele IP gebruiken.
-		if(!Recaptcha.isCaptchaValid(recaptchaResponse,ip)) return Response.status(Response.Status.UNAUTHORIZED).entity(new AbstractMap.SimpleEntry<String,String>("error","captcha invalid")).build();
-		User user=User.getUserByEmail(email);
-		if(user==null) user=new User(email);
-		user.sendPasswordForgottenUrl();
+		if(!recaptchaKey.isCaptchaValid(recaptchaResponse,ip)) return Response.status(Response.Status.UNAUTHORIZED).entity(new AbstractMap.SimpleEntry<String,String>("error","captcha invalid")).build();
+		User user=repository.findByEmail(email);
+		if(user==null) user=new User();
+		user.setEmail(email);
+		user=repository.save(user);
+		sendEmail.sendPasswordForgottenUrl(user);
 		return Response.ok(new HashMap<String,String>()).build();
 	}
-	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Path("/newPassword")
-	public Response use(@FormParam("code") String code, @FormParam("password") String password) {
-		NewPassword newPassword=NewPassword.use(code);
-		User user=newPassword.getUser();
+	@PostMapping("/newPassword")
+	public Response use(@RequestBody newPasswordDTO newPasswordDTO) {
+		NewPassword newPassword=newPasswordRepository.getOne(newPasswordDTO.code);
+		User user=newPassword.use();
 		try {
-			user.setPassword(password);
+			user.setPassword(newPasswordDTO.password);
 		} catch(IllegalArgumentException e) {
 			return Response.status(Response.Status.BAD_REQUEST).entity(new AbstractMap.SimpleEntry<String,String>("error",e.getMessage())).build();
 		}
-		newPassword.delete();
+		newPasswordRepository.delete(newPassword);
 		return Response.ok().build();
 	}
 	@GET
@@ -80,12 +100,12 @@ public class UserController {
 		if (!user.getEmail().equals(email)) user.setEmail(email);
 		return Response.ok().build();
 	}
-	@GET
+	/*@GET
 	@Path("/{userId}/lidAanvragen")
 	@RolesAllowed("user")
 	public Response getLidAanvragen(@BeanParam SecurityBean securityBean) {
 		return Response.ok(securityBean.allowedUser().getLidAanvragenOpPaginas()).build();
-	}
+	}*/
 	@GET
 	@RolesAllowed("user")
 	@Path("/{userId}")
@@ -112,17 +132,20 @@ public class UserController {
 	public Response addSocket(@BeanParam SecurityBean securityBean) {
 		return Response.ok(new AbstractMap.SimpleEntry<String,String>("code",WebSocket.addWaiting(securityBean.allowedUser()))).build();
 	}
-	@GET
+	/*@GET
 	@RolesAllowed("user")
 	@Path("/{userId}/pages")
 	public Response getPages(@BeanParam SecurityBean securityBean) {
 		return Response.ok(securityBean.allowedUser().getPages()).build();
-	}
+	}*/
 	@GET
 	@RolesAllowed("user")
 	@Path("/{userId}/ownPages")
 	public Response getOwnPages(@BeanParam SecurityBean securityBean) {
 		return Response.ok(securityBean.allowedUser().getOwnPages()).build();
 	}
+	private static class newPasswordDTO {
+		public String code;
+		public String password;
+	}
 }
-*/
